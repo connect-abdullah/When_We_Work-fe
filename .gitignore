@@ -1,0 +1,128 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# ============================================
+# ITERATIVE DEPLOYMENT - CALENDAR & DASHBOARD ONLY
+# ============================================
+# This .gitignore is configured to ONLY include calendar and dashboard components.
+# Everything else is ignored for iterative deployment.
+
+# ============================================
+# EXCLUDED: Auth Components (for future deployment)
+# ============================================
+# To include auth components in next deployment, REMOVE or COMMENT OUT these lines:
+/src/app/auth/
+/src/components/auth/
+
+/src/components/calendar
+/src/app/calendar/
+
+# ============================================
+# EXCLUDED: Other App Pages (for future deployment)
+# ============================================
+# To include other pages, REMOVE or COMMENT OUT these lines:
+/src/app/campaigns/
+/src/app/catalogs/
+/src/app/customers/
+/src/app/jobs/
+/src/app/workers/
+
+# ============================================
+# EXCLUDED: Other Components (for future deployment)
+# ============================================
+# To include other components, REMOVE or COMMENT OUT these lines:
+/src/components/agents/
+/src/components/conversation/
+/src/components/onboarding/
+
+/src/constants/agents.ts
+# ============================================
+# INCLUDED: Calendar & Dashboard (currently tracked)
+# ============================================
+# The following are NOT ignored and will be committed:
+# - /src/app/calendar/ (included)
+# - /src/app/dashboard/ (included)
+# - /src/components/calendar/ (included)
+# - /src/components/dashboard/ (included)
+# - /src/components/ui/ (included - shared UI components)
+# - /src/components/layout/ (included - navbar, sidebar)
+# - /src/app/layout.tsx (included - root layout)
+# - /src/app/globals.css (included - global styles)
+# - /src/lib/ (included - utilities)
+# - /src/constants/ (included - constants)
+# - /src/types/ (included - TypeScript types)
+# - /src/styles/ (included - styles)
+
+# ============================================
+# AUTH DEPLOYMENT INSTRUCTIONS
+# ============================================
+# When ready to deploy auth components:
+#
+# STEP 1: Remove or comment out these lines from .gitignore:
+#   /src/app/auth/
+#   /src/components/auth/
+#
+# STEP 2: The auth pages will then be included:
+#   - /src/app/auth/login/page.tsx
+#   - /src/app/auth/signup/page.tsx
+#   - /src/app/auth/forgot-password/page.tsx
+#   - /src/app/auth/change-password/page.tsx
+#   - /src/app/auth/otp/page.tsx
+#
+# STEP 3: The auth components will then be included:
+#   - /src/components/auth/AuthLayout.tsx
+#   - /src/components/auth/PasswordInput.tsx
+#   - /src/components/auth/PhoneInput.tsx
+#   - /src/components/auth/index.ts
+#
+# STEP 4: Commit the updated .gitignore:
+#   git add .gitignore
+#   git commit -m "Enable auth components in .gitignore"
+#
+# STEP 5: Add and commit the auth files:
+#   git add src/app/auth/ src/components/auth/
+#   git commit -m "Add auth components"
+#   git push
+#
+# NOTE: Make sure any auth-related dependencies in package.json are already
+#       committed, and any environment variables needed for auth are documented
+#       (but .env files should remain in .gitignore for security).
