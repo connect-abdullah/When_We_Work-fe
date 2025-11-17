@@ -53,8 +53,6 @@ next-env.d.ts
 /src/app/auth/
 /src/components/auth/
 
-/src/components/calendar
-/src/app/calendar/
 
 # ============================================
 # EXCLUDED: Other App Pages (for future deployment)
