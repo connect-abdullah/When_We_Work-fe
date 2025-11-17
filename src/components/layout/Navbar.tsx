@@ -45,7 +45,7 @@ const Navbar: React.FC<NavbarProps> = ({ className, onMenuToggle }) => {
             </div>
             <div className="hidden sm:block text-left">
               <p className="text-[10px] font-semibold text-[#1F384C] leading-tight">Admin User</p>
-              <p className="text-[8px] text-gray-500">admin@booklee.ai</p>
+              <p className="text-[8px] text-gray-500">admin@whenwework.com</p>
             </div>
           </button>
         </div>
