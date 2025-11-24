@@ -12,7 +12,12 @@ interface JobGridProps {
   onCardClick?: (job: JobSchema) => void;
 }
 
-const JobGrid: React.FC<JobGridProps> = ({ jobs, totalJobs, onEditClick, onCardClick }) => {
+const JobGrid: React.FC<JobGridProps> = ({
+  jobs,
+  totalJobs,
+  onEditClick,
+  onCardClick,
+}) => {
   if (jobs.length === 0) {
     return (
       <Card className="p-8 text-center">

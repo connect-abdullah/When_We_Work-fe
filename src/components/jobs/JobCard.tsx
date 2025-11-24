@@ -59,140 +59,154 @@ const JobCard: React.FC<JobCardProps> = ({
   onPlaygroundClick,
   onClick,
 }) => {
-  const hiringRate = job.people_needed > 0 
-    ? Math.round((job.people_hired / job.people_needed) * 100) 
-    : 0;
+  const hiringRate =
+    job.people_needed > 0
+      ? Math.round((job.people_hired / job.people_needed) * 100)
+      : 0;
 
   return (
     <div onClick={onClick} className="cursor-pointer">
       <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 group relative bg-white border border-gray-200">
-      {/* Top Bar with Status */}
-      <div className={`h-1 ${getStatusDot(job.status)}`} />
+        {/* Top Bar with Status */}
+        <div className={`h-1 ${getStatusDot(job.status)}`} />
 
-      {/* Content */}
-      <div className="p-3">
-        {/* Header Row */}
-        <div className="flex items-start justify-between mb-3">
-          <div className="flex-1 min-w-0 pr-2">
-            <h3 className="text-sm font-semibold text-[#1F384C] mb-2">
-              <span className="text-gray-500 font-normal">JOB:</span> {job.job_name}
-            </h3>
-            <div className="flex items-center gap-2 mb-2">
-              <span className={`text-[10px] font-medium ${getToneColor(job.tone)}`}>
-                {job.tone}
-              </span>
-              <span className="text-gray-300">•</span>
-              <span className="text-[10px] text-gray-500">
-                {job.salary_type === "per_hour" ? "Hourly" : "Fixed"}
-              </span>
-            </div>
-            <div>
-              <p className="text-[10px] text-gray-500 mb-1">
-                <span className="font-medium text-gray-600">Description:</span>
-              </p>
-              <p className="text-[10px] text-gray-600 line-clamp-2 leading-relaxed">
-                {job.description}
-              </p>
-            </div>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
-            <button
-              className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
-              onClick={(e) => {
-                e.stopPropagation();
-                if (onEditClick) onEditClick();
-              }}
-              title="Edit"
-            >
-              <Edit size={12} className="text-gray-500" />
-            </button>
-            <button
-              className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
-              onClick={(e) => {
-                e.stopPropagation();
-                if (onPlaygroundClick) onPlaygroundClick();
-              }}
-              title="Playground"
-            >
-              <Trash size={12} className="text-gray-500" />
-            </button>
-          </div>
-        </div>
-
-        {/* Key Metrics - Horizontal Compact */}
-        <div className="grid grid-cols-4 gap-2 mb-3">
-          <div className="text-center p-2 bg-gray-50 rounded-lg">
-            <div className="flex items-center justify-center mb-1">
-              <Users size={12} className="text-blue-600" />
-            </div>
-            <p className="text-xs font-bold text-gray-900">{job.people_hired}</p>
-            <p className="text-[9px] text-gray-500">Hired</p>
-          </div>
-          <div className="text-center p-2 bg-gray-50 rounded-lg">
-            <div className="flex items-center justify-center mb-1">
-              <Target size={12} className="text-emerald-600" />
-            </div>
-            <p className="text-xs font-bold text-gray-900">{job.people_needed}</p>
-            <p className="text-[9px] text-gray-500">Needed</p>
-          </div>
-          <div className="text-center p-2 bg-gray-50 rounded-lg">
-            <div className="flex items-center justify-center mb-1">
-              <DollarSign size={12} className="text-violet-600" />
-            </div>
-            <p className="text-xs font-bold text-gray-900">${(job.salary / 1000).toFixed(0)}k</p>
-            <p className="text-[9px] text-gray-500">Salary</p>
-          </div>
-          <div className="text-center p-2 bg-gray-50 rounded-lg">
-            <div className="flex items-center justify-center mb-1">
-              <TrendingUp size={12} className="text-amber-600" />
-            </div>
-            <p className="text-xs font-bold text-gray-900">{hiringRate}%</p>
-            <p className="text-[9px] text-gray-500">Rate</p>
-          </div>
-        </div>
-
-        {/* Bottom Section - Tags and Contact */}
-        <div className="space-y-2 pt-2 border-t border-gray-100">
-          {/* Characteristics */}
-          {job.characteristics && job.characteristics.length > 0 && (
-            <div className="flex flex-wrap gap-1">
-              {job.characteristics.slice(0, 2).map((char, index) => (
+        {/* Content */}
+        <div className="p-3">
+          {/* Header Row */}
+          <div className="flex items-start justify-between mb-3">
+            <div className="flex-1 min-w-0 pr-2">
+              <h3 className="text-sm font-semibold text-[#1F384C] mb-2">
+                <span className="text-gray-500 font-normal">JOB:</span>{" "}
+                {job.job_name}
+              </h3>
+              <div className="flex items-center gap-2 mb-2">
                 <span
-                  key={index}
-                  className="px-1.5 py-0.5 bg-gray-100 text-gray-700 text-[9px] font-medium rounded"
+                  className={`text-[10px] font-medium ${getToneColor(job.tone)}`}
                 >
-                  {char}
+                  {job.tone}
                 </span>
-              ))}
-              {job.characteristics.length > 2 && (
-                <span className="px-1.5 py-0.5 bg-gray-100 text-gray-500 text-[9px] font-medium rounded">
-                  +{job.characteristics.length - 2}
+                <span className="text-gray-300">•</span>
+                <span className="text-[10px] text-gray-500">
+                  {job.salary_type === "per_hour" ? "Hourly" : "Fixed"}
                 </span>
-              )}
+              </div>
+              <div>
+                <p className="text-[10px] text-gray-500 mb-1">
+                  <span className="font-medium text-gray-600">
+                    Description:
+                  </span>
+                </p>
+                <p className="text-[10px] text-gray-600 line-clamp-2 leading-relaxed">
+                  {job.description}
+                </p>
+              </div>
             </div>
-          )}
 
-          {/* Contact & Languages - Inline */}
-          <div className="flex items-center justify-between gap-2 text-[9px]">
-            <div className="flex items-center gap-2 flex-1 min-w-0">
-              {job.email && (
-                <div className="flex items-center gap-1 text-gray-500 truncate">
-                  <Mail size={10} />
-                  <span className="truncate">{job.email.split("@")[0]}</span>
+            {/* Action Buttons */}
+            <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+              <button
+                className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (onEditClick) onEditClick();
+                }}
+                title="Edit"
+              >
+                <Edit size={12} className="text-gray-500" />
+              </button>
+              <button
+                className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (onPlaygroundClick) onPlaygroundClick();
+                }}
+                title="Playground"
+              >
+                <Trash size={12} className="text-gray-500" />
+              </button>
+            </div>
+          </div>
+
+          {/* Key Metrics - Horizontal Compact */}
+          <div className="grid grid-cols-4 gap-2 mb-3">
+            <div className="text-center p-2 bg-gray-50 rounded-lg">
+              <div className="flex items-center justify-center mb-1">
+                <Users size={12} className="text-blue-600" />
+              </div>
+              <p className="text-xs font-bold text-gray-900">
+                {job.people_hired}
+              </p>
+              <p className="text-[9px] text-gray-500">Hired</p>
+            </div>
+            <div className="text-center p-2 bg-gray-50 rounded-lg">
+              <div className="flex items-center justify-center mb-1">
+                <Target size={12} className="text-emerald-600" />
+              </div>
+              <p className="text-xs font-bold text-gray-900">
+                {job.people_needed}
+              </p>
+              <p className="text-[9px] text-gray-500">Needed</p>
+            </div>
+            <div className="text-center p-2 bg-gray-50 rounded-lg">
+              <div className="flex items-center justify-center mb-1">
+                <DollarSign size={12} className="text-violet-600" />
+              </div>
+              <p className="text-xs font-bold text-gray-900">
+                ${(job.salary / 1000).toFixed(0)}k
+              </p>
+              <p className="text-[9px] text-gray-500">Salary</p>
+            </div>
+            <div className="text-center p-2 bg-gray-50 rounded-lg">
+              <div className="flex items-center justify-center mb-1">
+                <TrendingUp size={12} className="text-amber-600" />
+              </div>
+              <p className="text-xs font-bold text-gray-900">{hiringRate}%</p>
+              <p className="text-[9px] text-gray-500">Rate</p>
+            </div>
+          </div>
+
+          {/* Bottom Section - Tags and Contact */}
+          <div className="space-y-2 pt-2 border-t border-gray-100">
+            {/* Characteristics */}
+            {job.characteristics && job.characteristics.length > 0 && (
+              <div className="flex flex-wrap gap-1">
+                {job.characteristics.slice(0, 2).map((char, index) => (
+                  <span
+                    key={index}
+                    className="px-1.5 py-0.5 bg-gray-100 text-gray-700 text-[9px] font-medium rounded"
+                  >
+                    {char}
+                  </span>
+                ))}
+                {job.characteristics.length > 2 && (
+                  <span className="px-1.5 py-0.5 bg-gray-100 text-gray-500 text-[9px] font-medium rounded">
+                    +{job.characteristics.length - 2}
+                  </span>
+                )}
+              </div>
+            )}
+
+            {/* Contact & Languages - Inline */}
+            <div className="flex items-center justify-between gap-2 text-[9px]">
+              <div className="flex items-center gap-2 flex-1 min-w-0">
+                {job.email && (
+                  <div className="flex items-center gap-1 text-gray-500 truncate">
+                    <Mail size={10} />
+                    <span className="truncate">{job.email.split("@")[0]}</span>
+                  </div>
+                )}
+              </div>
+              {job.languages && job.languages.length > 0 && (
+                <div className="flex items-center gap-1 shrink-0">
+                  <Award size={10} className="text-gray-400" />
+                  <span className="text-gray-500">
+                    {job.languages.length} lang
+                  </span>
                 </div>
               )}
             </div>
-            {job.languages && job.languages.length > 0 && (
-              <div className="flex items-center gap-1 shrink-0">
-                <Award size={10} className="text-gray-400" />
-                <span className="text-gray-500">{job.languages.length} lang</span>
-              </div>
-            )}
           </div>
         </div>
-      </div>
       </Card>
     </div>
   );

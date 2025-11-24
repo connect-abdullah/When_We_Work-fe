@@ -1,7 +1,19 @@
 "use client";
 
 import React from "react";
-import { X, Mail, Phone, GraduationCap, Calendar, Users, Target, DollarSign, TrendingUp, Award, Edit } from "lucide-react";
+import {
+  X,
+  Mail,
+  Phone,
+  GraduationCap,
+  Calendar,
+  Users,
+  Target,
+  DollarSign,
+  TrendingUp,
+  Award,
+  Edit,
+} from "lucide-react";
 import { JobSchema } from "@/types";
 
 interface JobDetailModalProps {
@@ -49,9 +61,10 @@ const JobDetailModal: React.FC<JobDetailModalProps> = ({
 }) => {
   if (!isOpen || !job) return null;
 
-  const hiringRate = job.people_needed > 0 
-    ? Math.round((job.people_hired / job.people_needed) * 100) 
-    : 0;
+  const hiringRate =
+    job.people_needed > 0
+      ? Math.round((job.people_hired / job.people_needed) * 100)
+      : 0;
 
   return (
     <div
@@ -78,7 +91,8 @@ const JobDetailModal: React.FC<JobDetailModalProps> = ({
               </span>
             </div>
             <p className="text-sm text-gray-500">
-              <span className="font-medium text-gray-600">JOB:</span> {job.job_name}
+              <span className="font-medium text-gray-600">JOB:</span>{" "}
+              {job.job_name}
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -104,8 +118,12 @@ const JobDetailModal: React.FC<JobDetailModalProps> = ({
         <div className="p-6 space-y-6">
           {/* Description */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-700 mb-2">Description</h3>
-            <p className="text-sm text-gray-600 leading-relaxed">{job.description}</p>
+            <h3 className="text-sm font-semibold text-gray-700 mb-2">
+              Description
+            </h3>
+            <p className="text-sm text-gray-600 leading-relaxed">
+              {job.description}
+            </p>
           </div>
 
           {/* Key Metrics */}
@@ -115,14 +133,18 @@ const JobDetailModal: React.FC<JobDetailModalProps> = ({
                 <Users size={16} className="text-blue-600" />
                 <span className="text-xs text-gray-600">Hired</span>
               </div>
-              <p className="text-2xl font-bold text-gray-900">{job.people_hired}</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {job.people_hired}
+              </p>
             </div>
             <div className="p-4 bg-emerald-50 rounded-xl">
               <div className="flex items-center gap-2 mb-2">
                 <Target size={16} className="text-emerald-600" />
                 <span className="text-xs text-gray-600">Needed</span>
               </div>
-              <p className="text-2xl font-bold text-gray-900">{job.people_needed}</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {job.people_needed}
+              </p>
             </div>
             <div className="p-4 bg-violet-50 rounded-xl">
               <div className="flex items-center gap-2 mb-2">
@@ -146,14 +168,18 @@ const JobDetailModal: React.FC<JobDetailModalProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Contact Information */}
             <div className="space-y-3">
-              <h3 className="text-sm font-semibold text-gray-700 mb-3">Contact Information</h3>
+              <h3 className="text-sm font-semibold text-gray-700 mb-3">
+                Contact Information
+              </h3>
               <div className="space-y-2">
                 {job.email && (
                   <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                     <Mail size={16} className="text-gray-400" />
                     <div className="flex-1 min-w-0">
                       <p className="text-xs text-gray-500 mb-0.5">Email</p>
-                      <p className="text-sm text-gray-900 truncate">{job.email}</p>
+                      <p className="text-sm text-gray-900 truncate">
+                        {job.email}
+                      </p>
                     </div>
                   </div>
                 )}
@@ -171,11 +197,15 @@ const JobDetailModal: React.FC<JobDetailModalProps> = ({
 
             {/* Job Details */}
             <div className="space-y-3">
-              <h3 className="text-sm font-semibold text-gray-700 mb-3">Job Details</h3>
+              <h3 className="text-sm font-semibold text-gray-700 mb-3">
+                Job Details
+              </h3>
               <div className="space-y-2">
                 <div className="p-3 bg-gray-50 rounded-lg">
                   <p className="text-xs text-gray-500 mb-0.5">Tone</p>
-                  <p className={`text-sm font-medium ${getToneColor(job.tone)}`}>
+                  <p
+                    className={`text-sm font-medium ${getToneColor(job.tone)}`}
+                  >
                     {job.tone.charAt(0).toUpperCase() + job.tone.slice(1)}
                   </p>
                 </div>
@@ -189,8 +219,12 @@ const JobDetailModal: React.FC<JobDetailModalProps> = ({
                   <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                     <GraduationCap size={16} className="text-gray-400" />
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs text-gray-500 mb-0.5">Minimum Education</p>
-                      <p className="text-sm text-gray-900">{job.minimum_education}</p>
+                      <p className="text-xs text-gray-500 mb-0.5">
+                        Minimum Education
+                      </p>
+                      <p className="text-sm text-gray-900">
+                        {job.minimum_education}
+                      </p>
                     </div>
                   </div>
                 )}
@@ -216,7 +250,9 @@ const JobDetailModal: React.FC<JobDetailModalProps> = ({
           {/* Characteristics */}
           {job.characteristics && job.characteristics.length > 0 && (
             <div>
-              <h3 className="text-sm font-semibold text-gray-700 mb-3">Characteristics</h3>
+              <h3 className="text-sm font-semibold text-gray-700 mb-3">
+                Characteristics
+              </h3>
               <div className="flex flex-wrap gap-2">
                 {job.characteristics.map((char, index) => (
                   <span
@@ -235,7 +271,9 @@ const JobDetailModal: React.FC<JobDetailModalProps> = ({
             <div>
               <div className="flex items-center gap-2 mb-3">
                 <Award size={16} className="text-gray-400" />
-                <h3 className="text-sm font-semibold text-gray-700">Languages</h3>
+                <h3 className="text-sm font-semibold text-gray-700">
+                  Languages
+                </h3>
               </div>
               <div className="flex flex-wrap gap-2">
                 {job.languages.map((lang, index) => (
@@ -256,4 +294,3 @@ const JobDetailModal: React.FC<JobDetailModalProps> = ({
 };
 
 export default JobDetailModal;
-
