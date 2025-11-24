@@ -61,15 +61,10 @@ next-env.d.ts
 /src/app/campaigns/
 /src/app/catalogs/
 /src/app/customers/
-/src/app/jobs/
 /src/app/workers/
 
 # ============================================
 # EXCLUDED: Other Components (for future deployment)
 # ============================================
 # To include other components, REMOVE or COMMENT OUT these lines:
-/src/components/agents/
-/src/components/conversation/
 /src/components/onboarding/
-
-/src/constants/agents.ts

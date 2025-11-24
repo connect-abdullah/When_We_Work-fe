@@ -38,12 +38,18 @@ const TimeSlotAccordion: React.FC<TimeSlotAccordionProps> = ({
         }`}
       >
         <div className="flex items-center gap-1">
-          <div className={`w-5 h-5 ${iconBg} rounded-full flex items-center justify-center`}>
+          <div
+            className={`w-5 h-5 ${iconBg} rounded-full flex items-center justify-center`}
+          >
             <span className="text-white text-[10px]">{icon}</span>
           </div>
           <div className="text-left">
-            <div className="text-[10px] font-semibold text-gray-900">{title}</div>
-            <div className="text-[8px] text-gray-500">{displayCount} available slots</div>
+            <div className="text-[10px] font-semibold text-gray-900">
+              {title}
+            </div>
+            <div className="text-[8px] text-gray-500">
+              {displayCount} available slots
+            </div>
           </div>
         </div>
         <svg
@@ -60,7 +66,7 @@ const TimeSlotAccordion: React.FC<TimeSlotAccordionProps> = ({
           />
         </svg>
       </button>
-      
+
       {isExpanded && (
         <div className="grid grid-cols-2 gap-2">
           {slots.map((slot) => (
@@ -83,4 +89,3 @@ const TimeSlotAccordion: React.FC<TimeSlotAccordionProps> = ({
 };
 
 export default TimeSlotAccordion;
-

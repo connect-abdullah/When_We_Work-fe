@@ -47,34 +47,22 @@ export interface Payment {
   service: string;
 }
 
-export interface SalesAgent {
-  id: string;
-  name: string;
-  avatar?: string;
-  appointmentsClosed: number;
-  dealsWon: number;
-  conversionRate: number;
-  revenue: number;
-}
 
-export interface SalesRepresentative {
+export interface JobSchema {
   id: string;
-  name: string;
+  job_name: string;
+  description: string;
   email: string;
   phone?: string;
   profileImage?: string;
-  education: string;
+  minimum_education: string;
   tone: 'professional' | 'friendly' | 'casual' | 'formal' | 'empathetic';
   characteristics: string[];
   status: 'active' | 'inactive' | 'on-leave';
-  joinDate: string;
-  assignedCustomers: number;
-  appointmentsClosed: number;
-  dealsWon: number;
-  conversionRate: number;
-  revenue: number;
-  rating: number;
-  specialties?: string[];
+  joinDate?: string;
+  people_needed: number;
+  people_hired: number;
+  salary: number;
+  salary_type: 'per_hour' | 'fixed';
   languages?: string[];
-  bio?: string;
 }

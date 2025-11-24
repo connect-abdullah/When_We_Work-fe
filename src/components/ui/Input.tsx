@@ -1,5 +1,5 @@
-import React from 'react';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { cn } from "@/lib/utils";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -7,12 +7,12 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   icon?: React.ReactNode;
 }
 
-const Input: React.FC<InputProps> = ({ 
-  label, 
-  error, 
-  icon, 
-  className, 
-  ...props 
+const Input: React.FC<InputProps> = ({
+  label,
+  error,
+  icon,
+  className,
+  ...props
 }) => {
   return (
     <div className="w-full">
@@ -24,12 +24,12 @@ const Input: React.FC<InputProps> = ({
       <div className="relative">
         <input
           className={cn(
-            'w-full px-3 py-2 border border-gray-300 rounded-lg font-poppins text-sm',
-            'focus:outline-none focus:ring-2 focus:ring-[#5A6ACF] focus:border-transparent',
-            'placeholder:text-gray-400',
-            error && 'border-red-500 focus:ring-red-500',
-            icon && 'pl-10',
-            className
+            "w-full px-3 py-2 border border-gray-300 rounded-lg font-poppins text-sm",
+            "focus:outline-none focus:ring-2 focus:ring-[#5A6ACF] focus:border-transparent",
+            "placeholder:text-gray-400",
+            error && "border-red-500 focus:ring-red-500",
+            icon && "pl-10",
+            className,
           )}
           {...props}
         />
@@ -39,9 +39,7 @@ const Input: React.FC<InputProps> = ({
           </div>
         )}
       </div>
-      {error && (
-        <p className="mt-1 text-sm text-red-600">{error}</p>
-      )}
+      {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
     </div>
   );
 };
