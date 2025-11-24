@@ -1,6 +1,6 @@
-import React from 'react';
-import { Bell, Search, Menu, User } from 'lucide-react';
-import Input from '@/components/ui/Input';
+import React from "react";
+import { Bell, Search, Menu, User } from "lucide-react";
+import Input from "@/components/ui/Input";
 
 interface NavbarProps {
   className?: string;
@@ -10,7 +10,9 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ className, onMenuToggle }) => {
   return (
     <>
-      <div className={`h-[80px] flex flex-row items-center px-4 mb-2 sm:px-6 justify-between bg-white border-b p-4 border-gray-200 ${className || ''}`}>
+      <div
+        className={`h-[80px] flex flex-row items-center px-4 mb-2 sm:px-6 justify-between bg-white border-b p-4 border-gray-200 ${className || ""}`}
+      >
         {/* Mobile Menu Button */}
         <button
           onClick={onMenuToggle}
@@ -44,7 +46,9 @@ const Navbar: React.FC<NavbarProps> = ({ className, onMenuToggle }) => {
               <User size={14} />
             </div>
             <div className="hidden sm:block text-left">
-              <p className="text-[10px] font-semibold text-[#1F384C] leading-tight">Admin User</p>
+              <p className="text-[10px] font-semibold text-[#1F384C] leading-tight">
+                Admin User
+              </p>
               <p className="text-[8px] text-gray-500">admin@whenwework.com</p>
             </div>
           </button>

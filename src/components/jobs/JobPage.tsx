@@ -19,8 +19,7 @@ export default function JobPage() {
   >("all");
   const [typeFilter, setTypeFilter] = useState<string>("all");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedJob, setSelectedJob] =
-    useState<JobSchema | null>(null);
+  const [selectedJob, setSelectedJob] = useState<JobSchema | null>(null);
 
   // Filter jobs
   const filteredJobs = useMemo(() => {
@@ -32,32 +31,28 @@ export default function JobPage() {
       const matchesStatus =
         statusFilter === "all" || job.status === statusFilter;
       // Map "hourly" from filter to "per_hour" in schema
-      const salaryTypeMatch = typeFilter === "all" 
-        ? true 
-        : typeFilter === "hourly" 
-          ? job.salary_type === "per_hour"
-          : job.salary_type === typeFilter;
+      const salaryTypeMatch =
+        typeFilter === "all"
+          ? true
+          : typeFilter === "hourly"
+            ? job.salary_type === "per_hour"
+            : job.salary_type === typeFilter;
       return matchesSearch && matchesStatus && salaryTypeMatch;
     });
   }, [searchTerm, statusFilter, typeFilter]);
 
   // Calculate stats
   const totalJobs = Job_Details.length;
-  const activeJobs = Job_Details.filter(
-    (a) => a.status === "active",
-  ).length;
+  const activeJobs = Job_Details.filter((a) => a.status === "active").length;
   const totalPeopleNeeded = Job_Details.reduce(
     (sum, a) => sum + a.people_needed,
-    0,
+    0
   );
   const totalPeopleHired = Job_Details.reduce(
     (sum, a) => sum + a.people_hired,
-    0,
+    0
   );
-  const totalSalary = Job_Details.reduce(
-    (sum, a) => sum + a.salary,
-    0,
-  );
+  const totalSalary = Job_Details.reduce((sum, a) => sum + a.salary, 0);
 
   const stats = [
     {
@@ -169,9 +164,7 @@ export default function JobPage() {
               typeFilter={typeFilter}
               onSearchChange={setSearchTerm}
               onStatusFilterChange={(status) =>
-                setStatusFilter(
-                  status as "all" | "active" | "inactive"
-                )
+                setStatusFilter(status as "all" | "active" | "inactive")
               }
               onTypeFilterChange={setTypeFilter}
             />
@@ -195,7 +188,6 @@ export default function JobPage() {
         onClose={handleCloseModal}
         onSubmit={selectedJob ? handleUpdateJob : handleCreateJob}
       />
-
     </div>
   );
 }

@@ -11,12 +11,7 @@ interface JobGridProps {
   onEditClick: (job: JobSchema) => void;
 }
 
-const JobGrid: React.FC<JobGridProps> = ({
-  jobs,
-  totalJobs,
-  onEditClick,
-}) => {
-
+const JobGrid: React.FC<JobGridProps> = ({ jobs, totalJobs, onEditClick }) => {
   if (jobs.length === 0) {
     return (
       <Card className="p-8 text-center">
@@ -40,10 +35,7 @@ const JobGrid: React.FC<JobGridProps> = ({
             onClick={() => onEditClick(job)}
             className="cursor-pointer"
           >
-            <JobCard
-              job={job}
-              onEditClick={() => onEditClick(job)}
-            />
+            <JobCard job={job} onEditClick={() => onEditClick(job)} />
           </div>
         ))}
       </div>

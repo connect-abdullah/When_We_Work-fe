@@ -30,7 +30,7 @@ const FormInput: React.FC<FormInputProps> = ({
         className={cn(
           "w-full px-2 py-2 text-[10px] border text-[#1F384C] border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#5A6ACF] focus:border-transparent",
           error && "border-red-500",
-          className,
+          className
         )}
         {...props}
       />

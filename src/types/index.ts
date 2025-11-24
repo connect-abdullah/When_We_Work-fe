@@ -1,4 +1,4 @@
-import { LucideIcon } from 'lucide-react';
+import { LucideIcon } from "lucide-react";
 
 export interface MenuItem {
   label: string;
@@ -16,10 +16,10 @@ export interface DashboardCard {
 export interface Booking {
   id: string;
   customerName: string;
-  status: 'Booked' | 'Reserved' | 'Cancelled';
+  status: "Booked" | "Reserved" | "Cancelled";
   date: string;
   service: string;
-  source: 'instagram' | 'messenger' | 'whatsapp' | 'sms' | 'web';
+  source: "instagram" | "messenger" | "whatsapp" | "sms" | "web";
 }
 
 export interface Chat {
@@ -28,7 +28,7 @@ export interface Chat {
   lastMessage: string;
   timestamp: string;
   unread: boolean;
-  source: 'instagram' | 'messenger' | 'whatsapp' | 'sms' | 'web';
+  source: "instagram" | "messenger" | "whatsapp" | "sms" | "web";
 }
 
 export interface User {
@@ -42,11 +42,10 @@ export interface Payment {
   id: string;
   customerName: string;
   amount: number;
-  status: 'Completed' | 'Pending' | 'Failed';
+  status: "Completed" | "Pending" | "Failed";
   date: string;
   service: string;
 }
-
 
 export interface JobSchema {
   id: string;
@@ -56,14 +55,14 @@ export interface JobSchema {
   phone?: string;
   profileImage?: string;
   minimum_education: string;
-  tone: 'professional' | 'friendly' | 'casual' | 'formal' | 'empathetic';
+  tone: "professional" | "friendly" | "casual" | "formal" | "empathetic";
   characteristics: string[];
-  status: 'active' | 'inactive' | 'on-leave';
+  status: "active" | "inactive" | "on-leave";
   joinDate?: string;
   people_needed: number;
   people_hired: number;
   salary: number;
-  salary_type: 'per_hour' | 'fixed';
+  salary_type: "per_hour" | "fixed";
   languages?: string[];
 }
 

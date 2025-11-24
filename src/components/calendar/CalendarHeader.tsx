@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 // ============================================================================
 // HEADER COMPONENT
@@ -19,8 +19,8 @@ import {
   FaSyncAlt,
   FaChevronDown,
   FaPlus,
-} from 'react-icons/fa';
-import { useState, useRef, useEffect } from 'react';
+} from "react-icons/fa";
+import { useState, useRef, useEffect } from "react";
 
 // ============================================================================
 // INTERFACES
@@ -46,9 +46,9 @@ export default function CalendarHeader({
 
   // Track which staff members are selected in the filter
   const [selectedResources, setSelectedResources] = useState<string[]>([
-    'abril',
-    'allan',
-    'bianca',
+    "abril",
+    "allan",
+    "bianca",
   ]);
 
   // Track the current date being displayed
@@ -62,9 +62,9 @@ export default function CalendarHeader({
   // ============================================================================
 
   const resources = [
-    { id: 'abril', name: 'Abril Lewis' },
-    { id: 'allan', name: 'Allan Hicks' },
-    { id: 'bianca', name: 'Bianca West' },
+    { id: "abril", name: "Abril Lewis" },
+    { id: "allan", name: "Allan Hicks" },
+    { id: "bianca", name: "Bianca West" },
   ];
 
   // ============================================================================
@@ -85,9 +85,9 @@ export default function CalendarHeader({
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -151,20 +151,18 @@ export default function CalendarHeader({
    */
   const handleToday = () => {
     const today = new Date();
-    console.log('Today button clicked, setting date to:', today);
+    console.log("Today button clicked, setting date to:", today);
     setCurrentDate(today);
     onDateChange(today);
 
     // Add visual feedback to the button
-    const button = document.querySelector(
-      '[data-today-button]'
-    ) as HTMLElement;
+    const button = document.querySelector("[data-today-button]") as HTMLElement;
     if (button) {
-      button.style.transform = 'scale(0.95)';
-      button.style.backgroundColor = '#10b981';
+      button.style.transform = "scale(0.95)";
+      button.style.backgroundColor = "#10b981";
       setTimeout(() => {
-        button.style.transform = 'scale(1)';
-        button.style.backgroundColor = '';
+        button.style.transform = "scale(1)";
+        button.style.backgroundColor = "";
       }, 150);
     }
   };
@@ -175,10 +173,10 @@ export default function CalendarHeader({
    * @returns Formatted date string (e.g., "Mon, Dec 16")
    */
   const formatDate = (date: Date) => {
-    return date.toLocaleDateString('en-US', {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
+    return date.toLocaleDateString("en-US", {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
     });
   };
 
@@ -245,8 +243,8 @@ export default function CalendarHeader({
             <button
               className={`p-3 rounded-full transition-colors border border-gray-200 flex items-center gap-2 ${
                 selectedResources.length < resources.length
-                  ? 'bg-blue-100 hover:bg-blue-200 text-blue-700'
-                  : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                  ? "bg-blue-100 hover:bg-blue-200 text-blue-700"
+                  : "bg-gray-100 hover:bg-gray-200 text-gray-700"
               }`}
               onClick={() => setIsFilterOpen(!isFilterOpen)}
               title="Filter Staff Members"
@@ -371,4 +369,3 @@ export default function CalendarHeader({
     </header>
   );
 }
-

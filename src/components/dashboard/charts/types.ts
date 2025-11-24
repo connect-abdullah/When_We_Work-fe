@@ -41,4 +41,3 @@ export interface PlatformConversionData {
   conversions: number;
   conversionRate?: number;
 }
-

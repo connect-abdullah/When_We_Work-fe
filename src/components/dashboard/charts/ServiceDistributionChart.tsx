@@ -1,15 +1,9 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Card from '@/components/ui/Card';
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  ResponsiveContainer,
-} from 'recharts';
-import { DiagnosisData, ChartTooltipProps } from './types';
+import React from "react";
+import Card from "@/components/ui/Card";
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
+import { DiagnosisData, ChartTooltipProps } from "./types";
 
 interface MonthlyDiagnosesChartProps {
   data: DiagnosisData[];
@@ -20,7 +14,11 @@ interface CustomTooltipProps extends ChartTooltipProps {
   totalPatients: number;
 }
 
-const CustomTooltip = ({ active, payload, totalPatients }: CustomTooltipProps) => {
+const CustomTooltip = ({
+  active,
+  payload,
+  totalPatients,
+}: CustomTooltipProps) => {
   if (!active || !payload?.length) return null;
 
   const data = payload[0];
@@ -38,7 +36,7 @@ const CustomTooltip = ({ active, payload, totalPatients }: CustomTooltipProps) =
 
 const ServiceDistributionChart: React.FC<MonthlyDiagnosesChartProps> = ({
   data,
-  className = '',
+  className = "",
 }) => {
   const totalPatients = data.reduce((sum, item) => sum + item.value, 0);
 
@@ -47,8 +45,6 @@ const ServiceDistributionChart: React.FC<MonthlyDiagnosesChartProps> = ({
       <h1 className="text-[10px] font-medium text-[#1F384C] mb-2">
         Top Services
       </h1>
-
-  
 
       {/* Chart */}
       <div className="flex mt-2 items-center justify-center mb-2">
@@ -69,7 +65,9 @@ const ServiceDistributionChart: React.FC<MonthlyDiagnosesChartProps> = ({
                 <Cell key={`cell-${index}`} fill={entry.color} />
               ))}
             </Pie>
-            <Tooltip content={<CustomTooltip totalPatients={totalPatients} />} />
+            <Tooltip
+              content={<CustomTooltip totalPatients={totalPatients} />}
+            />
             {/* Center text */}
             <text
               x="50%"
@@ -89,7 +87,6 @@ const ServiceDistributionChart: React.FC<MonthlyDiagnosesChartProps> = ({
             </text>
           </PieChart>
         </ResponsiveContainer>
-
       </div>
 
       {/* Legend */}
@@ -114,15 +111,9 @@ const ServiceDistributionChart: React.FC<MonthlyDiagnosesChartProps> = ({
             </div>
           );
         })}
-        
       </div>
-      
     </Card>
   );
 };
 
-
-
-
 export default ServiceDistributionChart;
-

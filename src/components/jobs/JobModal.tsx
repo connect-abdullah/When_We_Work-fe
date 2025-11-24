@@ -386,4 +386,3 @@ const JobModal: React.FC<JobModalProps> = ({
 };
 
 export default JobModal;
-

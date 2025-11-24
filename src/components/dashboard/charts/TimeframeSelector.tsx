@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useRef } from 'react';
-import { ChevronDown } from 'lucide-react';
+import React, { useState, useEffect, useRef } from "react";
+import { ChevronDown } from "lucide-react";
 
 interface TimeframeSelectorProps {
   value: string;
@@ -14,7 +14,7 @@ const TimeframeSelector: React.FC<TimeframeSelectorProps> = ({
   value,
   options,
   onChange,
-  className = '',
+  className = "",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -30,11 +30,11 @@ const TimeframeSelector: React.FC<TimeframeSelectorProps> = ({
     };
 
     if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
 
@@ -70,4 +70,3 @@ const TimeframeSelector: React.FC<TimeframeSelectorProps> = ({
 };
 
 export default TimeframeSelector;
-

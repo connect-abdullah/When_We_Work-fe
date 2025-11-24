@@ -97,7 +97,7 @@ const JobCard: React.FC<JobCardProps> = ({
               className="w-8 h-8 rounded-full object-cover border border-gray-200"
               width={32}
               height={32}
-            />  
+            />
           ) : (
             <div className="w-8 h-8 rounded-full bg-linear-to-br from-[#5A6ACF] to-[#4A5ABF] flex items-center justify-center text-white font-semibold text-[9px] border border-gray-200">
               {job.job_name.charAt(0).toUpperCase()}
@@ -230,7 +230,7 @@ const JobCard: React.FC<JobCardProps> = ({
           <div>
             <p className="text-[9px] text-gray-600">Type</p>
             <p className="text-[9px] font-bold text-gray-900">
-              {job.salary_type === 'per_hour' ? 'Hourly' : 'Per Job'}
+              {job.salary_type === "per_hour" ? "Hourly" : "Per Job"}
             </p>
           </div>
         </div>

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 // ============================================================================
 // CALENDAR COMPONENT
@@ -10,296 +10,302 @@
 // - Current time indicator (red line)
 // - Auto-scroll to current time when "Today" is clicked
 
-import { useRef, useEffect } from 'react';
-import FullCalendar from '@fullcalendar/react';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin from '@fullcalendar/interaction';
-import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid';
-import { EventClickArg, EventContentArg } from '@fullcalendar/core';
-import { Instagram, MessageCircle, Mail, CheckCircle, Clock, DollarSign } from 'lucide-react';
+import { useRef, useEffect } from "react";
+import FullCalendar from "@fullcalendar/react";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
+import { EventClickArg, EventContentArg } from "@fullcalendar/core";
+import {
+  Instagram,
+  MessageCircle,
+  Mail,
+  CheckCircle,
+  Clock,
+  DollarSign,
+} from "lucide-react";
 
 // ============================================================================
 // DATA CONFIGURATION
 // ============================================================================
 // Get today's date in YYYY-MM-DD format for dynamic event creation
-const today = new Date().toISOString().split('T')[0];
+const today = new Date().toISOString().split("T")[0];
 
 // Sample events data with booking status, payment, and source info
 const events = [
   // TODAY'S EVENTS (dynamically created with 15-minute precision)
   {
-    id: 'today1',
-    title: 'Sarah Johnson',
-    service: 'Haircut & Styling',
+    id: "today1",
+    title: "Sarah Johnson",
+    service: "Haircut & Styling",
     start: `${today}T08:00:00`,
     end: `${today}T08:45:00`,
-    backgroundColor: '#e0f2fe',
-    borderColor: '#0ea5e9',
-    textColor: '#0c4a6e',
-    resourceId: 'abril',
+    backgroundColor: "#e0f2fe",
+    borderColor: "#0ea5e9",
+    textColor: "#0c4a6e",
+    resourceId: "abril",
     extendedProps: {
-      status: 'confirmed',
+      status: "confirmed",
       paid: true,
-      source: 'instagram',
-      customer: 'Sarah Johnson'
-    }
+      source: "instagram",
+      customer: "Sarah Johnson",
+    },
   },
   {
-    id: 'today2',
-    title: 'Mike Chen',
-    service: 'Hair Coloring',
+    id: "today2",
+    title: "Mike Chen",
+    service: "Hair Coloring",
     start: `${today}T09:00:00`,
     end: `${today}T10:30:00`,
-    backgroundColor: '#ddd6fe',
-    borderColor: '#a78bfa',
-    textColor: '#5b21b6',
-    resourceId: 'abril',
+    backgroundColor: "#ddd6fe",
+    borderColor: "#a78bfa",
+    textColor: "#5b21b6",
+    resourceId: "abril",
     extendedProps: {
-      status: 'confirmed',
+      status: "confirmed",
       paid: true,
-      source: 'whatsapp',
-      customer: 'Mike Chen'
-    }
+      source: "whatsapp",
+      customer: "Mike Chen",
+    },
   },
   {
-    id: 'today3',
-    title: 'Emma Wilson',
-    service: 'Balayage',
+    id: "today3",
+    title: "Emma Wilson",
+    service: "Balayage",
     start: `${today}T11:00:00`,
     end: `${today}T12:00:00`,
-    backgroundColor: '#fce7f3',
-    borderColor: '#f472b6',
-    textColor: '#831843',
-    resourceId: 'abril',
+    backgroundColor: "#fce7f3",
+    borderColor: "#f472b6",
+    textColor: "#831843",
+    resourceId: "abril",
     extendedProps: {
-      status: 'booked',
+      status: "booked",
       paid: false,
-      source: 'messenger',
-      customer: 'Emma Wilson'
-    }
+      source: "messenger",
+      customer: "Emma Wilson",
+    },
   },
   {
-    id: 'today4',
-    title: 'John Davis',
-    service: 'Keratin Treatment',
+    id: "today4",
+    title: "John Davis",
+    service: "Keratin Treatment",
     start: `${today}T13:00:00`,
     end: `${today}T14:15:00`,
-    backgroundColor: '#fed7aa',
-    borderColor: '#fb923c',
-    textColor: '#7c2d12',
-    resourceId: 'abril',
+    backgroundColor: "#fed7aa",
+    borderColor: "#fb923c",
+    textColor: "#7c2d12",
+    resourceId: "abril",
     extendedProps: {
-      status: 'confirmed',
+      status: "confirmed",
       paid: true,
-      source: 'instagram',
-      customer: 'John Davis'
-    }
+      source: "instagram",
+      customer: "John Davis",
+    },
   },
   {
-    id: 'today5',
-    title: 'Lisa Brown',
-    service: 'Hair Styling',
+    id: "today5",
+    title: "Lisa Brown",
+    service: "Hair Styling",
     start: `${today}T15:00:00`,
     end: `${today}T15:45:00`,
-    backgroundColor: '#e0f2fe',
-    borderColor: '#0ea5e9',
-    textColor: '#0c4a6e',
-    resourceId: 'abril',
+    backgroundColor: "#e0f2fe",
+    borderColor: "#0ea5e9",
+    textColor: "#0c4a6e",
+    resourceId: "abril",
     extendedProps: {
-      status: 'confirmed',
+      status: "confirmed",
       paid: true,
-      source: 'sms',
-      customer: 'Lisa Brown'
-    }
+      source: "sms",
+      customer: "Lisa Brown",
+    },
   },
   {
-    id: 'today6',
-    title: 'David Kim',
-    service: 'Deep Tissue Massage',
+    id: "today6",
+    title: "David Kim",
+    service: "Deep Tissue Massage",
     start: `${today}T08:30:00`,
     end: `${today}T09:30:00`,
-    backgroundColor: '#d1fae5',
-    borderColor: '#34d399',
-    textColor: '#064e3b',
-    resourceId: 'allan',
+    backgroundColor: "#d1fae5",
+    borderColor: "#34d399",
+    textColor: "#064e3b",
+    resourceId: "allan",
     extendedProps: {
-      status: 'confirmed',
+      status: "confirmed",
       paid: true,
-      source: 'whatsapp',
-      customer: 'David Kim'
-    }
+      source: "whatsapp",
+      customer: "David Kim",
+    },
   },
   {
-    id: 'today7',
-    title: 'Anna Martinez',
-    service: 'Swedish Massage',
+    id: "today7",
+    title: "Anna Martinez",
+    service: "Swedish Massage",
     start: `${today}T10:00:00`,
     end: `${today}T10:45:00`,
-    backgroundColor: '#ccfbf1',
-    borderColor: '#2dd4bf',
-    textColor: '#134e4a',
-    resourceId: 'allan',
+    backgroundColor: "#ccfbf1",
+    borderColor: "#2dd4bf",
+    textColor: "#134e4a",
+    resourceId: "allan",
     extendedProps: {
-      status: 'booked',
+      status: "booked",
       paid: false,
-      source: 'instagram',
-      customer: 'Anna Martinez'
-    }
+      source: "instagram",
+      customer: "Anna Martinez",
+    },
   },
   {
-    id: 'today8',
-    title: 'Robert Lee',
-    service: 'Hot Stone Therapy',
+    id: "today8",
+    title: "Robert Lee",
+    service: "Hot Stone Therapy",
     start: `${today}T11:15:00`,
     end: `${today}T12:30:00`,
-    backgroundColor: '#ffedd5',
-    borderColor: '#fb923c',
-    textColor: '#7c2d12',
-    resourceId: 'allan',
+    backgroundColor: "#ffedd5",
+    borderColor: "#fb923c",
+    textColor: "#7c2d12",
+    resourceId: "allan",
     extendedProps: {
-      status: 'confirmed',
+      status: "confirmed",
       paid: true,
-      source: 'messenger',
-      customer: 'Robert Lee'
-    }
+      source: "messenger",
+      customer: "Robert Lee",
+    },
   },
   {
-    id: 'today9',
-    title: 'Jessica Taylor',
-    service: 'Sports Massage',
+    id: "today9",
+    title: "Jessica Taylor",
+    service: "Sports Massage",
     start: `${today}T14:00:00`,
     end: `${today}T15:00:00`,
-    backgroundColor: '#e0f2fe',
-    borderColor: '#0ea5e9',
-    textColor: '#0c4a6e',
-    resourceId: 'allan',
+    backgroundColor: "#e0f2fe",
+    borderColor: "#0ea5e9",
+    textColor: "#0c4a6e",
+    resourceId: "allan",
     extendedProps: {
-      status: 'confirmed',
+      status: "confirmed",
       paid: true,
-      source: 'whatsapp',
-      customer: 'Jessica Taylor'
-    }
+      source: "whatsapp",
+      customer: "Jessica Taylor",
+    },
   },
   {
-    id: 'today10',
-    title: 'Mark Thompson',
-    service: 'Relaxation Massage',
+    id: "today10",
+    title: "Mark Thompson",
+    service: "Relaxation Massage",
     start: `${today}T16:00:00`,
     end: `${today}T16:45:00`,
-    backgroundColor: '#ddd6fe',
-    borderColor: '#a78bfa',
-    textColor: '#5b21b6',
-    resourceId: 'allan',
+    backgroundColor: "#ddd6fe",
+    borderColor: "#a78bfa",
+    textColor: "#5b21b6",
+    resourceId: "allan",
     extendedProps: {
-      status: 'booked',
+      status: "booked",
       paid: false,
-      source: 'sms',
-      customer: 'Mark Thompson'
-    }
+      source: "sms",
+      customer: "Mark Thompson",
+    },
   },
   {
-    id: 'today11',
-    title: 'Emily Rodriguez',
-    service: 'Facial Treatment',
+    id: "today11",
+    title: "Emily Rodriguez",
+    service: "Facial Treatment",
     start: `${today}T08:00:00`,
     end: `${today}T09:00:00`,
-    backgroundColor: '#fce7f3',
-    borderColor: '#f472b6',
-    textColor: '#831843',
-    resourceId: 'bianca',
+    backgroundColor: "#fce7f3",
+    borderColor: "#f472b6",
+    textColor: "#831843",
+    resourceId: "bianca",
     extendedProps: {
-      status: 'confirmed',
+      status: "confirmed",
       paid: true,
-      source: 'instagram',
-      customer: 'Emily Rodriguez'
-    }
+      source: "instagram",
+      customer: "Emily Rodriguez",
+    },
   },
   {
-    id: 'today12',
-    title: 'Sophie Anderson',
-    service: 'Microdermabrasion',
+    id: "today12",
+    title: "Sophie Anderson",
+    service: "Microdermabrasion",
     start: `${today}T09:30:00`,
     end: `${today}T10:15:00`,
-    backgroundColor: '#e9d5ff',
-    borderColor: '#c084fc',
-    textColor: '#581c87',
-    resourceId: 'bianca',
+    backgroundColor: "#e9d5ff",
+    borderColor: "#c084fc",
+    textColor: "#581c87",
+    resourceId: "bianca",
     extendedProps: {
-      status: 'confirmed',
+      status: "confirmed",
       paid: true,
-      source: 'whatsapp',
-      customer: 'Sophie Anderson'
-    }
+      source: "whatsapp",
+      customer: "Sophie Anderson",
+    },
   },
   {
-    id: 'today13',
-    title: 'Rachel Green',
-    service: 'Chemical Peel',
+    id: "today13",
+    title: "Rachel Green",
+    service: "Chemical Peel",
     start: `${today}T10:45:00`,
     end: `${today}T11:35:00`,
-    backgroundColor: '#dbeafe',
-    borderColor: '#60a5fa',
-    textColor: '#1e3a8a',
-    resourceId: 'bianca',
+    backgroundColor: "#dbeafe",
+    borderColor: "#60a5fa",
+    textColor: "#1e3a8a",
+    resourceId: "bianca",
     extendedProps: {
-      status: 'booked',
+      status: "booked",
       paid: false,
-      source: 'messenger',
-      customer: 'Rachel Green'
-    }
+      source: "messenger",
+      customer: "Rachel Green",
+    },
   },
   {
-    id: 'today14',
-    title: 'Monica White',
-    service: 'Hydrafacial',
+    id: "today14",
+    title: "Monica White",
+    service: "Hydrafacial",
     start: `${today}T12:00:00`,
     end: `${today}T13:00:00`,
-    backgroundColor: '#d1fae5',
-    borderColor: '#34d399',
-    textColor: '#064e3b',
-    resourceId: 'bianca',
+    backgroundColor: "#d1fae5",
+    borderColor: "#34d399",
+    textColor: "#064e3b",
+    resourceId: "bianca",
     extendedProps: {
-      status: 'confirmed',
+      status: "confirmed",
       paid: true,
-      source: 'instagram',
-      customer: 'Monica White'
-    }
+      source: "instagram",
+      customer: "Monica White",
+    },
   },
   {
-    id: 'today15',
-    title: 'Phoebe Clark',
-    service: 'Anti-Aging Facial',
+    id: "today15",
+    title: "Phoebe Clark",
+    service: "Anti-Aging Facial",
     start: `${today}T14:00:00`,
     end: `${today}T15:00:00`,
-    backgroundColor: '#fce7f3',
-    borderColor: '#f472b6',
-    textColor: '#831843',
-    resourceId: 'bianca',
+    backgroundColor: "#fce7f3",
+    borderColor: "#f472b6",
+    textColor: "#831843",
+    resourceId: "bianca",
     extendedProps: {
-      status: 'confirmed',
+      status: "confirmed",
       paid: true,
-      source: 'whatsapp',
-      customer: 'Phoebe Clark'
-    }
+      source: "whatsapp",
+      customer: "Phoebe Clark",
+    },
   },
   {
-    id: 'today16',
-    title: 'Chandler Bing',
-    service: 'Gentleman\'s Facial',
+    id: "today16",
+    title: "Chandler Bing",
+    service: "Gentleman's Facial",
     start: `${today}T15:30:00`,
     end: `${today}T16:30:00`,
-    backgroundColor: '#e0f2fe',
-    borderColor: '#0ea5e9',
-    textColor: '#0c4a6e',
-    resourceId: 'bianca',
+    backgroundColor: "#e0f2fe",
+    borderColor: "#0ea5e9",
+    textColor: "#0c4a6e",
+    resourceId: "bianca",
     extendedProps: {
-      status: 'booked',
+      status: "booked",
       paid: false,
-      source: 'sms',
-      customer: 'Chandler Bing'
-    }
+      source: "sms",
+      customer: "Chandler Bing",
+    },
   },
-
 ];
 
 // ============================================================================
@@ -314,7 +320,7 @@ interface MyCalendarProps {
 // MAIN CALENDAR COMPONENT
 // ============================================================================
 export default function MyCalendar({
-  filteredResources = ['abril', 'allan', 'bianca'],
+  filteredResources = ["abril", "allan", "bianca"],
   selectedDate = new Date(),
 }: MyCalendarProps) {
   // Reference to the FullCalendar instance for API access
@@ -350,14 +356,14 @@ export default function MyCalendar({
         // Wait for calendar to render completely
         setTimeout(() => {
           const now = new Date();
-          const timeStr = now.toTimeString().split(' ')[0]; // Get HH:MM:SS format
+          const timeStr = now.toTimeString().split(" ")[0]; // Get HH:MM:SS format
 
           // Step 1: Use FullCalendar's built-in scrollToTime method
           calendar.scrollToTime(timeStr); // true = smooth scrolling
 
           // Step 2: Fine-tune the scroll position to center the current time
           setTimeout(() => {
-            const scrollContainer = document.querySelector('.fc-scroller');
+            const scrollContainer = document.querySelector(".fc-scroller");
             if (scrollContainer) {
               const containerHeight = scrollContainer.clientHeight;
               const currentHour = now.getHours();
@@ -377,18 +383,22 @@ export default function MyCalendar({
               );
 
               // Debug logging for development
-              console.log('Centering current time slot:');
-              console.log('- Current hour:', currentHour);
-              console.log('- Current minute:', currentMinute);
-              console.log('- Current time position:', currentTimePosition, 'px');
-              console.log('- Container height:', containerHeight, 'px');
-              console.log('- Center offset:', centerOffset, 'px');
-              console.log('- Scroll position:', scrollPosition, 'px');
+              console.log("Centering current time slot:");
+              console.log("- Current hour:", currentHour);
+              console.log("- Current minute:", currentMinute);
+              console.log(
+                "- Current time position:",
+                currentTimePosition,
+                "px"
+              );
+              console.log("- Container height:", containerHeight, "px");
+              console.log("- Center offset:", centerOffset, "px");
+              console.log("- Scroll position:", scrollPosition, "px");
 
               // Smooth scroll to center the current time slot
               scrollContainer.scrollTo({
                 top: scrollPosition,
-                behavior: 'smooth',
+                behavior: "smooth",
               });
             }
           }, 400); // Wait 400ms for scrollToTime to complete
@@ -408,27 +418,27 @@ export default function MyCalendar({
   const renderEventContent = (eventInfo: EventContentArg) => {
     const { extendedProps } = eventInfo.event;
     const eventData = eventInfo.event._def.extendedProps;
-    const startTime = eventInfo.event.start?.toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true
+    const startTime = eventInfo.event.start?.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
     });
-    const endTime = eventInfo.event.end?.toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true
+    const endTime = eventInfo.event.end?.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
     });
 
     // Get source icon
     const getSourceIcon = () => {
       switch (extendedProps.source) {
-        case 'instagram':
+        case "instagram":
           return <Instagram size={8} />;
-        case 'whatsapp':
+        case "whatsapp":
           return <MessageCircle size={8} />;
-        case 'messenger':
+        case "messenger":
           return <MessageCircle size={8} />;
-        case 'sms':
+        case "sms":
           return <Mail size={8} />;
         default:
           return null;
@@ -437,15 +447,15 @@ export default function MyCalendar({
 
     // Get status icon
     const getStatusIcon = () => {
-      if (extendedProps.status === 'confirmed') {
+      if (extendedProps.status === "confirmed") {
         return <CheckCircle size={8} />;
       }
       return <Clock size={8} />;
     };
 
     // Get service from event
-    const service = eventData.service || '';
-    
+    const service = eventData.service || "";
+
     return (
       <div className="p-1 overflow-hidden h-full flex flex-col justify-between">
         {/* Top Section - Always visible */}
@@ -454,7 +464,7 @@ export default function MyCalendar({
           <div className="font-semibold text-[10px] truncate leading-tight">
             {eventInfo.event.title}
           </div>
-          
+
           {/* Service */}
           {service && (
             <div className="text-[9px] opacity-80 truncate leading-tight">
@@ -462,7 +472,7 @@ export default function MyCalendar({
             </div>
           )}
         </div>
-        
+
         {/* Bottom Section - Icons and Time */}
         <div className="shrink-0 mt-auto">
           {/* Icons Row */}
@@ -471,20 +481,20 @@ export default function MyCalendar({
             <div className="flex items-center opacity-70">
               {getStatusIcon()}
             </div>
-            
+
             {/* Payment Icon */}
             {extendedProps.paid && (
               <div className="flex items-center opacity-70">
                 <DollarSign size={8} />
               </div>
             )}
-            
+
             {/* Source Icon */}
             <div className="flex items-center opacity-70 ml-auto">
               {getSourceIcon()}
             </div>
           </div>
-          
+
           {/* Time */}
           <div className="text-[7px] opacity-70 leading-tight">
             {startTime} - {endTime}
@@ -498,7 +508,9 @@ export default function MyCalendar({
    * Custom resource label renderer
    * Shows staff member name with minimal design
    */
-  const renderResourceLabel = (resourceInfo: { resource: { title: string } }) => {
+  const renderResourceLabel = (resourceInfo: {
+    resource: { title: string };
+  }) => {
     return (
       <div className="flex items-center justify-center gap-2 py-1.5 px-2">
         <span className="text-[10px] font-medium text-[#1F384C]">
@@ -519,11 +531,7 @@ export default function MyCalendar({
         // ====================================================================
         // PLUGINS & VIEW CONFIGURATION
         // ====================================================================
-        plugins={[
-          timeGridPlugin,
-          interactionPlugin,
-          resourceTimeGridPlugin,
-        ]}
+        plugins={[timeGridPlugin, interactionPlugin, resourceTimeGridPlugin]}
         initialView="resourceTimeGridDay"
         initialDate={selectedDate}
         key={selectedDate.toISOString()} // Force re-render when date changes
@@ -531,9 +539,9 @@ export default function MyCalendar({
         // RESOURCES (STAFF MEMBERS)
         // ====================================================================
         resources={[
-          { id: 'abril', title: 'Abril Lewis' },
-          { id: 'allan', title: 'Allan Hicks' },
-          { id: 'bianca', title: 'Bianca West' },
+          { id: "abril", title: "Abril Lewis" },
+          { id: "allan", title: "Allan Hicks" },
+          { id: "bianca", title: "Bianca West" },
         ].filter((resource) => filteredResources.includes(resource.id))}
         // ====================================================================
         // CALENDAR CONFIGURATION
@@ -545,7 +553,7 @@ export default function MyCalendar({
         slotLabelInterval="01:00:00" // Show labels every hour
         allDaySlot={false} // Hide all-day slot
         nowIndicator={true} // Show current time indicator (red line)
-        nowIndicatorClassNames="now-indicator-line" 
+        nowIndicatorClassNames="now-indicator-line"
         // Current time indicator content (shows time badge)
         // nowIndicatorContent={() => {
         //   const now = new Date();
@@ -564,8 +572,8 @@ export default function MyCalendar({
         dayMaxEvents={false} // No limit on events per day
         snapDuration="00:15:00" // Snap to 15-minute intervals
         selectConstraint={{
-          start: '00:00',
-          end: '24:00',
+          start: "00:00",
+          end: "24:00",
         }}
         // ====================================================================
         // DISPLAY SETTINGS
@@ -579,8 +587,8 @@ export default function MyCalendar({
         // TIME FORMATTING
         // ====================================================================
         slotLabelFormat={{
-          hour: 'numeric',
-          minute: '2-digit',
+          hour: "numeric",
+          minute: "2-digit",
           hour12: true, // Show AM/PM
         }}
         // ====================================================================
@@ -592,9 +600,9 @@ export default function MyCalendar({
         // DATE FORMATTING
         // ====================================================================
         dayHeaderFormat={{
-          weekday: 'short',
-          month: 'short',
-          day: 'numeric',
+          weekday: "short",
+          month: "short",
+          day: "numeric",
         }}
         // ====================================================================
         // EVENT DISPLAY SETTINGS
@@ -602,18 +610,17 @@ export default function MyCalendar({
         eventDisplay="block" // Show events as blocks
         eventOverlap={true} // Don't allow event overlap
         eventConstraint={{
-          start: '00:00',
-          end: '24:00',
+          start: "00:00",
+          end: "24:00",
         }}
         slotMinWidth={120} // Minimum width for time slots
         // ====================================================================
         // SCROLL SETTINGS
         // ====================================================================
-        scrollTime={new Date().toTimeString().split(' ')[0]} // Initial scroll position
+        scrollTime={new Date().toTimeString().split(" ")[0]} // Initial scroll position
         scrollTimeReset={false} // Don't reset scroll on date change
         aspectRatio={1.8} // Calendar aspect ratio
       />
     </div>
   );
 }
-

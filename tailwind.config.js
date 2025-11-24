@@ -9,7 +9,12 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ["var(--font-geist-sans)", "system-ui", "Arial", "sans-serif"],
-        mono: ["var(--font-geist-mono)", "ui-monospace", "SFMono-Regular", "monospace"],
+        mono: [
+          "var(--font-geist-mono)",
+          "ui-monospace",
+          "SFMono-Regular",
+          "monospace",
+        ],
       },
     },
   },
