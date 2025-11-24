@@ -68,3 +68,7 @@ next-env.d.ts
 # ============================================
 # To include other components, REMOVE or COMMENT OUT these lines:
 /src/components/onboarding/
+
+/src/components/customers/
+/src/constants/customers.tsx
+/src/components/catalogs/

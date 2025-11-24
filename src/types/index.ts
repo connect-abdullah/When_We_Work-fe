@@ -66,3 +66,13 @@ export interface JobSchema {
   salary_type: 'per_hour' | 'fixed';
   languages?: string[];
 }
+
+export interface SalesAgent {
+  id: string;
+  name: string;
+  avatar?: string;
+  appointmentsClosed: number;
+  dealsWon: number;
+  conversionRate: number;
+  revenue: number;
+}
