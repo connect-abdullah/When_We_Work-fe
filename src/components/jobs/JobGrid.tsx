@@ -9,9 +9,10 @@ interface JobGridProps {
   jobs: JobSchema[];
   totalJobs: number;
   onEditClick: (job: JobSchema) => void;
+  onCardClick?: (job: JobSchema) => void;
 }
 
-const JobGrid: React.FC<JobGridProps> = ({ jobs, totalJobs, onEditClick }) => {
+const JobGrid: React.FC<JobGridProps> = ({ jobs, totalJobs, onEditClick, onCardClick }) => {
   if (jobs.length === 0) {
     return (
       <Card className="p-8 text-center">
@@ -30,13 +31,12 @@ const JobGrid: React.FC<JobGridProps> = ({ jobs, totalJobs, onEditClick }) => {
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 mb-2">
         {jobs.map((job) => (
-          <div
+          <JobCard
             key={job.id}
-            onClick={() => onEditClick(job)}
-            className="cursor-pointer"
-          >
-            <JobCard job={job} onEditClick={() => onEditClick(job)} />
-          </div>
+            job={job}
+            onEditClick={() => onEditClick(job)}
+            onClick={() => onCardClick?.(job)}
+          />
         ))}
       </div>
 

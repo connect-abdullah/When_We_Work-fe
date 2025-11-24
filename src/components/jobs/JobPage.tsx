@@ -10,6 +10,7 @@ import JobFilters from "@/components/jobs/JobFilters";
 import JobGrid from "@/components/jobs/JobGrid";
 import JobStats from "@/components/jobs/JobStats";
 import JobModal from "@/components/jobs/JobModal";
+import JobDetailModal from "@/components/jobs/JobDetailModal";
 
 export default function JobPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -20,6 +21,8 @@ export default function JobPage() {
   const [typeFilter, setTypeFilter] = useState<string>("all");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedJob, setSelectedJob] = useState<JobSchema | null>(null);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [detailJob, setDetailJob] = useState<JobSchema | null>(null);
 
   // Filter jobs
   const filteredJobs = useMemo(() => {
@@ -127,6 +130,24 @@ export default function JobPage() {
     setSelectedJob(null);
   };
 
+  const handleOpenDetailModal = (job: JobSchema) => {
+    setDetailJob(job);
+    setIsDetailModalOpen(true);
+  };
+
+  const handleCloseDetailModal = () => {
+    setIsDetailModalOpen(false);
+    setDetailJob(null);
+  };
+
+  const handleEditFromDetail = () => {
+    if (detailJob) {
+      setIsDetailModalOpen(false);
+      setSelectedJob(detailJob);
+      setIsModalOpen(true);
+    }
+  };
+
   const handleUpdateJob = (jobData: Partial<JobSchema>) => {
     console.log("Updating job:", selectedJob?.id, jobData);
     // TODO: Implement API call to update job
@@ -176,6 +197,7 @@ export default function JobPage() {
               jobs={filteredJobs}
               totalJobs={totalJobs}
               onEditClick={(job) => handleOpenModal(job)}
+              onCardClick={handleOpenDetailModal}
             />
           </div>
         </div>
@@ -187,6 +209,14 @@ export default function JobPage() {
         job={selectedJob || undefined}
         onClose={handleCloseModal}
         onSubmit={selectedJob ? handleUpdateJob : handleCreateJob}
+      />
+
+      {/* Job Detail Modal */}
+      <JobDetailModal
+        isOpen={isDetailModalOpen}
+        job={detailJob}
+        onClose={handleCloseDetailModal}
+        onEdit={handleEditFromDetail}
       />
     </div>
   );
