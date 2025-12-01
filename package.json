@@ -2,14 +2,14 @@
   "name": "When_We_Work",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "bun run next dev --turbopack",
-    "build": "bun run next build --turbopack",
-    "start": "bun run next start",
-    "lint": "bun run eslint",
-    "format": "prettier --write .",
-    "format:check": "prettier --check ."
-  },
+"scripts": {
+  "dev": "next dev",
+  "build": "next build",
+  "start": "next start",
+  "lint": "eslint",
+  "format": "prettier --write .",
+  "format:check": "prettier --check ."
+},
   "dependencies": {
     "@fullcalendar/core": "^6.1.19",
     "@fullcalendar/daygrid": "^6.1.19",

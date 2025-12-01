@@ -19,3 +19,4 @@ export { default as Pagination } from "@/components/ui/Pagination";
 export { default as MetricCard } from "@/components/ui/MetricCard";
 export { default as MessageInput } from "@/components/ui/MessageInput";
 export { default as InsightsCard } from "@/components/ui/InsightsCard";
+export { default as SearchableMultiSelect } from "@/components/ui/SearchableMultiSelect";

@@ -13,7 +13,7 @@ import { MenuItem } from "@/types";
 export const TOP_MENU_ITEMS: MenuItem[] = [
   { label: "Dashboard", link: "/dashboard", icon: LayoutDashboard },
   { label: "Calendar", link: "/calendar", icon: Calendar },
-  { label: "Catalogs", link: "/catalogs", icon: BookOpen },
+  { label: "Approval Panel", link: "/approval-panel", icon: BookOpen },
   { label: "Workers", link: "/workers", icon: UserCheck },
   { label: "Jobs", link: "/jobs", icon: Users },
   { label: "Reminder", link: "/reminder", icon: Bell },

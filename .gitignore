@@ -59,16 +59,12 @@ next-env.d.ts
 # ============================================
 # To include other pages, REMOVE or COMMENT OUT these lines:
 /src/app/campaigns/
-/src/app/catalogs/
+/src/app/approval-panel/
 /src/app/customers/
-/src/app/workers/
 
 # ============================================
 # EXCLUDED: Other Components (for future deployment)
 # ============================================
 # To include other components, REMOVE or COMMENT OUT these lines:
 /src/components/onboarding/
-
-/src/components/customers/
-/src/constants/customers.tsx
-/src/components/catalogs/
+/src/components/approval-panel/
