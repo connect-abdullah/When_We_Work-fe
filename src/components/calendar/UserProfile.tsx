@@ -13,6 +13,7 @@ export default function UserProfile() {
     <div className="flex flex-col items-center py-6 bg-white border-b border-gray-200">
       {/* PROFILE PICTURE */}
       <div className="w-16 h-16 rounded-full border-2 border-blue-200 overflow-hidden mb-3">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&crop=face"
           alt="Profile"

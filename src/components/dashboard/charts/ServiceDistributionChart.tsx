@@ -2,8 +2,8 @@
 
 import React from "react";
 import Card from "@/components/ui/Card";
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
-import { DiagnosisData, ChartTooltipProps } from "./types";
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
+import { ChartTooltipProps, DiagnosisData } from "./types";
 
 interface MonthlyDiagnosesChartProps {
   data: DiagnosisData[];
@@ -19,7 +19,9 @@ const CustomTooltip = ({
   payload,
   totalPatients,
 }: CustomTooltipProps) => {
-  if (!active || !payload?.length) return null;
+  if (!active || !payload?.length) {
+    return null;
+  }
 
   const data = payload[0];
   const percentage = ((data.value / totalPatients) * 100).toFixed(1);

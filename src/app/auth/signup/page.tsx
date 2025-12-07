@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { User, Mail, Phone, Lock, CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Lock, Mail, Phone, User } from "lucide-react";
 import { Button, FormInput } from "@/components/ui";
 import { AuthLayout, PasswordInput, PhoneInput } from "@/components/auth";
 import Link from "next/link";
@@ -68,7 +68,7 @@ const SignupPage: React.FC = () => {
         if (!phoneNumber || !phoneNumber.isValid()) {
           newErrors.phone = "Please enter a valid phone number";
         }
-      } catch (error) {
+      } catch (_error) {
         newErrors.phone = "Please enter a valid phone number";
       }
     }
@@ -129,11 +129,11 @@ const SignupPage: React.FC = () => {
 
     try {
       // TODO: Implement actual signup logic here
-      const signupData = {
+      const _signupData = {
         ...formData,
         phone: getFullPhoneNumber(), // This will be in E.164 format (e.g., +1234567890)
       };
-      console.log("Signup data with international phone number:", signupData);
+      // console.log("Signup data with international phone number:", _signupData);
 
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));

@@ -10,19 +10,19 @@
 // - Current time indicator (red line)
 // - Auto-scroll to current time when "Today" is clicked
 
-import { useRef, useEffect } from "react";
+import { useEffect, useRef } from "react";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
 import { EventClickArg, EventContentArg } from "@fullcalendar/core";
 import {
-  Instagram,
-  MessageCircle,
-  Mail,
   CheckCircle,
   Clock,
   DollarSign,
+  Instagram,
+  Mail,
+  MessageCircle,
 } from "lucide-react";
 
 // ============================================================================
@@ -383,17 +383,17 @@ export default function MyCalendar({
               );
 
               // Debug logging for development
-              console.log("Centering current time slot:");
-              console.log("- Current hour:", currentHour);
-              console.log("- Current minute:", currentMinute);
-              console.log(
-                "- Current time position:",
-                currentTimePosition,
-                "px"
-              );
-              console.log("- Container height:", containerHeight, "px");
-              console.log("- Center offset:", centerOffset, "px");
-              console.log("- Scroll position:", scrollPosition, "px");
+              // console.log("Centering current time slot:");
+              // console.log("- Current hour:", currentHour);
+              // console.log("- Current minute:", currentMinute);
+              // console.log(
+              //   "- Current time position:",
+              //   currentTimePosition,
+              //   "px",
+              // );
+              // console.log("- Container height:", containerHeight, "px");
+              // console.log("- Center offset:", centerOffset, "px");
+              // console.log("- Scroll position:", scrollPosition, "px");
 
               // Smooth scroll to center the current time slot
               scrollContainer.scrollTo({

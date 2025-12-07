@@ -1,0 +1,56 @@
+name: Code Quality
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  code-quality:
+    name: Code Quality Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Check for TODO comments
+        run: |
+          echo "Checking for TODO comments..."
+          if grep -r "TODO\|FIXME\|HACK" src/ --exclude-dir=node_modules || true; then
+            echo "::notice::Found TODO/FIXME/HACK comments in codebase"
+          fi
+
+      - name: Check for large files
+        run: |
+          echo "Checking for large files (>500KB)..."
+          find . -type f -size +500k -not -path "./node_modules/*" -not -path "./.git/*" -not -path "./.next/*" | while read file; do
+            echo "::warning::Large file found: $file"
+          done || true
+
+      - name: Check unused dependencies
+        run: |
+          echo "Checking for unused dependencies..."
+          bunx depcheck --ignores="@types/*,eslint-config-next,@next/*,@tailwindcss/*" || echo "::notice::Consider removing unused dependencies"
+        continue-on-error: true
+
+      - name: Security audit
+        run: bun pm audit --audit-level=moderate || true
+        continue-on-error: true
+
+      - name: License compliance check
+        run: |
+          echo "Checking license compliance..."
+          bunx license-checker --summary
+        continue-on-error: true

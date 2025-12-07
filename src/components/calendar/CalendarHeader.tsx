@@ -11,16 +11,15 @@
 // - Settings, refresh, and add buttons
 
 import {
+  FaCalendarAlt,
+  FaChevronDown,
   FaChevronLeft,
   FaChevronRight,
-  FaCog,
-  FaCalendarAlt,
   FaClock,
+  FaCog,
   FaSyncAlt,
-  FaChevronDown,
-  FaPlus,
 } from "react-icons/fa";
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // ============================================================================
 // INTERFACES
@@ -151,7 +150,7 @@ export default function CalendarHeader({
    */
   const handleToday = () => {
     const today = new Date();
-    console.log("Today button clicked, setting date to:", today);
+    // console.log("Today button clicked, setting date to:", today);
     setCurrentDate(today);
     onDateChange(today);
 

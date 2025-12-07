@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Mail, CheckCircle2, ArrowLeft } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Mail } from "lucide-react";
 import { Button, FormInput } from "@/components/ui";
 import { AuthLayout } from "@/components/auth";
 import Link from "next/link";
@@ -67,7 +67,7 @@ const ForgotPasswordPage: React.FC = () => {
 
     try {
       // TODO: Implement actual forgot password logic here
-      console.log("Forgot password email:", formData.email);
+      // console.log("Forgot password email:", formData.email);
 
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));

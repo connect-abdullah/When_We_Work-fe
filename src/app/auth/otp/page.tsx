@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useRef, useEffect, Suspense } from "react";
-import { ArrowLeft, RotateCcw, Loader2 } from "lucide-react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
+import { ArrowLeft, Loader2, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui";
 import { AuthLayout } from "@/components/auth";
 import Link from "next/link";
@@ -51,7 +51,9 @@ const OTPContent: React.FC = () => {
   };
 
   const handleInputChange = (index: number, value: string) => {
-    if (value.length > 1) return; // Prevent multiple characters
+    if (value.length > 1) {
+      return;
+    } // Prevent multiple characters
 
     const newOtp = [...otp];
     newOtp[index] = value;
@@ -104,8 +106,8 @@ const OTPContent: React.FC = () => {
 
     try {
       // TODO: Implement actual OTP verification logic here
-      const otpString = otp.join("");
-      console.log("OTP verification:", otpString);
+      const _otpString = otp.join("");
+      // console.log("OTP verification:", _otpString);
 
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -131,7 +133,7 @@ const OTPContent: React.FC = () => {
     setOtp(["", "", "", "", "", ""]);
     setErrors({});
     // TODO: Implement resend OTP logic
-    console.log("Resending OTP...");
+    // console.log("Resending OTP...");
   };
 
   return (

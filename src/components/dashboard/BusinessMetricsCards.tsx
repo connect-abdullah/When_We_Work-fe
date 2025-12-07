@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Card from "@/components/ui/Card";
-import { DollarSign, Calendar, Users, TrendingUp } from "lucide-react";
+import { Calendar, DollarSign, TrendingUp, Users } from "lucide-react";
 
 interface MetricCardProps {
   title: string;
@@ -14,7 +14,7 @@ interface MetricCardProps {
   iconBgColor: string;
 }
 
-interface SocialChannelCardProps {
+interface _SocialChannelCardProps {
   title: string;
   icon: React.ReactNode;
   iconColor: string;
@@ -75,7 +75,7 @@ const BusinessMetricsCards: React.FC<BusinessMetricsCardsProps> = ({
   // Effect to handle date range changes for metrics
   useEffect(() => {
     // TODO: Fetch metrics data based on dateRange when API is integrated
-    console.log("BusinessMetrics: Date range updated to", dateRange);
+    // console.log("BusinessMetrics: Date range updated to", dateRange);
   }, [dateRange]);
 
   const metrics = [

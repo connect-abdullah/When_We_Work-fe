@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Star, Eye, Edit, Trash2 } from "lucide-react";
+import { Edit, Eye, Star, Trash2 } from "lucide-react";
 import { Worker } from "@/components/workers/WorkerPage";
 
 interface WorkerTableProps {

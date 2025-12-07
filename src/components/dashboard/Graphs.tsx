@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import TotalOverviewChart from "./charts/TotalOverviewChart";
 import {
   DailyData,
@@ -32,7 +32,7 @@ const Graphs: React.FC<GraphsProps> = ({
   // Effect to handle date range changes for graphs
   useEffect(() => {
     // TODO: Fetch graph data based on dateRange when API is integrated
-    console.log("Graphs: Date range updated to", dateRange);
+    // console.log("Graphs: Date range updated to", dateRange);
   }, [dateRange]);
 
   // Default sample daily data (can be overridden via props)
@@ -73,7 +73,7 @@ const Graphs: React.FC<GraphsProps> = ({
     if (onDownload) {
       onDownload();
     } else {
-      console.log("Download functionality - override with onDownload prop");
+      // console.log("Download functionality - override with onDownload prop");
     }
   };
 

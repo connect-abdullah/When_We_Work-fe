@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { X, Check } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Check, X } from "lucide-react";
 import { Button, FormInput, FormTextarea } from "@/components/ui";
 import { JobSchema } from "@/types";
 
@@ -18,7 +18,7 @@ const JobModal: React.FC<JobModalProps> = ({
   onClose,
   onSubmit,
 }) => {
-  const isEditMode = !!job;
+  const isEditMode = Boolean(job);
 
   const [formData, setFormData] = useState<Partial<JobSchema>>({
     job_name: "",
@@ -84,7 +84,9 @@ const JobModal: React.FC<JobModalProps> = ({
     }
   }, [job, isOpen]);
 
-  if (!isOpen) return null;
+  if (!isOpen) {
+    return null;
+  }
 
   const handleSubmit = () => {
     const characteristics = characteristicsInput

@@ -2,17 +2,17 @@
 
 import React from "react";
 import {
-  X,
+  Award,
+  Calendar,
+  DollarSign,
+  Edit,
+  GraduationCap,
   Mail,
   Phone,
-  GraduationCap,
-  Calendar,
-  Users,
   Target,
-  DollarSign,
   TrendingUp,
-  Award,
-  Edit,
+  Users,
+  X,
 } from "lucide-react";
 import { JobSchema } from "@/types";
 
@@ -59,7 +59,9 @@ const JobDetailModal: React.FC<JobDetailModalProps> = ({
   job,
   onEdit,
 }) => {
-  if (!isOpen || !job) return null;
+  if (!isOpen || !job) {
+    return null;
+  }
 
   const hiringRate =
     job.people_needed > 0

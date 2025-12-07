@@ -1,6 +1,5 @@
 import React from "react";
-import { Bell, Search, Menu, User } from "lucide-react";
-import Input from "@/components/ui/Input";
+import { Bell, Menu, User } from "lucide-react";
 
 interface NavbarProps {
   className?: string;

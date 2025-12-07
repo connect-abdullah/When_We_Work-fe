@@ -1,15 +1,15 @@
 "use client";
 import React from "react";
 import {
-  X,
-  Star,
-  Mail,
-  Phone,
-  MapPin,
-  Calendar,
-  Briefcase,
-  Shield,
   Award,
+  Briefcase,
+  Calendar,
+  Mail,
+  MapPin,
+  Phone,
+  Shield,
+  Star,
+  X,
 } from "lucide-react";
 import { Worker } from "../WorkerPage";
 
@@ -33,7 +33,9 @@ const WorkerViewModal: React.FC<WorkerViewModalProps> = ({
   onClose,
   customer,
 }) => {
-  if (!isOpen || !customer) return null;
+  if (!isOpen || !customer) {
+    return null;
+  }
 
   const getFullName = () => {
     return `${customer.first_name}${customer.middle_name ? ` ${customer.middle_name}` : ""} ${customer.last_name}`;

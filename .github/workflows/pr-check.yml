@@ -1,0 +1,60 @@
+name: PR Quality Check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  check-pr:
+    name: PR Quality Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Lint check
+        run: bun run lint
+        continue-on-error: false
+
+      - name: Type check
+        run: bun tsc --noEmit
+        continue-on-error: false
+
+      - name: Build check
+        run: bun run build
+        continue-on-error: false
+
+      - name: Check for console.log statements
+        run: |
+          if grep -r "console\.log" src/ --exclude-dir=node_modules; then
+            echo "::warning::Found console.log statements in source code"
+            exit 0
+          fi
+
+      - name: Check package.json and lock file sync
+        run: |
+          if [ -f bun.lockb ]; then
+            bun install --frozen-lockfile
+            if ! git diff --exit-code bun.lockb; then
+              echo "::error::bun.lockb is out of sync with package.json"
+              exit 1
+            fi
+          fi
+
+      - name: PR size check
+        run: |
+          FILES_CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | wc -l)
+          if [ $FILES_CHANGED -gt 50 ]; then
+            echo "::warning::This PR modifies $FILES_CHANGED files. Consider breaking it into smaller PRs."
+          fi

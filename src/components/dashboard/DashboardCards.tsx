@@ -1,5 +1,5 @@
 import React from "react";
-import { Users, Workflow, DollarSign, Calendar } from "lucide-react";
+import { Calendar, DollarSign, Users, Workflow } from "lucide-react";
 import Card from "@/components/ui/Card";
 import { DASHBOARD_CARDS } from "@/constants/dashboard";
 

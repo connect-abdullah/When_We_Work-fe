@@ -7,14 +7,14 @@ import MyCalendar from "@/components/calendar/MyCalendar";
 import { Card } from "@/components/ui";
 import {
   Calendar,
-  Clock,
-  Users,
   CheckCircle,
-  TrendingUp,
   ChevronLeft,
   ChevronRight,
-  Plus,
+  Clock,
   Filter,
+  Plus,
+  TrendingUp,
+  Users,
 } from "lucide-react";
 
 export default function CalendarPage() {
@@ -28,7 +28,7 @@ export default function CalendarPage() {
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
 
   // Calendar stats
-  const stats = [
+  const _stats = [
     {
       title: "Today's Bookings",
       value: "18",

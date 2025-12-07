@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Logo from "../../../public/Logo.png";
-import { TOP_MENU_ITEMS, BOTTOM_MENU_ITEMS } from "@/constants/menu";
+import { BOTTOM_MENU_ITEMS, TOP_MENU_ITEMS } from "@/constants/menu";
 import { MenuItem } from "@/types";
 import Link from "next/link";
 import { X } from "lucide-react";

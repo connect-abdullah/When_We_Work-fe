@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Send, Image as ImageIcon, Paperclip, Smile, Mic } from "lucide-react";
+import { Image as ImageIcon, Mic, Paperclip, Send, Smile } from "lucide-react";
 
 const MessageInput: React.FC = () => {
   return (

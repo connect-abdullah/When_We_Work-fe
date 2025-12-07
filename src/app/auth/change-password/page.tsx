@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Lock, CheckCircle2, ArrowLeft } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Lock } from "lucide-react";
 import { Button } from "@/components/ui";
 import { AuthLayout, PasswordInput } from "@/components/auth";
 import Link from "next/link";
@@ -93,10 +93,10 @@ const ChangePasswordPage: React.FC = () => {
 
     try {
       // TODO: Implement actual change password logic here
-      console.log("Change password data:", {
-        currentPassword: formData.currentPassword,
-        newPassword: formData.newPassword,
-      });
+      // console.log("Change password data:", {
+      //   currentPassword: formData.currentPassword,
+      //   newPassword: formData.newPassword,
+      // });
 
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));

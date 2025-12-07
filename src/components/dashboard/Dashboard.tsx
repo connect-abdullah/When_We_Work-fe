@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "@/components/layout/Sidebar";
 import Navbar from "@/components/layout/Navbar";
 import BusinessMetricsCards from "./BusinessMetricsCards";
 import Graphs from "./Graphs";
-import { Calendar } from "lucide-react";
 import { DateRange } from "@/types/dashboard";
 
 const Dashboard: React.FC = () => {
@@ -22,7 +21,7 @@ const Dashboard: React.FC = () => {
 
   // Effect to handle date range changes (will trigger API calls when integrated)
   useEffect(() => {
-    console.log("Date range changed to:", dateRange);
+    // console.log("Date range changed to:", dateRange);
     // TODO: Fetch data based on dateRange when API is integrated
   }, [dateRange]);
   return (

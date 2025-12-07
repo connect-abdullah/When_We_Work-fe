@@ -1,4 +1,4 @@
-import { Booking, Chat, Payment, SalesAgent } from "@/types";
+// import { Booking, Chat, Payment, SalesAgent } from "@/types";
 
 export interface DashboardCardData {
   title: string;

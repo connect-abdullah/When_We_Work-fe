@@ -3,16 +3,15 @@
 import React from "react";
 import Card from "@/components/ui/Card";
 import {
-  BarChart,
   Bar,
+  BarChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
 } from "recharts";
-import { DailyData, ChartTooltipProps } from "./types";
-import TimeframeSelector from "./TimeframeSelector";
+import { ChartTooltipProps, DailyData } from "./types";
 
 interface TotalOverviewChartProps {
   data: DailyData[];
@@ -26,7 +25,9 @@ interface TotalOverviewChartProps {
 }
 
 const CustomTooltip = ({ active, payload }: ChartTooltipProps) => {
-  if (!active || !payload?.length) return null;
+  if (!active || !payload?.length) {
+    return null;
+  }
 
   const data = payload[0]?.payload;
   const day = data?.day || "";
@@ -48,12 +49,12 @@ const CustomTooltip = ({ active, payload }: ChartTooltipProps) => {
 
 const TotalOverviewChart: React.FC<TotalOverviewChartProps> = ({
   data,
-  dailyAverage,
-  percentageChange,
-  timeframe,
-  onTimeframeChange,
-  timeframeOptions = ["Last 7 Days", "Last 30 Days"],
-  onDownload,
+  dailyAverage: _dailyAverage,
+  percentageChange: _percentageChange,
+  timeframe: _timeframe,
+  onTimeframeChange: _onTimeframeChange,
+  timeframeOptions: _timeframeOptions = ["Last 7 Days", "Last 30 Days"],
+  onDownload: _onDownload,
   className = "",
 }) => {
   return (

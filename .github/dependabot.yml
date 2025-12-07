@@ -1,0 +1,44 @@
+version: 2
+updates:
+  # Note: Dependabot doesn't support Bun natively yet
+  # Using npm ecosystem as fallback - it works with package.json
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    groups:
+      # Group all patch updates together
+      patch-updates:
+        patterns:
+          - "*"
+        update-types:
+          - "patch"
+      # Group minor updates
+      minor-updates:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+    # Prefix commit messages
+    commit-message:
+      prefix: "chore"
+      prefix-development: "chore"
+    # Add labels
+    labels:
+      - "dependencies"
+      - "automerge"
+    # Reviewers
+    reviewers:
+      - "uzairanjum"
+
+  # Enable updates for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "ci"
+    labels:
+      - "ci"
+      - "dependencies"

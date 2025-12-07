@@ -1,8 +1,8 @@
 "use client";
-import React, { useState, useMemo } from "react";
-import { PageHeader, SearchInput, Card } from "@/components/ui";
+import React, { useMemo, useState } from "react";
+import { Card, PageHeader, SearchInput } from "@/components/ui";
 import Sidebar from "@/components/layout/Sidebar";
-import { JobSection, Job } from "@/components/approval-panel";
+import { Job, JobSection } from "@/components/approval-panel";
 
 // Mock data - In a real app, this would come from your database/API
 const MOCK_JOBS: Job[] = [
@@ -128,7 +128,7 @@ export default function ApprovalPanelPage() {
     );
 
     // TODO: Make API call to accept the person
-    console.log(`Accepted person ${personId} for job ${jobId}`);
+    // console.log(`Accepted person ${personId} for job ${jobId}`);
   };
 
   const handleDecline = (jobId: number, personId: number) => {
@@ -157,7 +157,7 @@ export default function ApprovalPanelPage() {
     );
 
     // TODO: Make API call to decline the person
-    console.log(`Declined person ${personId} for job ${jobId}`);
+    // console.log(`Declined person ${personId} for job ${jobId}`);
   };
 
   return (

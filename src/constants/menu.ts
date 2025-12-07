@@ -1,12 +1,12 @@
 import {
-  LayoutDashboard,
-  Calendar,
-  BookOpen,
-  Users,
-  UserCheck,
-  Settings,
-  LogOut,
   Bell,
+  BookOpen,
+  Calendar,
+  LayoutDashboard,
+  LogOut,
+  Settings,
+  UserCheck,
+  Users,
 } from "lucide-react";
 import { MenuItem } from "@/types";
 

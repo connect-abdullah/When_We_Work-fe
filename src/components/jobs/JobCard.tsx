@@ -4,15 +4,13 @@ import React from "react";
 import Card from "@/components/ui/Card";
 import { JobSchema } from "@/types";
 import {
-  Mail,
-  Phone,
-  TrendingUp,
-  Target,
-  DollarSign,
-  UserCheck,
   Award,
+  DollarSign,
   Edit,
+  Mail,
+  Target,
   Trash,
+  TrendingUp,
   Users,
 } from "lucide-react";
 
@@ -108,7 +106,9 @@ const JobCard: React.FC<JobCardProps> = ({
                 className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
                 onClick={(e) => {
                   e.stopPropagation();
-                  if (onEditClick) onEditClick();
+                  if (onEditClick) {
+                    onEditClick();
+                  }
                 }}
                 title="Edit"
               >
@@ -118,7 +118,9 @@ const JobCard: React.FC<JobCardProps> = ({
                 className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
                 onClick={(e) => {
                   e.stopPropagation();
-                  if (onPlaygroundClick) onPlaygroundClick();
+                  if (onPlaygroundClick) {
+                    onPlaygroundClick();
+                  }
                 }}
                 title="Playground"
               >

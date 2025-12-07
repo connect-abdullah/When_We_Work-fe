@@ -1,20 +1,20 @@
 import React from "react";
 import {
-  Instagram,
-  MessageCircle,
-  Mail,
-  Globe,
-  Users,
-  UserCheck,
-  Percent,
-  MessageSquare,
   AlertCircle,
-  Clock,
-  Calendar,
-  TrendingUp,
-  DollarSign,
   Award,
+  Calendar,
+  Clock,
+  DollarSign,
+  Globe,
+  Instagram,
   LucideIcon,
+  Mail,
+  MessageCircle,
+  MessageSquare,
+  Percent,
+  TrendingUp,
+  UserCheck,
+  Users,
 } from "lucide-react";
 
 // Source channel icons

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { COUNTRY_CODES } from "@/constants/countrycodes";
 import { parsePhoneNumber } from "libphonenumber-js";
 
@@ -143,7 +143,7 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
                 </div>
               );
             }
-          } catch (error) {
+          } catch (_error) {
             // Ignore parsing errors
           }
           return null;

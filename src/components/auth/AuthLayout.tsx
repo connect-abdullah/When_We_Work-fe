@@ -1,12 +1,11 @@
 import React from "react";
 import { Card } from "@/components/ui";
 import Image from "next/image";
-import { ReactNode } from "react";
 
 interface AuthLayoutProps {
   children: React.ReactNode;
   title: string;
-  subtitle?: string | ReactNode;
+  subtitle?: string | React.ReactNode;
   showLogo?: boolean;
   logoPath?: string;
 }
@@ -19,11 +18,11 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
   logoPath = "/logo.png",
 }) => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Decorative gradient orbs */}
-      <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-gradient-to-br from-[#5A6ACF]/15 via-[#5A6ACF]/5 to-transparent rounded-full blur-3xl -translate-x-1/3 -translate-y-1/3"></div>
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-gradient-to-tl from-[#4A5ABF]/15 via-purple-400/10 to-transparent rounded-full blur-3xl translate-x-1/3 translate-y-1/3"></div>
-      <div className="absolute top-1/2 left-1/2 w-[400px] h-[400px] bg-gradient-to-br from-blue-200/10 to-purple-200/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+      <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-linear-to-br from-[#5A6ACF]/15 via-[#5A6ACF]/5 to-transparent rounded-full blur-3xl -translate-x-1/3 -translate-y-1/3"></div>
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-linear-to-tl from-[#4A5ABF]/15 via-purple-400/10 to-transparent rounded-full blur-3xl translate-x-1/3 translate-y-1/3"></div>
+      <div className="absolute top-1/2 left-1/2 w-[400px] h-[400px] bg-linear-to-br from-blue-200/10 to-purple-200/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
 
       <div className="w-full max-w-md relative z-10">
         <Card

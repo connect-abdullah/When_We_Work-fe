@@ -1,13 +1,13 @@
 "use client";
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { PageHeader, Pagination } from "@/components/ui";
 import {
-  InsightsCard,
   FilterBar,
+  formatDate,
+  InsightsCard,
+  WorkerEditModal,
   WorkerTable,
   WorkerViewModal,
-  WorkerEditModal,
-  formatDate,
 } from "@/components/workers";
 import { CustomerInsightsData } from "@/constants/customers";
 import { Download, Plus } from "lucide-react";
@@ -125,12 +125,16 @@ const MOCK_WORKERS: Worker[] = [
 // Helper function to count new workers (created in the last 24 hours)
 // This runs client-side only to avoid hydration mismatches
 const getNewWorkersCount = (workers: Worker[]): number => {
-  if (typeof window === "undefined") return 0; // Server-side: return 0 to avoid hydration mismatch
+  if (typeof window === "undefined") {
+    return 0; // Server-side: return 0 to avoid hydration mismatch
+  }
   const now = Date.now();
   const twentyFourHours = 24 * 60 * 60 * 1000;
 
   return workers.filter((worker) => {
-    if (!worker.date_joined) return false;
+    if (!worker.date_joined) {
+      return false;
+    }
     const joined = new Date(worker.date_joined).getTime();
     return now - joined <= twentyFourHours;
   }).length;
@@ -274,7 +278,7 @@ export default function WorkersPage() {
   };
 
   const handleExport = () => {
-    console.log("Exporting workers...");
+    // console.log("Exporting workers...");
   };
 
   // Compute insights data with dynamic total workers value
@@ -307,6 +311,8 @@ export default function WorkersPage() {
             title: "New Workers",
             value: getNewWorkersCount(workers).toLocaleString(), // Format with commas
           };
+        default:
+          return insight;
       }
       return insight;
     });

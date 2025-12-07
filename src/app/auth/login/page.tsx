@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { Lock, Mail } from "lucide-react";
 import { Button, FormInput } from "@/components/ui";
 import { AuthLayout, PasswordInput } from "@/components/auth";
 import Link from "next/link";
@@ -74,7 +74,7 @@ const LoginPage: React.FC = () => {
 
     try {
       // TODO: Implement actual login logic here
-      console.log("Login data:", formData);
+      // console.log("Login data:", formData);
 
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));

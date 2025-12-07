@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Card, SearchInput, FilterSelect } from "@/components/ui";
+import { Card, FilterSelect, SearchInput } from "@/components/ui";
 
 interface JobFiltersProps {
   searchTerm: string;

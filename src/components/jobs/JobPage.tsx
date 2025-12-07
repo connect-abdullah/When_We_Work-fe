@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import Sidebar from "@/components/layout/Sidebar";
 import { PageHeader } from "@/components/ui";
 import { Plus } from "lucide-react";
@@ -114,8 +114,8 @@ export default function JobPage() {
     },
   ];
 
-  const handleCreateJob = (jobData: Partial<JobSchema>) => {
-    console.log("Creating new job:", jobData);
+  const handleCreateJob = (_jobData: Partial<JobSchema>) => {
+    // console.log("Creating new job:", jobData);
     // TODO: Implement API call to create job
     // The jobData will contain all the form fields matching JobSchema
   };
@@ -148,8 +148,8 @@ export default function JobPage() {
     }
   };
 
-  const handleUpdateJob = (jobData: Partial<JobSchema>) => {
-    console.log("Updating job:", selectedJob?.id, jobData);
+  const handleUpdateJob = (_jobData: Partial<JobSchema>) => {
+    // console.log("Updating job:", selectedJob?.id, jobData);
     // TODO: Implement API call to update job
     // The jobData will contain all the form fields matching JobSchema
   };

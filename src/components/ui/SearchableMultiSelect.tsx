@@ -1,6 +1,6 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
-import { X, ChevronDown, Search } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
+import { ChevronDown, Search, X } from "lucide-react";
 
 interface SearchableMultiSelectProps {
   label: string;
@@ -141,7 +141,9 @@ const SearchableMultiSelect: React.FC<SearchableMultiSelectProps> = ({
                       <input
                         type="checkbox"
                         checked={selectedValues.includes(option)}
-                        onChange={() => {}}
+                        onChange={() => {
+                          // Handle checkbox change
+                        }}
                         className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
                       <span>{option}</span>
