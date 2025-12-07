@@ -76,7 +76,7 @@ export default function JobSection({
                 {/* People Count */}
                 <div className="text-right shrink-0">
                   <span className="text-[11px] font-medium text-[#1F384C]">
-                  Workers Requirement: {job.acceptedCount}/{job.totalRequired} 
+                    Workers Requirement: {job.acceptedCount}/{job.totalRequired}
                   </span>
                 </div>
 
@@ -117,4 +117,3 @@ export default function JobSection({
     </div>
   );
 }
-

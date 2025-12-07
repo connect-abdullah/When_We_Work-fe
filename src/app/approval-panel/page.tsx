@@ -113,8 +113,7 @@ export default function ApprovalPanelPage() {
 
           // Check if this person was already accepted
           const person = job.applicants.find((p) => p.id === personId);
-          const wasAlreadyAccepted =
-            person?.availabilityStatus === "available";
+          const wasAlreadyAccepted = person?.availabilityStatus === "available";
 
           return {
             ...job,

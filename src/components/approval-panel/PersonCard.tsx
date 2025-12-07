@@ -38,7 +38,7 @@ export default function PersonCard({
     }
   };
 
-    const getStatusText = (status: Worker["availabilityStatus"]) => {
+  const getStatusText = (status: Worker["availabilityStatus"]) => {
     switch (status) {
       case "available":
         return "Available";
@@ -121,4 +121,3 @@ export default function PersonCard({
     </div>
   );
 }
-

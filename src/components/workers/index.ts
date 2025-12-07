@@ -2,10 +2,7 @@
 export { InsightsCard } from "@/components/workers/cards";
 
 // Modals
-export {
-  WorkerViewModal,
-  WorkerEditModal,
-} from "@/components/workers/modals";
+export { WorkerViewModal, WorkerEditModal } from "@/components/workers/modals";
 
 // Table components
 export { default as FilterBar } from "@/components/workers/FilterBar";

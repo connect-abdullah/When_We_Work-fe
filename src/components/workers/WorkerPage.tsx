@@ -9,9 +9,7 @@ import {
   WorkerEditModal,
   formatDate,
 } from "@/components/workers";
-import {
-  CustomerInsightsData,
-} from "@/constants/customers";
+import { CustomerInsightsData } from "@/constants/customers";
 import { Download, Plus } from "lucide-react";
 import Sidebar from "@/components/layout/Sidebar";
 
@@ -130,7 +128,7 @@ const getNewWorkersCount = (workers: Worker[]): number => {
   if (typeof window === "undefined") return 0; // Server-side: return 0 to avoid hydration mismatch
   const now = Date.now();
   const twentyFourHours = 24 * 60 * 60 * 1000;
-  
+
   return workers.filter((worker) => {
     if (!worker.date_joined) return false;
     const joined = new Date(worker.date_joined).getTime();
@@ -175,10 +173,10 @@ export default function WorkersPage() {
   const handleDeleteWorker = (worker: Worker) => {
     const workerName = `${worker.first_name} ${worker.last_name}`.trim();
     if (window.confirm(`Are you sure you want to delete ${workerName}?`)) {
-        // Update local state by removing the deleted worker
-        setWorkers((prevWorkers) =>
-          prevWorkers.filter((w) => w.id !== worker.id)
-        );
+      // Update local state by removing the deleted worker
+      setWorkers((prevWorkers) =>
+        prevWorkers.filter((w) => w.id !== worker.id)
+      );
     }
   };
 
@@ -198,14 +196,20 @@ export default function WorkersPage() {
     } else {
       // Create new worker - use timestamp only on client-side
       const newWorker: Worker = {
-        id: typeof window !== "undefined" ? Date.now().toString() : `temp-${Math.random()}`,
+        id:
+          typeof window !== "undefined"
+            ? Date.now().toString()
+            : `temp-${Math.random()}`,
         first_name: workerData.first_name || "",
         middle_name: workerData.middle_name || null,
         last_name: workerData.last_name || "",
         email: workerData.email || "",
         phone: workerData.phone || null,
         address: workerData.address || null,
-        date_joined: typeof window !== "undefined" ? new Date().toISOString() : new Date("2024-01-01").toISOString(),
+        date_joined:
+          typeof window !== "undefined"
+            ? new Date().toISOString()
+            : new Date("2024-01-01").toISOString(),
         rating: workerData.rating || 4.0,
         is_available: workerData.is_available ?? true,
         is_freelancer: workerData.is_freelancer ?? false,
@@ -216,15 +220,18 @@ export default function WorkersPage() {
       setWorkers((prevWorkers) => [...prevWorkers, newWorker]);
     }
 
-      // Close modals
-      setIsEditModalOpen(false);
-      setIsAddModalOpen(false);
-      setSelectedWorker(null);
+    // Close modals
+    setIsEditModalOpen(false);
+    setIsAddModalOpen(false);
+    setSelectedWorker(null);
   };
 
   // Filter and search workers
   const filteredWorkers = workers.filter((worker) => {
-    const fullName = `${worker.first_name} ${worker.middle_name || ""} ${worker.last_name}`.trim().toLowerCase();
+    const fullName =
+      `${worker.first_name} ${worker.middle_name || ""} ${worker.last_name}`
+        .trim()
+        .toLowerCase();
     const matchesSearch =
       fullName.includes(searchTerm.toLowerCase()) ||
       worker.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -232,7 +239,7 @@ export default function WorkersPage() {
       (worker.address || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
       (worker.emergency_contact || "").includes(searchTerm);
     const matchesStatus =
-      statusFilter === "all" || 
+      statusFilter === "all" ||
       (statusFilter === "available" && worker.is_available) ||
       (statusFilter === "unavailable" && !worker.is_available);
     return matchesSearch && matchesStatus;
@@ -246,7 +253,9 @@ export default function WorkersPage() {
         const nameB = `${b.first_name} ${b.last_name}`.trim();
         return nameA.localeCompare(nameB);
       case "joinDate":
-        return new Date(b.date_joined).getTime() - new Date(a.date_joined).getTime();
+        return (
+          new Date(b.date_joined).getTime() - new Date(a.date_joined).getTime()
+        );
       case "rating":
         return b.rating - a.rating;
       default:
@@ -275,7 +284,12 @@ export default function WorkersPage() {
       // Return default values during SSR
       return CustomerInsightsData.map((insight) => ({
         ...insight,
-        title: insight.title === "Total Customers" ? "Total Workers" : insight.title === "New Customers" ? "New Workers" : insight.title,
+        title:
+          insight.title === "Total Customers"
+            ? "Total Workers"
+            : insight.title === "New Customers"
+              ? "New Workers"
+              : insight.title,
         value: "0",
       }));
     }

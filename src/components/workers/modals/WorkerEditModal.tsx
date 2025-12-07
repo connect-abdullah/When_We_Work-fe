@@ -90,7 +90,9 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
 
   const handleSubmit = () => {
     if (!formData.first_name || !formData.last_name || !formData.email) {
-      alert("Please fill in all required fields (First Name, Last Name, Email)");
+      alert(
+        "Please fill in all required fields (First Name, Last Name, Email)"
+      );
       return;
     }
 
@@ -113,7 +115,9 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
       <div className="space-y-5 max-h-[75vh] overflow-y-auto pr-2">
         {/* Name Fields */}
         <div className="space-y-4">
-          <h3 className="text-sm font-semibold text-gray-700 border-b pb-2">Personal Information</h3>
+          <h3 className="text-sm font-semibold text-gray-700 border-b pb-2">
+            Personal Information
+          </h3>
           <div className="grid grid-cols-3 gap-4">
             <FormInput
               label="First Name"
@@ -129,7 +133,10 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
               placeholder="Middle name"
               value={formData.middle_name || ""}
               onChange={(e) =>
-                setFormData({ ...formData, middle_name: e.target.value || null })
+                setFormData({
+                  ...formData,
+                  middle_name: e.target.value || null,
+                })
               }
             />
             <FormInput
@@ -146,8 +153,10 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
 
         {/* Contact Information */}
         <div className="space-y-4">
-          <h3 className="text-sm font-semibold text-gray-700 border-b pb-2">Contact Details</h3>
-          
+          <h3 className="text-sm font-semibold text-gray-700 border-b pb-2">
+            Contact Details
+          </h3>
+
           <FormInput
             label="Email"
             type="email"
@@ -173,7 +182,10 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
               placeholder="+1 (555) 000-0000"
               value={formData.emergency_contact || ""}
               onChange={(e) =>
-                setFormData({ ...formData, emergency_contact: e.target.value || null })
+                setFormData({
+                  ...formData,
+                  emergency_contact: e.target.value || null,
+                })
               }
             />
           </div>
@@ -190,8 +202,10 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
 
         {/* Work Information */}
         <div className="space-y-4">
-          <h3 className="text-sm font-semibold text-gray-700 border-b pb-2">Work Information</h3>
-          
+          <h3 className="text-sm font-semibold text-gray-700 border-b pb-2">
+            Work Information
+          </h3>
+
           <div className="grid grid-cols-3 gap-4">
             <FormInput
               label="Rating"
@@ -199,7 +213,10 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
               placeholder="4.0"
               value={formData.rating?.toString() || "4.0"}
               onChange={(e) =>
-                setFormData({ ...formData, rating: parseFloat(e.target.value) || 4.0 })
+                setFormData({
+                  ...formData,
+                  rating: parseFloat(e.target.value) || 4.0,
+                })
               }
               min="0"
               max="5"
@@ -214,7 +231,10 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
               ]}
               value={String(formData.is_available ?? true)}
               onChange={(e) =>
-                setFormData({ ...formData, is_available: e.target.value === "true" })
+                setFormData({
+                  ...formData,
+                  is_available: e.target.value === "true",
+                })
               }
             />
 
@@ -226,7 +246,10 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
               ]}
               value={String(formData.is_freelancer ?? false)}
               onChange={(e) =>
-                setFormData({ ...formData, is_freelancer: e.target.value === "true" })
+                setFormData({
+                  ...formData,
+                  is_freelancer: e.target.value === "true",
+                })
               }
             />
           </div>
@@ -269,7 +292,12 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
               {isEditMode ? "Update Worker" : "Add Worker"}
             </span>
           </Button>
-          <Button variant="secondary" size="sm" onClick={onClose} className="px-6">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={onClose}
+            className="px-6"
+          >
             <span className="text-sm font-medium">Cancel</span>
           </Button>
         </div>

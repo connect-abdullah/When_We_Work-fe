@@ -21,16 +21,6 @@ const Navbar: React.FC<NavbarProps> = ({ className, onMenuToggle }) => {
           <Menu size={20} />
         </button>
 
-        {/* Search Bar */}
-        <div className="flex-1 max-w-md lg:max-w-lg flex flex-row items-center gap-2 bg-gray-50 rounded-lg px-3 py-2 mx-2 lg:mx-4 border border-gray-200 focus-within:border-[#5A6ACF] focus-within:bg-white transition-all">
-          <Search size={14} className="text-gray-400 shrink-0" />
-          <Input
-            type="text"
-            placeholder="Search..."
-            className="w-full p-0 text-[10px] font-medium hover:outline-none focus-visible:outline-none text-[#1F384C] placeholder:text-gray-400 border-0 focus:ring-0 bg-transparent"
-          />
-        </div>
-
         {/* Right Side Actions */}
         <div className="flex flex-row items-center gap-3">
           {/* Notifications */}

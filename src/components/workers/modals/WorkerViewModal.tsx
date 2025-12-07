@@ -122,9 +122,7 @@ const WorkerViewModal: React.FC<WorkerViewModalProps> = ({
                 </p>
               </div>
               <p className="text-sm font-semibold text-gray-900">
-                {customer.roles.length > 0
-                  ? customer.roles[0]
-                  : "Unassigned"}
+                {customer.roles.length > 0 ? customer.roles[0] : "Unassigned"}
               </p>
             </div>
           </div>
@@ -150,9 +148,7 @@ const WorkerViewModal: React.FC<WorkerViewModalProps> = ({
                     <Phone size={16} className="text-gray-400" />
                     <div className="flex-1 min-w-0">
                       <p className="text-xs text-gray-500 mb-0.5">Phone</p>
-                      <p className="text-sm text-gray-900">
-                        {customer.phone}
-                      </p>
+                      <p className="text-sm text-gray-900">{customer.phone}</p>
                     </div>
                   </div>
                 )}

@@ -2,14 +2,23 @@
   "name": "When_We_Work",
   "version": "0.1.0",
   "private": true,
-"scripts": {
-  "dev": "next dev",
-  "build": "next build",
-  "start": "next start",
-  "lint": "eslint",
-  "format": "prettier --write .",
-  "format:check": "prettier --check ."
-},
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "build:prod": "next build && next start",
+    "build:analyze": "ANALYZE=true next build",
+    "start": "next start",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
+    "lint:check": "eslint . --ext .ts,.tsx,.js,.jsx --max-warnings 0",
+    "type-check": "tsc --noEmit",
+    "type-check:watch": "tsc --noEmit --watch",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "npm run type-check && npm run lint:check && npm run format:check",
+    "prebuild": "npm run check",
+    "prepare": "npm run check"
+  },
   "dependencies": {
     "@fullcalendar/core": "^6.1.19",
     "@fullcalendar/daygrid": "^6.1.19",

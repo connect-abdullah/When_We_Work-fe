@@ -21,9 +21,7 @@ const FormInput: React.FC<FormInputProps> = ({
     <div className="space-y-2 w-full">
       <div className="flex items-center gap-2">
         {icon && <span className="text-gray-400 shrink-0">{icon}</span>}
-        <label className="text-sm font-medium text-gray-700">
-          {label}
-        </label>
+        <label className="text-sm font-medium text-gray-700">{label}</label>
         {required && <span className="text-red-500 text-sm">*</span>}
       </div>
       <input

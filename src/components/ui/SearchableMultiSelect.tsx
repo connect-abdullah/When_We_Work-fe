@@ -26,7 +26,10 @@ const SearchableMultiSelect: React.FC<SearchableMultiSelectProps> = ({
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -155,4 +158,3 @@ const SearchableMultiSelect: React.FC<SearchableMultiSelectProps> = ({
 };
 
 export default SearchableMultiSelect;
-
