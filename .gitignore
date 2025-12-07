@@ -40,29 +40,4 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# ============================================
-# ITERATIVE DEPLOYMENT - CALENDAR & DASHBOARD ONLY
-# ============================================
-# This .gitignore is configured to ONLY include calendar and dashboard components.
-# Everything else is ignored for iterative deployment.
-
-# ============================================
-# EXCLUDED: Auth Components (for future deployment)
-# ============================================
-# To include auth components in next deployment, REMOVE or COMMENT OUT these lines:
-/src/app/auth/
-/src/components/auth/
-
-
-# ============================================
-# EXCLUDED: Other App Pages (for future deployment)
-# ============================================
-# To include other pages, REMOVE or COMMENT OUT these lines:
-/src/app/campaigns/
-/src/app/customers/
-
-# ============================================
-# EXCLUDED: Other Components (for future deployment)
-# ============================================
-# To include other components, REMOVE or COMMENT OUT these lines:
 /src/components/onboarding/
