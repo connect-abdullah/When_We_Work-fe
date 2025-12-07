@@ -59,7 +59,6 @@ next-env.d.ts
 # ============================================
 # To include other pages, REMOVE or COMMENT OUT these lines:
 /src/app/campaigns/
-/src/app/approval-panel/
 /src/app/customers/
 
 # ============================================
@@ -67,4 +66,3 @@ next-env.d.ts
 # ============================================
 # To include other components, REMOVE or COMMENT OUT these lines:
 /src/components/onboarding/
-/src/components/approval-panel/
