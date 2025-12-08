@@ -20,7 +20,7 @@ const ButtonCard: React.FC<React.PropsWithChildren<ButtonCardProps>> = ({
         selected
           ? "border-[#5A6ACF] bg-[#5A6ACF]/5 shadow-md"
           : "border-gray-200 hover:border-gray-300 bg-white",
-        className
+        className,
       )}
       {...props}
     >

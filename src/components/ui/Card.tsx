@@ -27,7 +27,7 @@ const Card: React.FC<CardProps> = ({
         "rounded-lg bg-white",
         paddingClasses[padding],
         shadow && "shadow-md",
-        className
+        className,
       )}
     >
       {children}

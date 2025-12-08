@@ -21,7 +21,7 @@ import {
 export const getSourceIcon = (
   iconName: string,
   size: number = 12,
-  className?: string
+  className?: string,
 ): React.ReactNode => {
   const iconMap: Record<string, LucideIcon> = {
     instagram: Instagram,
@@ -39,7 +39,7 @@ export const getSourceIcon = (
 export const getInsightIcon = (
   iconName: string,
   size: number = 14,
-  className?: string
+  className?: string,
 ): React.ReactNode => {
   const iconMap: Record<string, LucideIcon> = {
     users: Users,
