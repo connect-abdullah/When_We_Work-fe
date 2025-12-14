@@ -54,9 +54,6 @@ const Dashboard: React.FC = () => {
 
           {/* Business Metrics Cards */}
           <BusinessMetricsCards dateRange={dateRange} />
-
-          {/* Graphs */}
-          <Graphs dateRange={dateRange} />
         </div>
       </div>
     </div>
