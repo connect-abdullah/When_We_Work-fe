@@ -4,7 +4,6 @@ import React, { useEffect } from "react";
 import { Calendar, DollarSign, TrendingUp, Users } from "lucide-react";
 import MetricCard from "@/components/dashboard/MetricCard";
 
-
 interface BusinessMetricsCardsProps {
   className?: string;
   dateRange?: "today" | "7days" | "30days" | "custom";

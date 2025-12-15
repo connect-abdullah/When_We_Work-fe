@@ -36,7 +36,7 @@ const buttonVariants = cva(
       variant: "primary",
       size: "sm",
     },
-  },
+  }
 );
 
 function Button({

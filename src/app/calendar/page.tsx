@@ -178,7 +178,7 @@ export default function CalendarPage() {
                               <input
                                 type="checkbox"
                                 checked={filteredResources.includes(
-                                  resource.id,
+                                  resource.id
                                 )}
                                 onChange={() => toggleResource(resource.id)}
                                 className="w-3 h-3 text-[#5A6ACF] border-gray-300 rounded focus:ring-[#5A6ACF]"

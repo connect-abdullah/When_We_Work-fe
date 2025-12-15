@@ -26,7 +26,7 @@ const Modal: React.FC<ModalProps> = ({
       <div
         className={cn(
           "bg-white rounded-lg shadow-lg max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto",
-          className,
+          className
         )}
       >
         {/* Modal Header */}

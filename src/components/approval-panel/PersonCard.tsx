@@ -89,7 +89,7 @@ export default function PersonCard({
         <div className="pt-2 border-t border-gray-100">
           <span
             className={`inline-flex items-center px-2 py-1 rounded-full text-[9px] font-medium border ${getStatusColor(
-              person.availabilityStatus,
+              person.availabilityStatus
             )}`}
           >
             {getStatusText(person.availabilityStatus)}
