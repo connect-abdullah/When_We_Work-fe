@@ -29,8 +29,10 @@ const getStatusColor = (status: string) => {
       return "bg-emerald-50 text-emerald-700 border-emerald-200";
     case "inactive":
       return "bg-gray-50 text-gray-700 border-gray-200";
-    case "on-leave":
-      return "bg-amber-50 text-amber-700 border-amber-200";
+    case "completed":
+      return "bg-blue-50 text-blue-700 border-blue-200";
+    case "cancelled":
+      return "bg-red-50 text-red-700 border-red-200";
     default:
       return "bg-gray-50 text-gray-700 border-gray-200";
   }
@@ -82,19 +84,17 @@ const JobDetailModal: React.FC<JobDetailModalProps> = ({
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-1">
               <h2 className="text-xl font-semibold text-[#1F384C]">
-                {job.job_name}
+                {job.title}
               </h2>
               <span
                 className={`px-2.5 py-1 rounded-lg text-xs font-medium border ${getStatusColor(job.status)}`}
               >
-                {job.status === "on-leave"
-                  ? "On Leave"
-                  : job.status.charAt(0).toUpperCase() + job.status.slice(1)}
+                {job.status.charAt(0).toUpperCase() + job.status.slice(1)}
               </span>
             </div>
             <p className="text-sm text-gray-500">
               <span className="font-medium text-gray-600">JOB:</span>{" "}
-              {job.job_name}
+              {job.title}
             </p>
           </div>
           <div className="flex items-center gap-2">

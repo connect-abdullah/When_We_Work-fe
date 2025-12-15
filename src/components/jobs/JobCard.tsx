@@ -44,8 +44,10 @@ const getStatusDot = (status: string) => {
       return "bg-emerald-500";
     case "inactive":
       return "bg-gray-400";
-    case "on-leave":
-      return "bg-amber-500";
+    case "completed":
+      return "bg-blue-500";
+    case "cancelled":
+      return "bg-red-500";
     default:
       return "bg-gray-400";
   }
@@ -75,7 +77,7 @@ const JobCard: React.FC<JobCardProps> = ({
             <div className="flex-1 min-w-0 pr-2">
               <h3 className="text-sm font-semibold text-[#1F384C] mb-2">
                 <span className="text-gray-500 font-normal">JOB:</span>{" "}
-                {job.job_name}
+                {job.title}
               </h3>
               <div className="flex items-center gap-2 mb-2">
                 <span

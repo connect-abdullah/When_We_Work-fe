@@ -45,6 +45,7 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
     email: "",
     phone: null,
     address: null,
+    gender: null,
     rating: 4.0,
     is_available: true,
     is_freelancer: false,
@@ -63,6 +64,7 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
         email: customer.email || "",
         phone: customer.phone || null,
         address: customer.address || null,
+        gender: customer.gender || null,
         rating: customer.rating || 4.0,
         is_available: customer.is_available ?? true,
         is_freelancer: customer.is_freelancer ?? false,
@@ -78,6 +80,7 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
         email: "",
         phone: null,
         address: null,
+        gender: null,
         rating: 4.0,
         is_available: true,
         is_freelancer: false,
@@ -196,6 +199,23 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
             value={formData.address || ""}
             onChange={(e) =>
               setFormData({ ...formData, address: e.target.value || null })
+            }
+          />
+          <FormSelect
+            label="Gender"
+            options={[
+              { value: "", label: "Select gender" },
+              { value: "Male", label: "Male" },
+              { value: "Female", label: "Female" },
+              { value: "Other", label: "Other" },
+              { value: "Prefer not to say", label: "Prefer not to say" },
+            ]}
+            value={formData.gender || ""}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                gender: e.target.value || null,
+              })
             }
           />
         </div>

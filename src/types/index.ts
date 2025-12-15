@@ -49,7 +49,7 @@ export interface Payment {
 
 export interface JobSchema {
   id: string;
-  job_name: string;
+  title: string;
   description: string;
   email: string;
   phone?: string;
@@ -57,7 +57,8 @@ export interface JobSchema {
   minimum_education: string;
   tone: "professional" | "friendly" | "casual" | "formal" | "empathetic";
   characteristics: string[];
-  status: "active" | "inactive" | "on-leave";
+  status: "active" | "inactive" | "completed" | "cancelled";
+  job_type?: "contract" | "full_time" | "part_time" | "freelance";
   joinDate?: string;
   people_needed: number;
   people_hired: number;

@@ -28,7 +28,7 @@ export default function JobPage() {
   const filteredJobs = useMemo(() => {
     return Job_Details.filter((job) => {
       const matchesSearch =
-        job.job_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         job.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
         job.minimum_education.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesStatus =
@@ -55,8 +55,6 @@ export default function JobPage() {
     (sum, a) => sum + a.people_hired,
     0,
   );
-  const totalSalary = Job_Details.reduce((sum, a) => sum + a.salary, 0);
-
   const stats = [
     {
       title: "Total Jobs",
@@ -93,24 +91,6 @@ export default function JobPage() {
       icon: "usercheck",
       iconColor: "text-indigo-600",
       iconBgColor: "bg-indigo-50",
-    },
-    {
-      title: "Total Salary",
-      value: `$${(totalSalary / 1000).toFixed(0)}k`,
-      change: "+18.5%",
-      changeType: "positive" as const,
-      icon: "dollarsign",
-      iconColor: "text-orange-600",
-      iconBgColor: "bg-orange-50",
-    },
-    {
-      title: "Hiring Rate",
-      value: `${((totalPeopleHired / totalPeopleNeeded) * 100).toFixed(1)}%`,
-      change: "+2.5%",
-      changeType: "positive" as const,
-      icon: "trendingup",
-      iconColor: "text-yellow-600",
-      iconBgColor: "bg-yellow-50",
     },
   ];
 

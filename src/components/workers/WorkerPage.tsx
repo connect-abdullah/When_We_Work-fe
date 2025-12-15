@@ -22,6 +22,7 @@ export interface Worker {
   email: string;
   phone?: string | null;
   address?: string | null;
+  gender?: string | null;
   date_joined: string;
   rating: number;
   is_available: boolean;

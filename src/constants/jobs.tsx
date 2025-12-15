@@ -3,7 +3,7 @@ import { JobSchema } from "@/types";
 export const Job_Details: JobSchema[] = [
   {
     id: "1",
-    job_name: "House Keeping",
+    title: "House Keeping",
     description:
       "Experienced professional with a passion for helping businesses grow through excellent customer service.",
     email: "sarah.johnson@whenwework.com",
@@ -27,7 +27,7 @@ export const Job_Details: JobSchema[] = [
   },
   {
     id: "2",
-    job_name: "Customer Service",
+    title: "Customer Service",
     description:
       "Creative professional specializing in building long-term customer relationships.",
     email: "michael.chen@whenwework.com",
@@ -46,7 +46,7 @@ export const Job_Details: JobSchema[] = [
   },
   {
     id: "3",
-    job_name: "Support Specialist",
+    title: "Support Specialist",
     description:
       "Psychology background helps understand customer needs and provide personalized solutions.",
     email: "emily.rodriguez@whenwework.com",
@@ -70,7 +70,7 @@ export const Job_Details: JobSchema[] = [
   },
   {
     id: "4",
-    job_name: "Data Entry Clerk",
+    title: "Data Entry Clerk",
     description:
       "Detail-oriented professional for data management and entry tasks.",
     email: "john.doe@whenwework.com",

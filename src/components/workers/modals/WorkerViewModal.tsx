@@ -165,6 +165,14 @@ const WorkerViewModal: React.FC<WorkerViewModalProps> = ({
                     </div>
                   </div>
                 )}
+                {customer.gender && (
+                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs text-gray-500 mb-0.5">Gender</p>
+                      <p className="text-sm text-gray-900">{customer.gender}</p>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 

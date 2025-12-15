@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import { Check, X } from "lucide-react";
 import { Button, FormInput, FormTextarea } from "@/components/ui";
 import { JobSchema } from "@/types";
+import JobTypeSelect from "./JobTypeSelect";
+import JobStatusSelect from "./JobStatusSelect";
 
 interface JobModalProps {
   isOpen: boolean;
@@ -21,7 +23,7 @@ const JobModal: React.FC<JobModalProps> = ({
   const isEditMode = Boolean(job);
 
   const [formData, setFormData] = useState<Partial<JobSchema>>({
-    job_name: "",
+    title: "",
     description: "",
     email: "",
     phone: "",
@@ -29,6 +31,7 @@ const JobModal: React.FC<JobModalProps> = ({
     tone: "professional",
     characteristics: [],
     status: "active",
+    job_type: undefined,
     joinDate: "",
     people_needed: 0,
     people_hired: 0,
@@ -44,7 +47,7 @@ const JobModal: React.FC<JobModalProps> = ({
   useEffect(() => {
     if (job) {
       setFormData({
-        job_name: job.job_name,
+        title: job.title,
         description: job.description,
         email: job.email,
         phone: job.phone || "",
@@ -52,6 +55,7 @@ const JobModal: React.FC<JobModalProps> = ({
         tone: job.tone,
         characteristics: job.characteristics,
         status: job.status,
+        job_type: job.job_type,
         joinDate: job.joinDate || "",
         people_needed: job.people_needed,
         people_hired: job.people_hired,
@@ -64,7 +68,7 @@ const JobModal: React.FC<JobModalProps> = ({
     } else {
       // Reset to defaults for create mode
       setFormData({
-        job_name: "",
+        title: "",
         description: "",
         email: "",
         phone: "",
@@ -72,6 +76,7 @@ const JobModal: React.FC<JobModalProps> = ({
         tone: "professional",
         characteristics: [],
         status: "active",
+        job_type: undefined,
         joinDate: "",
         people_needed: 0,
         people_hired: 0,
@@ -108,7 +113,7 @@ const JobModal: React.FC<JobModalProps> = ({
 
   const isFormValid = () => {
     return (
-      formData.job_name?.trim() !== "" &&
+      formData.title?.trim() !== "" &&
       formData.description?.trim() !== "" &&
       formData.email?.trim() !== "" &&
       formData.minimum_education?.trim() !== "" &&
@@ -137,14 +142,14 @@ const JobModal: React.FC<JobModalProps> = ({
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-4 space-y-3">
           <FormInput
-            label="Job Name"
-            name="job_name"
+            label="Title"
+            name="title"
             type="text"
-            value={formData.job_name || ""}
+            value={formData.title || ""}
             onChange={(e) =>
-              setFormData({ ...formData, job_name: e.target.value })
+              setFormData({ ...formData, title: e.target.value })
             }
-            placeholder="Enter job name"
+            placeholder="Enter title for the job"
             required
           />
 
@@ -185,17 +190,29 @@ const JobModal: React.FC<JobModalProps> = ({
             />
           </div>
 
-          <FormInput
-            label="Minimum Education"
-            name="minimum_education"
-            type="text"
-            value={formData.minimum_education || ""}
-            onChange={(e) =>
-              setFormData({ ...formData, minimum_education: e.target.value })
-            }
-            placeholder="e.g., High School Diploma, BA, MBA"
-            required
-          />
+          <div className="grid grid-cols-2 gap-3">
+            <FormInput
+              label="Minimum Education"
+              name="minimum_education"
+              type="text"
+              value={formData.minimum_education || ""}
+              onChange={(e) =>
+                setFormData({ ...formData, minimum_education: e.target.value })
+              }
+              placeholder="e.g., High School Diploma, BA, MBA"
+              required
+            />
+
+            <JobTypeSelect
+              value={formData.job_type || ""}
+              onChange={(value) =>
+                setFormData({
+                  ...formData,
+                  job_type: value || undefined,
+                })
+              }
+            />
+          </div>
 
           <div>
             <label className="block text-[9px] font-medium text-gray-700 mb-1">
@@ -240,29 +257,16 @@ const JobModal: React.FC<JobModalProps> = ({
             />
           </div>
 
-          <div>
-            <label className="block text-[9px] font-medium text-gray-700 mb-1">
-              Status
-            </label>
-            <div className="grid grid-cols-3 gap-1.5">
-              {(["active", "inactive", "on-leave"] as const).map((status) => (
-                <button
-                  key={status}
-                  type="button"
-                  onClick={() => setFormData({ ...formData, status })}
-                  className={`px-2 py-1.5 text-[9px] font-medium rounded-lg border-2 transition-all ${
-                    formData.status === status
-                      ? "border-[#5A6ACF] bg-[#5A6ACF]/10 text-[#5A6ACF]"
-                      : "border-gray-200 bg-white text-gray-700 hover:border-gray-300"
-                  }`}
-                >
-                  {status === "on-leave"
-                    ? "On Leave"
-                    : status.charAt(0).toUpperCase() + status.slice(1)}
-                </button>
-              ))}
-            </div>
-          </div>
+          <JobStatusSelect
+            value={formData.status || ""}
+            onChange={(value) =>
+              setFormData({
+                ...formData,
+                status: (value || "active") as JobSchema["status"],
+              })
+            }
+            required
+          />
 
           <div className="grid grid-cols-2 gap-3">
             <FormInput
