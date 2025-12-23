@@ -38,3 +38,4 @@ const JobTypeSelect: React.FC<JobTypeSelectProps> = ({
 };
 
 export default JobTypeSelect;
+
