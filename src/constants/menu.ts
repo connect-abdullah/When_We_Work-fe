@@ -1,6 +1,7 @@
 import {
   Bell,
   BookOpen,
+  Briefcase,
   Calendar,
   LayoutDashboard,
   LogOut,
@@ -17,6 +18,7 @@ export const TOP_MENU_ITEMS: MenuItem[] = [
   { label: "Workers", link: "/workers", icon: UserCheck },
   { label: "Jobs", link: "/jobs", icon: Users },
   { label: "Reminder", link: "/reminder", icon: Bell },
+  { label: "Job Applications", link: "/job-application", icon: Briefcase },
 ];
 
 export const BOTTOM_MENU_ITEMS: MenuItem[] = [
