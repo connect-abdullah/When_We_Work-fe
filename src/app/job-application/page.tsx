@@ -28,7 +28,9 @@ export default function JobApplicationPage() {
       const matchesSearch =
         job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         job.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        job.minimum_education.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        job.minimum_education
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
         job.description.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesStatus =
         statusFilter === "all" || job.status === statusFilter;
@@ -158,7 +160,11 @@ export default function JobApplicationPage() {
             : activeTabId === "applied"
               ? appliedJobs.size
               : hiredJobs.size}{" "}
-          {activeTabId === "all" ? "jobs" : activeTabId === "applied" ? "applied jobs" : "hired jobs"}
+          {activeTabId === "all"
+            ? "jobs"
+            : activeTabId === "applied"
+              ? "applied jobs"
+              : "hired jobs"}
         </div>
       </>
     );
@@ -213,7 +219,7 @@ export default function JobApplicationPage() {
                       "px-3 py-1.5 text-[10px] font-medium transition-colors border-b-2",
                       activeTabId === tab.id
                         ? "text-[#5A6ACF] border-[#5A6ACF] bg-[#F1F2F7]"
-                        : "text-[#5A6ACF]/70 border-transparent hover:text-[#5A6ACF] hover:border-[#5A6ACF]/30",
+                        : "text-[#5A6ACF]/70 border-transparent hover:text-[#5A6ACF] hover:border-[#5A6ACF]/30"
                     )}
                   >
                     {tab.label}
