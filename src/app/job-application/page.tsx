@@ -1,17 +1,15 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import Sidebar from "@/components/layout/Sidebar";
 import { Button, Card, PageHeader } from "@/components/ui";
 import { Job_Details } from "@/constants/jobs";
 import { JobSchema } from "@/types";
-import JobCard from "@/components/jobs/JobCard";
-import JobFilters from "@/components/jobs/JobFilters";
+import JobCard from "@/components/admin/jobs/JobCard";
+import JobFilters from "@/components/admin/jobs/JobFilters";
 import { Briefcase, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function JobApplicationPage() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTabId, setActiveTabId] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<
@@ -86,6 +84,7 @@ export default function JobApplicationPage() {
           <JobCard
             job={job}
             // Don't pass onEditClick to hide edit buttons
+            isUser={true}
           />
         </div>
         {/* Apply Button */}
@@ -177,19 +176,11 @@ export default function JobApplicationPage() {
   ];
 
   return (
-    <div className="bg-[#F1F2F7] min-h-screen flex flex-row w-full">
-      <Sidebar
-        isOpen={sidebarOpen}
-        onToggle={() => setSidebarOpen(!sidebarOpen)}
-      />
-
-      <div className="flex flex-col w-full h-screen">
-        <div className="flex flex-col w-full h-full pt-4 px-2 sm:px-4 overflow-y-auto">
-          {/* Header */}
+    <div className="flex flex-col w-full h-full pt-4 px-2 sm:px-4 overflow-y-auto">
+      {/* Header */}
           <PageHeader
             title="Job Applications"
             description="Browse and apply to available job opportunities"
-            onMenuToggle={() => setSidebarOpen(!sidebarOpen)}
           />
 
           {/* Filters and Search */}
@@ -231,8 +222,6 @@ export default function JobApplicationPage() {
               <div className="w-full">{renderJobsGrid()}</div>
             </div>
           </div>
-        </div>
-      </div>
     </div>
   );
 }

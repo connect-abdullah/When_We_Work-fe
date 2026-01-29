@@ -1,255 +1,309 @@
 "use client";
 
 import React, { useState } from "react";
-import { CheckCircle2, Lock, Mail, Phone, User } from "lucide-react";
-import { Button, FormInput } from "@/components/ui";
-import { AuthLayout, PasswordInput, PhoneInput } from "@/components/auth";
 import Link from "next/link";
-import { parsePhoneNumber } from "libphonenumber-js";
 import { useRouter } from "next/navigation";
+import { Card } from "@/components/ui";
+import {
+  SignupStepBusiness,
+  SignupStepContact,
+  SignupStepPersonal,
+  SignupStepVerification,
+  SignupSuccess,
+  StepIndicator,
+} from "@/components/auth";
+import type {
+  AdminSignupPayload,
+  SignupBusinessData,
+  SignupStep1Data,
+  SignupStep2Data,
+} from "@/types";
 
-// Country codes data
+const defaultStep1: SignupStep1Data = {
+  first_name: "",
+  middle_name: "",
+  last_name: "",
+  email: "",
+  password: "",
+  confirm_password: "",
+};
 
-interface FormData {
-  name: string;
-  email: string;
-  phone: string;
-  password: string;
-  confirmPassword: string;
-}
+const defaultStep2: SignupStep2Data = {
+  phone: "",
+  photo: null,
+  language: "en",
+  gender: "",
+};
 
-interface FormErrors {
-  name?: string;
-  email?: string;
-  phone?: string;
-  password?: string;
-  confirmPassword?: string;
-}
+const defaultBusiness: SignupBusinessData = {
+  business_name: "",
+  email: "",
+  phone: "",
+  address: "",
+  city: "",
+  state: "",
+  zip_code: "",
+  country: "",
+  description: "",
+};
 
-const SignupPage: React.FC = () => {
+const STEPS = [
+  { label: "Personal" },
+  { label: "Contact" },
+  { label: "Business" },
+  { label: "Verify" },
+];
+
+export default function SignupPage() {
   const router = useRouter();
-  const [formData, setFormData] = useState<FormData>({
-    name: "",
-    email: "",
-    phone: "",
-    password: "",
-    confirmPassword: "",
-  });
-
-  const [errors, setErrors] = useState<FormErrors>({});
+  const [currentStep, setCurrentStep] = useState(1);
+  const [step1, setStep1] = useState<SignupStep1Data>(defaultStep1);
+  const [step2, setStep2] = useState<SignupStep2Data>(defaultStep2);
+  const [business, setBusiness] = useState<SignupBusinessData>(defaultBusiness);
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const [photoPreviewUrl, setPhotoPreviewUrl] = useState<string | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
-  const validateForm = (): boolean => {
-    const newErrors: FormErrors = {};
-
-    // Name validation
-    if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
-    } else if (formData.name.trim().length < 2) {
-      newErrors.name = "Name must be at least 2 characters";
-    }
-
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = "Please enter a valid email address";
-    }
-
-    // Phone validation using libphonenumber-js
-    if (!formData.phone.trim()) {
-      newErrors.phone = "Phone number is required";
-    } else {
-      try {
-        // Note: PhoneInput component handles country code internally
-        const phoneNumber = parsePhoneNumber(formData.phone);
-
-        if (!phoneNumber || !phoneNumber.isValid()) {
-          newErrors.phone = "Please enter a valid phone number";
-        }
-      } catch (_error) {
-        newErrors.phone = "Please enter a valid phone number";
-      }
-    }
-
-    // Password validation
-    if (!formData.password) {
-      newErrors.password = "Password is required";
-    } else if (formData.password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters";
-    }
-
-    // Confirm password validation
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = "Please confirm your password";
-    } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (section: "step1" | "step2" | "business") => (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    // Clear error when user starts typing
-    if (errors[name as keyof FormErrors]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: undefined,
-      }));
+    if (section === "step1") {
+      setStep1((prev) => ({ ...prev, [name]: value }));
+    } else if (section === "step2") {
+      setStep2((prev) => ({ ...prev, [name]: value }));
+    } else {
+      setBusiness((prev) => ({ ...prev, [name]: value }));
+    }
+    if (errors[name]) {
+      const { [name]: _, ...rest } = errors;
+      setErrors(rest);
     }
   };
 
-  const getFullPhoneNumber = () => {
-    // PhoneInput component handles the full phone number internally
-    return formData.phone;
+  const handlePhotoChange = (file: File | null, previewUrl: string | null) => {
+    setPhotoFile(file);
+    setPhotoPreviewUrl(previewUrl);
   };
 
-  const isPasswordMatch = () => {
-    return (
-      formData.confirmPassword && formData.password === formData.confirmPassword
-    );
+  const validateStep1 = (): boolean => {
+    const e: Record<string, string> = {};
+    if (!step1.first_name.trim()) {
+      e.first_name = "Required";
+    }
+    if (!step1.last_name.trim()) {
+      e.last_name = "Required";
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!step1.email.trim()) {
+      e.email = "Required";
+    } else if (!emailRegex.test(step1.email)) {
+      e.email = "Invalid email";
+    }
+    if (!step1.password) {
+      e.password = "Required";
+    } else if (step1.password.length < 8) {
+      e.password = "Min 8 characters";
+    }
+    if (!step1.confirm_password) {
+      e.confirm_password = "Required";
+    } else if (step1.password !== step1.confirm_password) {
+      e.confirm_password = "Passwords don't match";
+    }
+    setErrors(e);
+    return Object.keys(e).length === 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const validateStep2 = (): boolean => {
+    const e: Record<string, string> = {};
+    if (!step2.phone?.trim()) {
+      e.phone = "Required";
+    }
+    if (!step2.language) {
+      e.language = "Required";
+    }
+    if (!step2.gender) {
+      e.gender = "Required";
+    }
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  };
 
-    if (!validateForm()) {
+  const validateStep3 = (): boolean => {
+    const e: Record<string, string> = {};
+    if (!business.business_name?.trim()) {
+      e.business_name = "Required";
+    }
+    if (!business.email?.trim()) {
+      e.business_email = "Required";
+    }
+    if (!business.phone?.trim()) {
+      e.business_phone = "Required";
+    }
+    if (!business.address?.trim()) {
+      e.address = "Required";
+    }
+    if (!business.city?.trim()) {
+      e.city = "Required";
+    }
+    if (!business.state?.trim()) {
+      e.state = "Required";
+    }
+    if (!business.zip_code?.trim()) {
+      e.zip_code = "Required";
+    }
+    if (!business.country?.trim()) {
+      e.country = "Required";
+    }
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  };
+
+  const handleNext = () => {
+    let isValid = false;
+    if (currentStep === 1) {
+      isValid = validateStep1();
+    } else if (currentStep === 2) {
+      isValid = validateStep2();
+    }
+
+    if (isValid && currentStep < 4) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const handleBack = () => {
+    if (currentStep > 1 && currentStep < 5) {
+      setCurrentStep(currentStep - 1);
+      setErrors({});
+    }
+  };
+
+  const handleBusinessSubmit = async () => {
+    if (!validateStep3()) {
       return;
     }
-
     setIsLoading(true);
-
     try {
-      // TODO: Implement actual signup logic here
-      const _signupData = {
-        ...formData,
-        phone: getFullPhoneNumber(), // This will be in E.164 format (e.g., +1234567890)
+      const photoUrl = photoPreviewUrl ?? null;
+      const _payload: AdminSignupPayload = {
+        ...step1,
+        ...step2,
+        photo: photoUrl,
+        business,
       };
-      // console.log("Signup data with international phone number:", _signupData);
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Redirect to OTP page with flag=false for new signup
-      router.push("/auth/otp?flag=false");
-    } catch (error) {
-      console.error("Signup error:", error);
+      // TODO: API call to register admin with _payload
+      await new Promise((r) => setTimeout(r, 1000));
+      // Move to verification step
+      setCurrentStep(4);
+    } catch (err) {
+      console.error(err);
+      setErrors({ submit: "Something went wrong" });
     } finally {
       setIsLoading(false);
     }
   };
 
+  const handleVerify = async (_code: string) => {
+    setIsLoading(true);
+    try {
+      // TODO: API call to verify code with _code parameter
+      await new Promise((r) => setTimeout(r, 1000));
+      // Show success screen
+      setShowSuccess(true);
+    } catch (err) {
+      console.error(err);
+      setErrors({ submit: "Verification failed" });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleContinueToDashboard = () => {
+    router.push("/admin/dashboard");
+  };
+
   return (
-    <AuthLayout
-      title="Create your account"
-      subtitle={
-        <>
-          Already have an account?{" "}
-          <Link
-            href="/auth/login"
-            className="font-medium text-[#5A6ACF] hover:text-[#4A5ABF]"
-          >
-            Sign in
-          </Link>
-        </>
-      }
-    >
-      <form className="space-y-5 w-full" onSubmit={handleSubmit}>
-        <FormInput
-          label="Full Name"
-          name="name"
-          type="text"
-          value={formData.name}
-          onChange={handleInputChange}
-          error={errors.name}
-          placeholder="Enter your full name"
-          required
-          icon={<User size={14} className="text-gray-400" />}
-        />
+    <div className="min-h-screen bg-linear-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 flex items-center justify-center p-4 relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-linear-to-br from-[#5A6ACF]/15 via-[#5A6ACF]/5 to-transparent rounded-full blur-3xl -translate-x-1/3 -translate-y-1/3" />
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-linear-to-tl from-[#4A5ABF]/15 via-purple-400/10 to-transparent rounded-full blur-3xl translate-x-1/3 translate-y-1/3" />
 
-        <FormInput
-          label="Email Address"
-          name="email"
-          type="email"
-          value={formData.email}
-          onChange={handleInputChange}
-          error={errors.email}
-          placeholder="Enter your email"
-          required
-          icon={<Mail size={14} className="text-gray-400" />}
-        />
+      <div className="w-full max-w-2xl relative z-10">
+        <Card className="bg-white/95 backdrop-blur-md border-white/20 shadow-xl">
+          <div className="p-6 sm:p-8">
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">Signup</h2>
+              <p className="text-sm text-gray-600 mt-1">
+                Already have an account?{" "}
+                <Link href="/auth/login" className="font-medium text-[#5A6ACF] hover:text-[#4A5ABF]">
+                  Sign in
+                </Link>
+              </p>
+            </div>
 
-        <PhoneInput
-          value={formData.phone}
-          onChange={handleInputChange}
-          error={errors.phone}
-          required
-          icon={<Phone size={14} className="text-gray-400" />}
-        />
+            {!showSuccess && (
+              <StepIndicator steps={STEPS} currentStep={currentStep} className="mb-8" />
+            )}
 
-        <PasswordInput
-          name="password"
-          value={formData.password}
-          onChange={handleInputChange}
-          placeholder="Create a password"
-          label="Password"
-          error={errors.password}
-          required
-          icon={<Lock size={14} className="text-gray-400" />}
-        />
+            {showSuccess ? (
+              <SignupSuccess onContinue={handleContinueToDashboard} />
+            ) : (
+              <>
+                {currentStep === 1 && (
+                  <SignupStepPersonal
+                    data={step1}
+                    errors={errors}
+                    onChange={handleChange}
+                    onNext={handleNext}
+                  />
+                )}
 
-        <PasswordInput
-          name="confirmPassword"
-          value={formData.confirmPassword}
-          onChange={handleInputChange}
-          placeholder="Confirm your password"
-          label="Confirm Password"
-          error={errors.confirmPassword}
-          required
-          showMatchIndicator={true}
-          isMatch={isPasswordMatch()}
-          icon={<CheckCircle2 size={14} className="text-gray-400" />}
-        />
+                {currentStep === 2 && (
+                  <SignupStepContact
+                    data={step2}
+                    errors={errors}
+                    onChange={handleChange}
+                    onPhotoChange={handlePhotoChange}
+                    photoValue={photoFile ?? photoPreviewUrl}
+                    onNext={handleNext}
+                    onBack={handleBack}
+                  />
+                )}
 
-        <Button
-          type="submit"
-          variant="primary"
-          size="md"
-          className="w-full py-3 text-sm font-medium"
-          disabled={isLoading}
-        >
-          {isLoading ? "Creating Account..." : "Create Account"}
-        </Button>
+                {currentStep === 3 && (
+                  <SignupStepBusiness
+                    data={business}
+                    errors={errors}
+                    onChange={handleChange}
+                    onSubmit={handleBusinessSubmit}
+                    onBack={handleBack}
+                    isLoading={isLoading}
+                  />
+                )}
 
-        <div className="text-center pt-4">
-          <p className="text-xs text-gray-500 leading-relaxed">
-            By creating an account, you agree to our{" "}
-            <Link
-              href="/terms"
-              className="text-[#5A6ACF] hover:text-[#4A5ABF] font-medium"
-            >
-              Terms of Service
-            </Link>{" "}
-            and{" "}
-            <Link
-              href="/privacy"
-              className="text-[#5A6ACF] hover:text-[#4A5ABF] font-medium"
-            >
-              Privacy Policy
-            </Link>
-          </p>
-        </div>
-      </form>
-    </AuthLayout>
+                {currentStep === 4 && (
+                  <SignupStepVerification
+                    email={step1.email}
+                    onVerify={handleVerify}
+                    onBack={handleBack}
+                    isLoading={isLoading}
+                  />
+                )}
+
+                {errors.submit && <p className="text-sm text-red-500 text-center mt-4">{errors.submit}</p>}
+
+                {currentStep < 4 && (
+                  <p className="text-center text-xs text-gray-500 pt-4">
+                    Workers sign in with credentials provided by your admin.
+                  </p>
+                )}
+              </>
+            )}
+          </div>
+        </Card>
+      </div>
+    </div>
   );
-};
-
-export default SignupPage;
+}

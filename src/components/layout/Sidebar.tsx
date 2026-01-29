@@ -2,25 +2,35 @@
 
 import React from "react";
 import Image from "next/image";
-import Logo from "../../../public/Logo.png";
-import { BOTTOM_MENU_ITEMS, TOP_MENU_ITEMS } from "@/constants/menu";
-import { MenuItem } from "@/types";
+import Logo from "@/public/Logo.png";
+import { MenuItem, type SidebarMenuConfig } from "@/types";
 import Link from "next/link";
 import { X } from "lucide-react";
 import { usePathname } from "next/navigation";
 
+export type { SidebarMenuConfig };
+
 interface SidebarProps {
+  menuConfig: SidebarMenuConfig;
   className?: string;
   isOpen?: boolean;
   onToggle?: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({
+export default function Sidebar({
+  menuConfig,
   className,
   isOpen = true,
   onToggle,
-}) => {
+}: SidebarProps) {
   const pathname = usePathname();
+  const {
+    topItems,
+    bottomItems,
+    topSectionLabel = "Menu",
+    bottomSectionLabel = "Account",
+    logoAlt = "WhenWeWork",
+  } = menuConfig;
 
   const renderMenuItem = (item: MenuItem, index: number) => {
     const isActive =
@@ -47,7 +57,6 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <>
-      {/* Mobile Overlay */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
@@ -55,7 +64,6 @@ const Sidebar: React.FC<SidebarProps> = ({
         />
       )}
 
-      {/* Sidebar */}
       <div
         className={`
         bg-[#29232f] h-screen px-4 py-6 transition-transform duration-300 ease-in-out overflow-y-auto
@@ -65,7 +73,6 @@ const Sidebar: React.FC<SidebarProps> = ({
         ${className || ""}
       `}
       >
-        {/* Close button for mobile */}
         <button
           onClick={onToggle}
           className="lg:hidden absolute top-4 right-4 text-white hover:text-gray-200 transition-colors"
@@ -73,39 +80,32 @@ const Sidebar: React.FC<SidebarProps> = ({
           <X size={18} />
         </button>
 
-        {/* Logo */}
         <div className="mb-6 px-2">
           <Image
             src={Logo}
-            alt="BookleeAI"
+            alt={logoAlt}
             width={100}
             height={100}
             className="rounded-lg"
           />
         </div>
 
-        <div className="h-px bg-white/20 mb-4"></div>
+        <div className="h-px bg-white/20 mb-4" />
 
-        {/* Menu Section */}
         <div className="mb-6">
           <label className="text-[9px] font-semibold text-white/60 uppercase tracking-wider px-3 mb-2 block">
-            Menu
+            {topSectionLabel}
           </label>
-          <div className="space-y-1">{TOP_MENU_ITEMS.map(renderMenuItem)}</div>
+          <div className="space-y-1">{topItems.map(renderMenuItem)}</div>
         </div>
 
-        {/* Settings Section */}
         <div>
           <label className="text-[9px] font-semibold text-white/60 uppercase tracking-wider px-3 mb-2 block">
-            Settings
+            {bottomSectionLabel}
           </label>
-          <div className="space-y-1">
-            {BOTTOM_MENU_ITEMS.map(renderMenuItem)}
-          </div>
+          <div className="space-y-1">{bottomItems.map(renderMenuItem)}</div>
         </div>
       </div>
     </>
   );
-};
-
-export default Sidebar;
+}

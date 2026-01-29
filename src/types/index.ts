@@ -6,6 +6,14 @@ export interface MenuItem {
   icon: LucideIcon;
 }
 
+export interface SidebarMenuConfig {
+  topItems: MenuItem[];
+  bottomItems: MenuItem[];
+  topSectionLabel?: string;
+  bottomSectionLabel?: string;
+  logoAlt?: string;
+}
+
 export interface DashboardCard {
   title: string;
   value: string;
@@ -75,4 +83,39 @@ export interface SalesAgent {
   dealsWon: number;
   conversionRate: number;
   revenue: number;
+}
+
+/** Admin signup – step 1 (personal) */
+export interface SignupStep1Data {
+  first_name: string;
+  middle_name: string;
+  last_name: string;
+  email: string;
+  password: string;
+  confirm_password: string;
+}
+
+/** Admin signup – step 2 (contact & profile) */
+export interface SignupStep2Data {
+  phone: string;
+  photo: string | null;
+  language: string;
+  gender: string;
+}
+
+/** Admin signup – step 3 (business) */
+export interface SignupBusinessData {
+  business_name: string;
+  email: string;
+  phone: string;
+  address: string;
+  city: string;
+  state: string;
+  zip_code: string;
+  country: string;
+  description: string;
+}
+
+export interface AdminSignupPayload extends SignupStep1Data, SignupStep2Data {
+  business: SignupBusinessData;
 }

@@ -1,3 +1,10 @@
 export { default as AuthLayout } from "./AuthLayout";
 export { default as PasswordInput } from "./PasswordInput";
 export { default as PhoneInput } from "./PhoneInput";
+export { default as PhotoUpload } from "./PhotoUpload";
+export { default as StepIndicator } from "./StepIndicator";
+export { default as SignupStepPersonal } from "./SignupStepPersonal";
+export { default as SignupStepContact } from "./SignupStepContact";
+export { default as SignupStepBusiness } from "./SignupStepBusiness";
+export { default as SignupStepVerification } from "./SignupStepVerification";
+export { default as SignupSuccess } from "./SignupSuccess";
