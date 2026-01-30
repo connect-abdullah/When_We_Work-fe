@@ -36,7 +36,7 @@ const JobFilters: React.FC<JobFiltersProps> = ({
       <div className="flex flex-col sm:flex-row gap-2">
         {/* Search */}
         <SearchInput
-          placeholder="Search by job name, email, or education..."
+          placeholder="Search by job name or education..."
           value={searchTerm}
           onChange={onSearchChange}
         />

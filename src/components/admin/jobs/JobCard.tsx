@@ -2,12 +2,10 @@
 
 import React from "react";
 import Card from "@/components/ui/Card";
-import { JobSchema } from "@/types";
+import type { JobGetSchema } from "@/lib/api/jobs/schema";
 import {
-  Award,
   DollarSign,
   Edit,
-  Mail,
   Target,
   Trash,
   TrendingUp,
@@ -15,7 +13,7 @@ import {
 } from "lucide-react";
 
 interface JobCardProps {
-  job: JobSchema;
+  job: JobGetSchema;
   onEditClick?: () => void;
   onPlaygroundClick?: () => void;
   onClick?: () => void;
@@ -61,16 +59,18 @@ const JobCard: React.FC<JobCardProps> = ({
   onClick,
   isUser = false,
 }) => {
-  const hiringRate =
-    job.people_needed > 0
-      ? Math.round((job.people_hired / job.people_needed) * 100)
-      : 0;
+  const needed = job.workers_required ?? 0;
+  const hired = job.workers_hired ?? 0;
+  const hiringRate = needed > 0 ? Math.round((hired / needed) * 100) : 0;
+  const tone = job.tone_requirement ?? "professional";
+  const salaryType = job.salary_type ?? "hourly";
+  console.warn("job", job.salary);
 
   return (
     <div onClick={onClick} className="cursor-pointer">
       <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 group relative bg-white border border-gray-200">
         {/* Top Bar with Status */}
-        <div className={`h-1 ${getStatusDot(job.status)}`} />
+        <div className={`h-1 ${getStatusDot(job.status ?? "inactive")}`} />
 
         {/* Content */}
         <div className="p-3">
@@ -79,17 +79,17 @@ const JobCard: React.FC<JobCardProps> = ({
             <div className="flex-1 min-w-0 pr-2">
               <h3 className="text-sm font-semibold text-[#1F384C] mb-2">
                 <span className="text-gray-500 font-normal">JOB:</span>{" "}
-                {job.title}
+                {job.title ?? ""}
               </h3>
               <div className="flex items-center gap-2 mb-2">
                 <span
-                  className={`text-[10px] font-medium ${getToneColor(job.tone)}`}
+                  className={`text-[10px] font-medium ${getToneColor(tone)}`}
                 >
-                  {job.tone}
+                  {tone}
                 </span>
                 <span className="text-gray-300">•</span>
                 <span className="text-[10px] text-gray-500">
-                  {job.salary_type === "per_hour" ? "Hourly" : "Fixed"}
+                  {salaryType === "hourly" ? "Hourly" : "Fixed"}
                 </span>
               </div>
               <div>
@@ -99,7 +99,7 @@ const JobCard: React.FC<JobCardProps> = ({
                   </span>
                 </p>
                 <p className="text-[10px] text-gray-600 line-clamp-2 leading-relaxed">
-                  {job.description}
+                  {job.description ?? ""}
                 </p>
               </div>
             </div>
@@ -143,7 +143,7 @@ const JobCard: React.FC<JobCardProps> = ({
                 <Users size={12} className="text-blue-600" />
               </div>
               <p className="text-xs font-bold text-gray-900">
-                {job.people_hired}
+                {hired}
               </p>
               <p className="text-[9px] text-gray-500">Hired</p>
             </div>
@@ -152,7 +152,7 @@ const JobCard: React.FC<JobCardProps> = ({
                 <Target size={12} className="text-emerald-600" />
               </div>
               <p className="text-xs font-bold text-gray-900">
-                {job.people_needed}
+                {needed}
               </p>
               <p className="text-[9px] text-gray-500">Needed</p>
             </div>
@@ -161,7 +161,7 @@ const JobCard: React.FC<JobCardProps> = ({
                 <DollarSign size={12} className="text-violet-600" />
               </div>
               <p className="text-xs font-bold text-gray-900">
-                ${(job.salary / 1000).toFixed(0)}k
+                ${job.salary}
               </p>
               <p className="text-[9px] text-gray-500">Salary</p>
             </div>
@@ -174,9 +174,8 @@ const JobCard: React.FC<JobCardProps> = ({
             </div>
           </div>
 
-          {/* Bottom Section - Tags and Contact */}
+          {/* Bottom Section - Characteristics */}
           <div className="space-y-2 pt-2 border-t border-gray-100">
-            {/* Characteristics */}
             {job.characteristics && job.characteristics.length > 0 && (
               <div className="flex flex-wrap gap-1">
                 {job.characteristics.slice(0, 2).map((char, index) => (
@@ -194,26 +193,6 @@ const JobCard: React.FC<JobCardProps> = ({
                 )}
               </div>
             )}
-
-            {/* Contact & Languages - Inline */}
-            <div className="flex items-center justify-between gap-2 text-[9px]">
-              <div className="flex items-center gap-2 flex-1 min-w-0">
-                {job.email && (
-                  <div className="flex items-center gap-1 text-gray-500 truncate">
-                    <Mail size={10} />
-                    <span className="truncate">{job.email.split("@")[0]}</span>
-                  </div>
-                )}
-              </div>
-              {job.languages && job.languages.length > 0 && (
-                <div className="flex items-center gap-1 shrink-0">
-                  <Award size={10} className="text-gray-400" />
-                  <span className="text-gray-500">
-                    {job.languages.length} lang
-                  </span>
-                </div>
-              )}
-            </div>
           </div>
         </div>
       </Card>

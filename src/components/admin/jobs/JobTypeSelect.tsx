@@ -1,7 +1,7 @@
 import React from "react";
 import FormDropdownSelect, { DropdownOption } from "./FormDropdownSelect";
 
-export type JobType = "contract" | "full_time" | "part_time" | "freelance";
+export type JobType = "contract" | "full_time" | "part_time" | "freelancer";
 
 interface JobTypeSelectProps {
   value?: JobType | "";
@@ -15,7 +15,7 @@ const JOB_TYPE_OPTIONS: DropdownOption[] = [
   { value: "contract", label: "Contract" },
   { value: "full_time", label: "Full Time" },
   { value: "part_time", label: "Part Time" },
-  { value: "freelance", label: "Freelance" },
+  { value: "freelancer", label: "Freelance" },
 ];
 
 const JobTypeSelect: React.FC<JobTypeSelectProps> = ({

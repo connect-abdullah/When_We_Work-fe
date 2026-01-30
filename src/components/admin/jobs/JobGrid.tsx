@@ -2,14 +2,14 @@
 import React from "react";
 import { Users } from "lucide-react";
 import { Card } from "@/components/ui";
-import { JobSchema } from "@/types";
+import type { JobGetSchema } from "@/lib/api/jobs/schema";
 import JobCard from "@/components/admin/jobs/JobCard";
 
 interface JobGridProps {
-  jobs: JobSchema[];
+  jobs: JobGetSchema[];
   totalJobs: number;
-  onEditClick: (job: JobSchema) => void;
-  onCardClick?: (job: JobSchema) => void;
+  onEditClick: (job: JobGetSchema) => void;
+  onCardClick?: (job: JobGetSchema) => void;
 }
 
 const JobGrid: React.FC<JobGridProps> = ({

@@ -3,15 +3,21 @@
 import React, { useEffect, useState } from "react";
 import { Check, X } from "lucide-react";
 import { Button, FormInput, FormTextarea } from "@/components/ui";
-import { JobSchema } from "@/types";
+import {
+  JobCategory,
+  JobGetSchema,
+  JobStatus,
+  SalaryType,
+  ToneRequirement,
+} from "@/lib/api/jobs/schema";
 import JobTypeSelect from "./JobTypeSelect";
 import JobStatusSelect from "./JobStatusSelect";
 
 interface JobModalProps {
   isOpen: boolean;
-  job?: JobSchema | null;
+  job?: JobGetSchema | null;
   onClose: () => void;
-  onSubmit: (jobData: Partial<JobSchema>) => void;
+  onSubmit: (jobData: Partial<JobGetSchema>) => void;
 }
 
 const JobModal: React.FC<JobModalProps> = ({
@@ -22,70 +28,54 @@ const JobModal: React.FC<JobModalProps> = ({
 }) => {
   const isEditMode = Boolean(job);
 
-  const [formData, setFormData] = useState<Partial<JobSchema>>({
+  const [formData, setFormData] = useState<Partial<JobGetSchema>>({
     title: "",
     description: "",
-    email: "",
-    phone: "",
     minimum_education: "",
-    tone: "professional",
+    tone_requirement: ToneRequirement.professional,
     characteristics: [],
-    status: "active",
-    job_type: undefined,
-    joinDate: "",
-    people_needed: 0,
-    people_hired: 0,
+    status: JobStatus.active,
+    job_category: undefined,
+    workers_required: 0,
+    workers_hired: 0,
     salary: 0,
-    salary_type: "per_hour",
-    languages: [],
+    salary_type: SalaryType.hourly,
   });
 
   const [characteristicsInput, setCharacteristicsInput] = useState("");
-  const [languagesInput, setLanguagesInput] = useState("");
 
   // Initialize form data when job changes
   useEffect(() => {
     if (job) {
       setFormData({
-        title: job.title,
-        description: job.description,
-        email: job.email,
-        phone: job.phone || "",
-        minimum_education: job.minimum_education,
-        tone: job.tone,
-        characteristics: job.characteristics,
-        status: job.status,
-        job_type: job.job_type,
-        joinDate: job.joinDate || "",
-        people_needed: job.people_needed,
-        people_hired: job.people_hired,
-        salary: job.salary,
-        salary_type: job.salary_type,
-        languages: job.languages || [],
+        title: job.title ?? "",
+        description: job.description ?? "",
+        minimum_education: job.minimum_education ?? "",
+        tone_requirement: job.tone_requirement ?? ToneRequirement.professional,
+        characteristics: job.characteristics ?? [],
+        status: job.status ?? JobStatus.active,
+        job_category: job.job_category,
+        workers_required: job.workers_required ?? 0,
+        workers_hired: job.workers_hired ?? 0,
+        salary: job.salary ?? 0,
+        salary_type: job.salary_type ?? SalaryType.hourly,
       });
-      setCharacteristicsInput(job.characteristics.join(", "));
-      setLanguagesInput((job.languages || []).join(", "));
+      setCharacteristicsInput((job.characteristics ?? []).join(", "));
     } else {
-      // Reset to defaults for create mode
       setFormData({
         title: "",
         description: "",
-        email: "",
-        phone: "",
         minimum_education: "",
-        tone: "professional",
+        tone_requirement: ToneRequirement.professional,
         characteristics: [],
-        status: "active",
-        job_type: undefined,
-        joinDate: "",
-        people_needed: 0,
-        people_hired: 0,
+        status: JobStatus.active,
+        job_category: undefined,
+        workers_required: 0,
+        workers_hired: 0,
         salary: 0,
-        salary_type: "per_hour",
-        languages: [],
+        salary_type: SalaryType.hourly,
       });
       setCharacteristicsInput("");
-      setLanguagesInput("");
     }
   }, [job, isOpen]);
 
@@ -98,27 +88,21 @@ const JobModal: React.FC<JobModalProps> = ({
       .split(",")
       .map((c) => c.trim())
       .filter((c) => c.length > 0);
-    const languages = languagesInput
-      .split(",")
-      .map((l) => l.trim())
-      .filter((l) => l.length > 0);
 
     onSubmit({
       ...formData,
-      characteristics,
-      languages: languages.length > 0 ? languages : undefined,
+      characteristics: characteristics.length > 0 ? characteristics : undefined,
     });
     onClose();
   };
 
   const isFormValid = () => {
     return (
-      formData.title?.trim() !== "" &&
-      formData.description?.trim() !== "" &&
-      formData.email?.trim() !== "" &&
-      formData.minimum_education?.trim() !== "" &&
-      formData.people_needed !== undefined &&
-      formData.people_hired !== undefined &&
+      (formData.title?.trim() ?? "") !== "" &&
+      (formData.description?.trim() ?? "") !== "" &&
+      (formData.minimum_education?.trim() ?? "") !== "" &&
+      formData.workers_required !== undefined &&
+      formData.workers_hired !== undefined &&
       formData.salary !== undefined
     );
   };
@@ -167,31 +151,6 @@ const JobModal: React.FC<JobModalProps> = ({
 
           <div className="grid grid-cols-2 gap-3">
             <FormInput
-              label="Email"
-              name="email"
-              type="email"
-              value={formData.email || ""}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-              placeholder="job@whenwework.com"
-              required
-            />
-
-            <FormInput
-              label="Phone"
-              name="phone"
-              type="tel"
-              value={formData.phone || ""}
-              onChange={(e) =>
-                setFormData({ ...formData, phone: e.target.value })
-              }
-              placeholder="+1 (555) 123-4567"
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <FormInput
               label="Minimum Education"
               name="minimum_education"
               type="text"
@@ -204,11 +163,11 @@ const JobModal: React.FC<JobModalProps> = ({
             />
 
             <JobTypeSelect
-              value={formData.job_type || ""}
+              value={formData.job_category ?? ""}
               onChange={(value) =>
                 setFormData({
                   ...formData,
-                  job_type: value || undefined,
+                  job_category: value ? (value as JobCategory) : undefined,
                 })
               }
             />
@@ -219,21 +178,19 @@ const JobModal: React.FC<JobModalProps> = ({
               Tone
             </label>
             <div className="grid grid-cols-5 gap-1.5">
-              {(
-                [
-                  "professional",
-                  "friendly",
-                  "casual",
-                  "formal",
-                  "empathetic",
-                ] as const
-              ).map((tone) => (
+              {[
+                ToneRequirement.professional,
+                ToneRequirement.friendly,
+                ToneRequirement.casual,
+                ToneRequirement.formal,
+                ToneRequirement.empathic,
+              ].map((tone) => (
                 <button
                   key={tone}
                   type="button"
-                  onClick={() => setFormData({ ...formData, tone })}
+                  onClick={() => setFormData({ ...formData, tone_requirement: tone })}
                   className={`px-2 py-1.5 text-[9px] font-medium rounded-lg border-2 transition-all ${
-                    formData.tone === tone
+                    formData.tone_requirement === tone
                       ? "border-[#5A6ACF] bg-[#5A6ACF]/10 text-[#5A6ACF]"
                       : "border-gray-200 bg-white text-gray-700 hover:border-gray-300"
                   }`}
@@ -258,11 +215,11 @@ const JobModal: React.FC<JobModalProps> = ({
           </div>
 
           <JobStatusSelect
-            value={formData.status || ""}
+            value={formData.status ?? ""}
             onChange={(value) =>
               setFormData({
                 ...formData,
-                status: (value || "active") as JobSchema["status"],
+                status: (value ? (value as JobStatus) : JobStatus.active),
               })
             }
             required
@@ -270,14 +227,14 @@ const JobModal: React.FC<JobModalProps> = ({
 
           <div className="grid grid-cols-2 gap-3">
             <FormInput
-              label="People Needed"
-              name="people_needed"
+              label="Workers Needed"
+              name="workers_required"
               type="number"
-              value={formData.people_needed?.toString() || ""}
+              value={formData.workers_required?.toString() ?? ""}
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  people_needed: parseInt(e.target.value) || 0,
+                  workers_required: parseInt(e.target.value, 10) || 0,
                 })
               }
               placeholder="0"
@@ -285,14 +242,14 @@ const JobModal: React.FC<JobModalProps> = ({
             />
 
             <FormInput
-              label="People Hired"
-              name="people_hired"
+              label="Workers Hired"
+              name="workers_hired"
               type="number"
-              value={formData.people_hired?.toString() || ""}
+              value={formData.workers_hired?.toString() ?? ""}
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  people_hired: parseInt(e.target.value) || 0,
+                  workers_hired: parseInt(e.target.value, 10) || 0,
                 })
               }
               placeholder="0"
@@ -305,11 +262,11 @@ const JobModal: React.FC<JobModalProps> = ({
               label="Salary"
               name="salary"
               type="number"
-              value={formData.salary?.toString() || ""}
+              value={formData.salary?.toString() ?? ""}
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  salary: parseInt(e.target.value) || 0,
+                  salary: parseInt(e.target.value, 10) || 0,
                 })
               }
               placeholder="0"
@@ -321,7 +278,7 @@ const JobModal: React.FC<JobModalProps> = ({
                 Salary Type
               </label>
               <div className="grid grid-cols-2 gap-1.5">
-                {(["per_hour", "fixed"] as const).map((type) => (
+                {[SalaryType.hourly, SalaryType.fixed].map((type) => (
                   <button
                     key={type}
                     type="button"
@@ -334,35 +291,12 @@ const JobModal: React.FC<JobModalProps> = ({
                         : "border-gray-200 bg-white text-gray-700 hover:border-gray-300"
                     }`}
                   >
-                    {type === "per_hour" ? "Per Hour" : "Fixed"}
+                    {type === SalaryType.hourly ? "Hourly" : "Fixed"}
                   </button>
                 ))}
               </div>
             </div>
           </div>
-
-          <div>
-            <label className="block text-[9px] font-medium text-gray-700 mb-1">
-              Languages (comma-separated)
-            </label>
-            <input
-              type="text"
-              value={languagesInput}
-              onChange={(e) => setLanguagesInput(e.target.value)}
-              placeholder="English, Spanish, French"
-              className="w-full px-2 py-1.5 text-[9px] border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#5A6ACF]"
-            />
-          </div>
-
-          <FormInput
-            label="Join Date (optional)"
-            name="joinDate"
-            type="date"
-            value={formData.joinDate || ""}
-            onChange={(e) =>
-              setFormData({ ...formData, joinDate: e.target.value })
-            }
-          />
         </div>
 
         {/* Footer */}

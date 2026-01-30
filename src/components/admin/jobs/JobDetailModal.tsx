@@ -2,24 +2,20 @@
 
 import React from "react";
 import {
-  Award,
-  Calendar,
   DollarSign,
   Edit,
   GraduationCap,
-  Mail,
-  Phone,
   Target,
   TrendingUp,
   Users,
   X,
 } from "lucide-react";
-import { JobSchema } from "@/types";
+import type { JobGetSchema } from "@/lib/api/jobs/schema";
 
 interface JobDetailModalProps {
   isOpen: boolean;
   onClose: () => void;
-  job: JobSchema | null;
+  job: JobGetSchema | null;
   onEdit?: () => void;
 }
 
@@ -65,10 +61,10 @@ const JobDetailModal: React.FC<JobDetailModalProps> = ({
     return null;
   }
 
-  const hiringRate =
-    job.people_needed > 0
-      ? Math.round((job.people_hired / job.people_needed) * 100)
-      : 0;
+  const needed = job.workers_required ?? 0;
+  const hired = job.workers_hired ?? 0;
+  const hiringRate = needed > 0 ? Math.round((hired / needed) * 100) : 0;
+  const tone = job.tone_requirement ?? "professional";
 
   return (
     <div
@@ -84,17 +80,17 @@ const JobDetailModal: React.FC<JobDetailModalProps> = ({
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-1">
               <h2 className="text-xl font-semibold text-[#1F384C]">
-                {job.title}
+                {job.title ?? ""}
               </h2>
               <span
-                className={`px-2.5 py-1 rounded-lg text-xs font-medium border ${getStatusColor(job.status)}`}
+                className={`px-2.5 py-1 rounded-lg text-xs font-medium border ${getStatusColor(job.status ?? "inactive")}`}
               >
-                {job.status.charAt(0).toUpperCase() + job.status.slice(1)}
+                {(job.status ?? "inactive").charAt(0).toUpperCase() + (job.status ?? "inactive").slice(1)}
               </span>
             </div>
             <p className="text-sm text-gray-500">
               <span className="font-medium text-gray-600">JOB:</span>{" "}
-              {job.title}
+              {job.title ?? ""}
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -124,7 +120,7 @@ const JobDetailModal: React.FC<JobDetailModalProps> = ({
               Description
             </h3>
             <p className="text-sm text-gray-600 leading-relaxed">
-              {job.description}
+              {job.description ?? ""}
             </p>
           </div>
 
@@ -135,18 +131,14 @@ const JobDetailModal: React.FC<JobDetailModalProps> = ({
                 <Users size={16} className="text-blue-600" />
                 <span className="text-xs text-gray-600">Hired</span>
               </div>
-              <p className="text-2xl font-bold text-gray-900">
-                {job.people_hired}
-              </p>
+              <p className="text-2xl font-bold text-gray-900">{hired}</p>
             </div>
             <div className="p-4 bg-emerald-50 rounded-xl">
               <div className="flex items-center gap-2 mb-2">
                 <Target size={16} className="text-emerald-600" />
                 <span className="text-xs text-gray-600">Needed</span>
               </div>
-              <p className="text-2xl font-bold text-gray-900">
-                {job.people_needed}
-              </p>
+              <p className="text-2xl font-bold text-gray-900">{needed}</p>
             </div>
             <div className="p-4 bg-violet-50 rounded-xl">
               <div className="flex items-center gap-2 mb-2">
@@ -154,7 +146,7 @@ const JobDetailModal: React.FC<JobDetailModalProps> = ({
                 <span className="text-xs text-gray-600">Salary</span>
               </div>
               <p className="text-2xl font-bold text-gray-900">
-                ${(job.salary / 1000).toFixed(0)}k
+                ${job.salary ?? 0}
               </p>
             </div>
             <div className="p-4 bg-amber-50 rounded-xl">
@@ -166,86 +158,39 @@ const JobDetailModal: React.FC<JobDetailModalProps> = ({
             </div>
           </div>
 
-          {/* Details Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Contact Information */}
-            <div className="space-y-3">
-              <h3 className="text-sm font-semibold text-gray-700 mb-3">
-                Contact Information
-              </h3>
-              <div className="space-y-2">
-                {job.email && (
-                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                    <Mail size={16} className="text-gray-400" />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs text-gray-500 mb-0.5">Email</p>
-                      <p className="text-sm text-gray-900 truncate">
-                        {job.email}
-                      </p>
-                    </div>
-                  </div>
-                )}
-                {job.phone && (
-                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                    <Phone size={16} className="text-gray-400" />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs text-gray-500 mb-0.5">Phone</p>
-                      <p className="text-sm text-gray-900">{job.phone}</p>
-                    </div>
-                  </div>
-                )}
+          {/* Job Details */}
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold text-gray-700 mb-3">
+              Job Details
+            </h3>
+            <div className="space-y-2">
+              <div className="p-3 bg-gray-50 rounded-lg">
+                <p className="text-xs text-gray-500 mb-0.5">Tone</p>
+                <p
+                  className={`text-sm font-medium ${getToneColor(tone)}`}
+                >
+                  {tone.charAt(0).toUpperCase() + tone.slice(1)}
+                </p>
               </div>
-            </div>
-
-            {/* Job Details */}
-            <div className="space-y-3">
-              <h3 className="text-sm font-semibold text-gray-700 mb-3">
-                Job Details
-              </h3>
-              <div className="space-y-2">
-                <div className="p-3 bg-gray-50 rounded-lg">
-                  <p className="text-xs text-gray-500 mb-0.5">Tone</p>
-                  <p
-                    className={`text-sm font-medium ${getToneColor(job.tone)}`}
-                  >
-                    {job.tone.charAt(0).toUpperCase() + job.tone.slice(1)}
-                  </p>
-                </div>
-                <div className="p-3 bg-gray-50 rounded-lg">
-                  <p className="text-xs text-gray-500 mb-0.5">Salary Type</p>
-                  <p className="text-sm font-medium text-gray-900">
-                    {job.salary_type === "per_hour" ? "Per Hour" : "Fixed"}
-                  </p>
-                </div>
-                {job.minimum_education && (
-                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                    <GraduationCap size={16} className="text-gray-400" />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs text-gray-500 mb-0.5">
-                        Minimum Education
-                      </p>
-                      <p className="text-sm text-gray-900">
-                        {job.minimum_education}
-                      </p>
-                    </div>
-                  </div>
-                )}
-                {job.joinDate && (
-                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                    <Calendar size={16} className="text-gray-400" />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs text-gray-500 mb-0.5">Join Date</p>
-                      <p className="text-sm text-gray-900">
-                        {new Date(job.joinDate).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })}
-                      </p>
-                    </div>
-                  </div>
-                )}
+              <div className="p-3 bg-gray-50 rounded-lg">
+                <p className="text-xs text-gray-500 mb-0.5">Salary Type</p>
+                <p className="text-sm font-medium text-gray-900">
+                  {(job.salary_type ?? "hourly") === "hourly" ? "Per Hour" : "Fixed"}
+                </p>
               </div>
+              {job.minimum_education && (
+                <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                  <GraduationCap size={16} className="text-gray-400" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs text-gray-500 mb-0.5">
+                      Minimum Education
+                    </p>
+                    <p className="text-sm text-gray-900">
+                      {job.minimum_education}
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -262,28 +207,6 @@ const JobDetailModal: React.FC<JobDetailModalProps> = ({
                     className="px-3 py-1.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg"
                   >
                     {char}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Languages */}
-          {job.languages && job.languages.length > 0 && (
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <Award size={16} className="text-gray-400" />
-                <h3 className="text-sm font-semibold text-gray-700">
-                  Languages
-                </h3>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {job.languages.map((lang, index) => (
-                  <span
-                    key={index}
-                    className="px-3 py-1.5 bg-[#5A6ACF]/10 text-[#5A6ACF] text-sm font-medium rounded-lg"
-                  >
-                    {lang}
                   </span>
                 ))}
               </div>

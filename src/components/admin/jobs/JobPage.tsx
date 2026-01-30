@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { PageHeader } from "@/components/ui";
 import { Plus } from "lucide-react";
-import { Job_Details } from "@/constants/jobs";
-import { JobSchema } from "@/types";
+import type { JobCreate, JobGetSchema } from "@/lib/api/jobs/schema";
+import { createJob, getJobs, updateJob } from "@/lib/api/jobs";
 import JobFilters from "@/components/admin/jobs/JobFilters";
 import JobGrid from "@/components/admin/jobs/JobGrid";
 import JobStats from "@/components/admin/jobs/JobStats";
@@ -12,53 +12,68 @@ import JobModal from "@/components/admin/jobs/JobModal";
 import JobDetailModal from "@/components/admin/jobs/JobDetailModal";
 
 export default function JobPage() {
+  const [jobs, setJobs] = useState<JobGetSchema[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<
     "all" | "active" | "inactive"
   >("all");
   const [typeFilter, setTypeFilter] = useState<string>("all");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedJob, setSelectedJob] = useState<JobSchema | null>(null);
+  const [selectedJob, setSelectedJob] = useState<JobGetSchema | null>(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
-  const [detailJob, setDetailJob] = useState<JobSchema | null>(null);
+  const [detailJob, setDetailJob] = useState<JobGetSchema | null>(null);
+
+  const fetchJobs = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await getJobs();
+      setJobs(Array.isArray(data) ? data : []);
+    } catch {
+      setJobs([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchJobs();
+  }, [fetchJobs]);
 
   // Filter jobs
   const filteredJobs = useMemo(() => {
-    return Job_Details.filter((job) => {
+    return jobs.filter((job) => {
+      const title = (job.title ?? "").toLowerCase();
+      const education = (job.minimum_education ?? "").toLowerCase();
+      const term = searchTerm.toLowerCase();
       const matchesSearch =
-        job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        job.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        job.minimum_education.toLowerCase().includes(searchTerm.toLowerCase());
+        title.includes(term) ||
+        education.includes(term);
       const matchesStatus =
         statusFilter === "all" || job.status === statusFilter;
-      // Map "hourly" from filter to "per_hour" in schema
       const salaryTypeMatch =
-        typeFilter === "all"
-          ? true
-          : typeFilter === "hourly"
-            ? job.salary_type === "per_hour"
-            : job.salary_type === typeFilter;
+        typeFilter === "all" || job.salary_type === typeFilter;
       return matchesSearch && matchesStatus && salaryTypeMatch;
     });
-  }, [searchTerm, statusFilter, typeFilter]);
+  }, [jobs, searchTerm, statusFilter, typeFilter]);
 
-  // Calculate stats
-  const totalJobs = Job_Details.length;
-  const activeJobs = Job_Details.filter((a) => a.status === "active").length;
-  const totalPeopleNeeded = Job_Details.reduce(
-    (sum, a) => sum + a.people_needed,
+  // Calculate stats from API data
+  const totalJobs = jobs.length;
+  const activeJobs = jobs.filter((a) => a.status === "active").length;
+  const totalPeopleNeeded = jobs.reduce(
+    (sum, a) => sum + (a.workers_required ?? 0),
     0,
   );
-  const totalPeopleHired = Job_Details.reduce(
-    (sum, a) => sum + a.people_hired,
+  const totalPeopleHired = jobs.reduce(
+    (sum, a) => sum + (a.workers_hired ?? 0),
     0,
   );
   const stats = [
     {
       title: "Total Jobs",
       value: totalJobs.toString(),
-      change: "+3",
-      changeType: "positive" as const,
+      change: "",
+      changeType: "neutral" as const,
       icon: "users",
       iconColor: "text-blue-600",
       iconBgColor: "bg-blue-50",
@@ -66,8 +81,8 @@ export default function JobPage() {
     {
       title: "Active Jobs",
       value: activeJobs.toString(),
-      change: "+2",
-      changeType: "positive" as const,
+      change: "",
+      changeType: "neutral" as const,
       icon: "usercheck",
       iconColor: "text-green-600",
       iconBgColor: "bg-green-50",
@@ -75,8 +90,8 @@ export default function JobPage() {
     {
       title: "People Needed",
       value: totalPeopleNeeded.toString(),
-      change: "+24",
-      changeType: "positive" as const,
+      change: "",
+      changeType: "neutral" as const,
       icon: "users",
       iconColor: "text-purple-600",
       iconBgColor: "bg-purple-50",
@@ -84,22 +99,40 @@ export default function JobPage() {
     {
       title: "People Hired",
       value: totalPeopleHired.toString(),
-      change: "+18",
-      changeType: "positive" as const,
+      change: "",
+      changeType: "neutral" as const,
       icon: "usercheck",
       iconColor: "text-indigo-600",
       iconBgColor: "bg-indigo-50",
     },
   ];
 
-  const handleCreateJob = (_jobData: Partial<JobSchema>) => {
-    // console.log("Creating new job:", jobData);
-    // TODO: Implement API call to create job
-    // The jobData will contain all the form fields matching JobSchema
+  const handleCreateJob = async (jobData: Partial<JobGetSchema>) => {
+    try {
+      const payload: JobCreate = {
+        title: jobData.title ?? "",
+        description: jobData.description ?? "",
+        status: (jobData.status as JobCreate["status"]) ?? ("active" as JobCreate["status"]),
+        minimum_education: jobData.minimum_education ?? "",
+        job_category: (jobData.job_category as JobCreate["job_category"]) ?? ("full_time" as JobCreate["job_category"]),
+        tone_requirement: (jobData.tone_requirement as JobCreate["tone_requirement"]) ?? ("professional" as JobCreate["tone_requirement"]),
+        characteristics: jobData.characteristics,
+        workers_required: jobData.workers_required ?? 0,
+        workers_hired: jobData.workers_hired ?? 0,
+        salary: jobData.salary ?? 0,
+        salary_type: (jobData.salary_type as JobCreate["salary_type"]) ?? ("hourly" as JobCreate["salary_type"]),
+        admin_id: 0, // TODO: from auth
+      };
+      await createJob(payload);
+      await fetchJobs();
+      handleCloseModal();
+    } catch {
+      // TODO: show error toast
+    }
   };
 
-  const handleOpenModal = (job?: JobSchema) => {
-    setSelectedJob(job || null);
+  const handleOpenModal = (job?: JobGetSchema) => {
+    setSelectedJob(job ?? null);
     setIsModalOpen(true);
   };
 
@@ -108,7 +141,7 @@ export default function JobPage() {
     setSelectedJob(null);
   };
 
-  const handleOpenDetailModal = (job: JobSchema) => {
+  const handleOpenDetailModal = (job: JobGetSchema) => {
     setDetailJob(job);
     setIsDetailModalOpen(true);
   };
@@ -126,10 +159,17 @@ export default function JobPage() {
     }
   };
 
-  const handleUpdateJob = (_jobData: Partial<JobSchema>) => {
-    // console.log("Updating job:", selectedJob?.id, jobData);
-    // TODO: Implement API call to update job
-    // The jobData will contain all the form fields matching JobSchema
+  const handleUpdateJob = async (jobData: Partial<JobGetSchema>) => {
+    if (!selectedJob?.id) {
+      return;
+    }
+    try {
+      await updateJob({ ...selectedJob, ...jobData });
+      await fetchJobs();
+      handleCloseModal();
+    } catch {
+      // TODO: show error toast
+    }
   };
 
   return (
@@ -164,12 +204,18 @@ export default function JobPage() {
 
           {/* Jobs Grid */}
           <div className="px-2 sm:px-4 mb-2">
-            <JobGrid
-              jobs={filteredJobs}
-              totalJobs={totalJobs}
-              onEditClick={(job) => handleOpenModal(job)}
-              onCardClick={handleOpenDetailModal}
-            />
+            {loading ? (
+              <div className="py-12 text-center text-sm text-gray-500">
+                Loading jobs...
+              </div>
+            ) : (
+              <JobGrid
+                jobs={filteredJobs}
+                totalJobs={totalJobs}
+                onEditClick={(job) => handleOpenModal(job)}
+                onCardClick={handleOpenDetailModal}
+              />
+            )}
           </div>
 
       {/* Job Modal - Used for both create and edit */}
