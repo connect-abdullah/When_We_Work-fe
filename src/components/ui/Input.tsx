@@ -29,7 +29,7 @@ const Input: React.FC<InputProps> = ({
             "placeholder:text-gray-400",
             error && "border-red-500 focus:ring-red-500",
             icon && "pl-10",
-            className
+            className,
           )}
           {...props}
         />

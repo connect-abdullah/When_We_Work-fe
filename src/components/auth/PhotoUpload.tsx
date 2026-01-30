@@ -3,6 +3,7 @@
 import React, { useRef } from "react";
 import { Camera, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 interface PhotoUploadProps {
   value: string | File | null;
@@ -42,7 +43,9 @@ export default function PhotoUpload({
 
   const handleClear = () => {
     onChange(null, null);
-    if (inputRef.current) inputRef.current.value = "";
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
   };
 
   return (
@@ -66,7 +69,7 @@ export default function PhotoUpload({
             className="hidden"
           />
           {previewUrl ? (
-            <img
+            <Image
               src={previewUrl}
               alt="Preview"
               className="h-full w-full rounded-lg object-cover"

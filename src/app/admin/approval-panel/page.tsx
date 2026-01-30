@@ -90,7 +90,7 @@ export default function ApprovalPanelPage() {
     return jobs.filter(
       (job) =>
         job.name.toLowerCase().includes(searchLower) ||
-        job.jobId.toLowerCase().includes(searchLower)
+        job.jobId.toLowerCase().includes(searchLower),
     );
   }, [jobs, searchTerm]);
 
@@ -102,7 +102,7 @@ export default function ApprovalPanelPage() {
           const updatedApplicants = job.applicants.map((applicant) =>
             applicant.id === personId
               ? { ...applicant, availabilityStatus: "available" as const }
-              : applicant
+              : applicant,
           );
 
           // Check if this person was already accepted
@@ -118,7 +118,7 @@ export default function ApprovalPanelPage() {
           };
         }
         return job;
-      })
+      }),
     );
 
     // TODO: Make API call to accept the person
@@ -131,7 +131,7 @@ export default function ApprovalPanelPage() {
         if (job.id === jobId) {
           // Remove the person from applicants
           const updatedApplicants = job.applicants.filter(
-            (applicant) => applicant.id !== personId
+            (applicant) => applicant.id !== personId,
           );
 
           // Check if this person was accepted
@@ -147,7 +147,7 @@ export default function ApprovalPanelPage() {
           };
         }
         return job;
-      })
+      }),
     );
 
     // TODO: Make API call to decline the person

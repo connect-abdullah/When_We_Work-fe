@@ -379,7 +379,7 @@ export default function MyCalendar({
               const centerOffset = containerHeight / 2;
               const scrollPosition = Math.max(
                 0,
-                currentTimePosition - centerOffset
+                currentTimePosition - centerOffset,
               );
 
               // Debug logging for development

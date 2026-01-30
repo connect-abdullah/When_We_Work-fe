@@ -173,7 +173,7 @@ export default function WorkersPage() {
     if (window.confirm(`Are you sure you want to delete ${workerName}?`)) {
       // Update local state by removing the deleted worker
       setWorkers((prevWorkers) =>
-        prevWorkers.filter((w) => w.id !== worker.id)
+        prevWorkers.filter((w) => w.id !== worker.id),
       );
     }
   };
@@ -188,8 +188,8 @@ export default function WorkersPage() {
                 ...w,
                 ...workerData,
               }
-            : w
-        )
+            : w,
+        ),
       );
     } else {
       // Create new worker - use timestamp only on client-side

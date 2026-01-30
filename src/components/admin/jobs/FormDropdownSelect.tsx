@@ -21,7 +21,7 @@ const FormDropdownSelect: React.FC<FormDropdownSelectProps> = ({
   onChange,
   options,
   label,
-  placeholder,
+  placeholder: _placeholder,
   required = false,
   className,
 }) => {

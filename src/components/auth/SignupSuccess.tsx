@@ -23,7 +23,7 @@ export default function SignupSuccess({ onContinue }: SignupSuccessProps) {
       <div className="mx-auto w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-4">
         <CheckCircle2 size={48} className="text-green-600" />
       </div>
-      
+
       <div>
         <h3 className="text-2xl font-bold text-gray-900 mb-2">
           Congratulations!

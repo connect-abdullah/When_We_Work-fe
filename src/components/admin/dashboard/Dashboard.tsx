@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import BusinessMetricsCards from "./BusinessMetricsCards";
-import Graphs from "./Graphs";
 import { DateRange } from "@/types/dashboard";
 
 const Dashboard: React.FC = () => {

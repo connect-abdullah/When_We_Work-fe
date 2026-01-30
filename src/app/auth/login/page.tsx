@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Lock, Mail } from "lucide-react";
 import { Button, FormInput } from "@/components/ui";
-import { AuthLayout, PasswordInput } from "@/components/auth";
+import { AuthLayout, LoginAsAdminToggle, PasswordInput } from "@/components/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -26,6 +26,7 @@ const LoginPage: React.FC = () => {
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [loginAsAdmin, setLoginAsAdmin] = useState(false);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -79,8 +80,8 @@ const LoginPage: React.FC = () => {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // Redirect to dashboard after successful login
-      router.push("/dashboard");
+      // Redirect based on login type
+      router.push(loginAsAdmin ? "/admin/dashboard" : "/dashboard");
     } catch (error) {
       console.error("Login error:", error);
     } finally {
@@ -125,6 +126,12 @@ const LoginPage: React.FC = () => {
           error={errors.password}
           required
           icon={<Lock size={14} className="text-gray-400" />}
+        />
+
+        <LoginAsAdminToggle
+          checked={loginAsAdmin}
+          onChange={setLoginAsAdmin}
+          disabled={isLoading}
         />
 
         <div className="flex items-center justify-between pt-1">

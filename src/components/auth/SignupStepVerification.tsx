@@ -107,7 +107,7 @@ export default function SignupStepVerification({
           Check your email
         </h3>
         <p className="text-sm text-gray-600">
-          We've sent a 6-digit verification code to
+          We&apos;ve sent a 6-digit verification code to
         </p>
         <p className="text-sm font-medium text-gray-900 mt-1">
           {email}

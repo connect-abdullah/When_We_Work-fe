@@ -47,11 +47,11 @@ export default function JobPage() {
   const activeJobs = Job_Details.filter((a) => a.status === "active").length;
   const totalPeopleNeeded = Job_Details.reduce(
     (sum, a) => sum + a.people_needed,
-    0
+    0,
   );
   const totalPeopleHired = Job_Details.reduce(
     (sum, a) => sum + a.people_hired,
-    0
+    0,
   );
   const stats = [
     {
