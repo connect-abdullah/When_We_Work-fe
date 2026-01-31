@@ -64,7 +64,6 @@ const JobCard: React.FC<JobCardProps> = ({
   const hiringRate = needed > 0 ? Math.round((hired / needed) * 100) : 0;
   const tone = job.tone_requirement ?? "professional";
   const salaryType = job.salary_type ?? "hourly";
-  console.warn("job", job.salary);
 
   return (
     <div onClick={onClick} className="cursor-pointer">
@@ -138,6 +137,15 @@ const JobCard: React.FC<JobCardProps> = ({
 
           {/* Key Metrics - Horizontal Compact */}
           <div className="grid grid-cols-4 gap-2 mb-3">
+          <div className="text-center p-2 bg-gray-50 rounded-lg">
+              <div className="flex items-center justify-center mb-1">
+                <Target size={12} className="text-emerald-600" />
+              </div>
+              <p className="text-xs font-bold text-gray-900">
+                {needed}
+              </p>
+              <p className="text-[9px] text-gray-500">Needed</p>
+            </div>
             <div className="text-center p-2 bg-gray-50 rounded-lg">
               <div className="flex items-center justify-center mb-1">
                 <Users size={12} className="text-blue-600" />
@@ -146,15 +154,6 @@ const JobCard: React.FC<JobCardProps> = ({
                 {hired}
               </p>
               <p className="text-[9px] text-gray-500">Hired</p>
-            </div>
-            <div className="text-center p-2 bg-gray-50 rounded-lg">
-              <div className="flex items-center justify-center mb-1">
-                <Target size={12} className="text-emerald-600" />
-              </div>
-              <p className="text-xs font-bold text-gray-900">
-                {needed}
-              </p>
-              <p className="text-[9px] text-gray-500">Needed</p>
             </div>
             <div className="text-center p-2 bg-gray-50 rounded-lg">
               <div className="flex items-center justify-center mb-1">
