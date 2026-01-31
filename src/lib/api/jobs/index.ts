@@ -6,8 +6,10 @@ import {
   JobsListResponseApi,
 } from "@/lib/api/jobs/schema";
 
+const baseUrl = "/jobs";
+
 export const getJobs = async (): Promise<JobGetSchema[]> => {
-  const response = await get<JobsListResponseApi>("/jobs", {
+  const response = await get<JobsListResponseApi>(baseUrl, {
     params: {
       admin_id: 2, // TODO: from auth
     },
@@ -16,7 +18,7 @@ export const getJobs = async (): Promise<JobGetSchema[]> => {
 };
 
 export const createJob = async (job: JobCreate): Promise<JobGetSchema> => {
-  const response = await post<JobSingleResponseApi>("/jobs", job);
+  const response = await post<JobSingleResponseApi>(baseUrl, job);
   return response?.data;
 };
 
@@ -25,13 +27,13 @@ export const updateJob = async (
   jobId: number,
 ): Promise<JobGetSchema> => {
   const response = await put<JobSingleResponseApi>(
-    `/jobs/${jobId}`,
+    `${baseUrl}/${jobId}`,
     job,
   );
   return response?.data;
 };
 
 export const deleteJob = async (jobId: number): Promise<void> => {
-  await del(`/jobs/${jobId}`);
+  await del(`${baseUrl}/${jobId}`);
 };
 

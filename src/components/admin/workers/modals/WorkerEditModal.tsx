@@ -2,17 +2,22 @@
 import React, { useEffect, useState } from "react";
 import { Button, FormInput, FormSelect, Modal } from "@/components/ui";
 import SearchableMultiSelect from "@/components/ui/SearchableMultiSelect";
-import { Worker } from "@/components/admin/workers/WorkerPage";
+import {
+  EmploymentType,
+  Gender,
+  UserRoleEnum,
+  WorkerResponseSchema,
+  WorkerSchema,
+} from "@/lib/api/workers/schema";
 
 interface WorkerEditModalProps {
   isOpen: boolean;
   onClose: () => void;
-  customer: Worker | null;
+  customer: WorkerResponseSchema | null;
   isEditMode: boolean;
-  onSave?: (workerData: Partial<Worker>) => void;
+  onSave?: (workerData: Partial<WorkerSchema>) => void | Promise<void>;
 }
 
-// Available role options
 const ROLE_OPTIONS = [
   "Plumber",
   "Electrician",
@@ -31,6 +36,22 @@ const ROLE_OPTIONS = [
   "Drywall Installer",
 ];
 
+const GENDER_OPTIONS: { value: Gender | ""; label: string }[] = [
+  { value: "", label: "Select gender" },
+  { value: Gender.male, label: "Male" },
+  { value: Gender.female, label: "Female" },
+  { value: Gender.other, label: "Other" },
+];
+
+const EMPLOYMENT_OPTIONS: { value: EmploymentType; label: string }[] = [
+  { value: EmploymentType.full_time, label: "Full-time" },
+  { value: EmploymentType.part_time, label: "Part-time" },
+  { value: EmploymentType.contract, label: "Contract" },
+  { value: EmploymentType.freelancer, label: "Freelancer" },
+];
+
+// user_role: always "worker" by default, no dropdown in UI
+
 const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
   isOpen,
   onClose,
@@ -38,39 +59,39 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
   isEditMode,
   onSave,
 }) => {
-  const [formData, setFormData] = useState<Partial<Worker>>({
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState<Partial<WorkerSchema>>({
     first_name: "",
     middle_name: null,
     last_name: "",
     email: "",
-    phone: null,
+    phone: "",
     address: null,
-    gender: null,
-    rating: 4.0,
-    is_available: true,
-    is_freelancer: false,
+    gender: Gender.male,
+    availability: true,
+    employment_type: EmploymentType.full_time,
+    user_role: UserRoleEnum.worker,
     emergency_contact: null,
     roles: [],
     remarks: null,
   });
 
-  // Initialize form data from worker
   useEffect(() => {
     if (customer && isEditMode) {
       setFormData({
         first_name: customer.first_name || "",
-        middle_name: customer.middle_name || null,
+        middle_name: customer.middle_name ?? null,
         last_name: customer.last_name || "",
         email: customer.email || "",
-        phone: customer.phone || null,
-        address: customer.address || null,
-        gender: customer.gender || null,
-        rating: customer.rating || 4.0,
-        is_available: customer.is_available ?? true,
-        is_freelancer: customer.is_freelancer ?? false,
-        emergency_contact: customer.emergency_contact || null,
-        roles: customer.roles || [],
-        remarks: customer.remarks || null,
+        phone: customer.phone || "",
+        address: customer.address ?? null,
+        gender: customer.gender,
+        availability: customer.availability ?? true,
+        employment_type: customer.employment_type,
+        user_role: UserRoleEnum.worker,
+        emergency_contact: customer.emergency_contact ?? null,
+        roles: customer.roles ?? [],
+        remarks: customer.remarks ?? null,
       });
     } else {
       setFormData({
@@ -78,12 +99,12 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
         middle_name: null,
         last_name: "",
         email: "",
-        phone: null,
+        phone: "",
         address: null,
-        gender: null,
-        rating: 4.0,
-        is_available: true,
-        is_freelancer: false,
+        gender: Gender.male,
+        availability: true,
+        employment_type: EmploymentType.full_time,
+        user_role: UserRoleEnum.worker,
         emergency_contact: null,
         roles: [],
         remarks: null,
@@ -91,7 +112,7 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
     }
   }, [customer, isEditMode, isOpen]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!formData.first_name || !formData.last_name || !formData.email) {
       alert(
         "Please fill in all required fields (First Name, Last Name, Email)",
@@ -99,13 +120,18 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
       return;
     }
 
-    if ((formData.roles || []).length === 0) {
+    if ((formData.roles ?? []).length === 0) {
       alert("Please select at least one role");
       return;
     }
 
     if (onSave) {
-      onSave(formData);
+      setIsSubmitting(true);
+      try {
+        await Promise.resolve(onSave(formData));
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -116,7 +142,6 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
       title={isEditMode ? "Edit Worker" : "Add New Worker"}
     >
       <div className="space-y-5 max-h-[75vh] overflow-y-auto pr-2">
-        {/* Name Fields */}
         <div className="space-y-4">
           <h3 className="text-sm font-semibold text-gray-700 border-b pb-2">
             Personal Information
@@ -154,7 +179,6 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
           </div>
         </div>
 
-        {/* Contact Information */}
         <div className="space-y-4">
           <h3 className="text-sm font-semibold text-gray-700 border-b pb-2">
             Contact Details
@@ -177,7 +201,7 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
               placeholder="+1 (555) 000-0000"
               value={formData.phone || ""}
               onChange={(e) =>
-                setFormData({ ...formData, phone: e.target.value || null })
+                setFormData({ ...formData, phone: e.target.value })
               }
             />
             <FormInput
@@ -203,72 +227,46 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
           />
           <FormSelect
             label="Gender"
-            options={[
-              { value: "", label: "Select gender" },
-              { value: "Male", label: "Male" },
-              { value: "Female", label: "Female" },
-              { value: "Other", label: "Other" },
-              { value: "Prefer not to say", label: "Prefer not to say" },
-            ]}
+            options={GENDER_OPTIONS}
             value={formData.gender || ""}
             onChange={(e) =>
               setFormData({
                 ...formData,
-                gender: e.target.value || null,
+                gender: (e.target.value || "male") as Gender,
               })
             }
           />
         </div>
 
-        {/* Work Information */}
         <div className="space-y-4">
           <h3 className="text-sm font-semibold text-gray-700 border-b pb-2">
             Work Information
           </h3>
 
-          <div className="grid grid-cols-3 gap-4">
-            <FormInput
-              label="Rating"
-              type="number"
-              placeholder="4.0"
-              value={formData.rating?.toString() || "4.0"}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  rating: parseFloat(e.target.value) || 4.0,
-                })
-              }
-              min="0"
-              max="5"
-              step="0.1"
-            />
-
+          <div className="grid grid-cols-2 gap-4">
             <FormSelect
               label="Availability"
               options={[
                 { value: "true", label: "Available" },
                 { value: "false", label: "Unavailable" },
               ]}
-              value={String(formData.is_available ?? true)}
+              value={String(formData.availability ?? true)}
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  is_available: e.target.value === "true",
+                  availability: e.target.value === "true",
                 })
               }
             />
 
             <FormSelect
               label="Employment Type"
-              options={[
-                { value: "true", label: "Freelancer" },
-                { value: "false", label: "Full-time" },
-              ]}
-              value={String(formData.is_freelancer ?? false)}
+              options={EMPLOYMENT_OPTIONS}
+              value={formData.employment_type ?? "full_time"}
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  is_freelancer: e.target.value === "true",
+                  employment_type: (e.target.value as EmploymentType) ?? "full_time",
                 })
               }
             />
@@ -284,7 +282,6 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
           />
         </div>
 
-        {/* Remarks */}
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700">
             Remarks
@@ -300,16 +297,20 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
           />
         </div>
 
-        {/* Action Buttons */}
         <div className="flex gap-3 pt-4 border-t border-gray-200">
           <Button
             variant="primary"
             size="sm"
             className="flex-1"
             onClick={handleSubmit}
+            disabled={isSubmitting}
           >
             <span className="text-sm font-medium">
-              {isEditMode ? "Update Worker" : "Add Worker"}
+              {isSubmitting
+                ? "Saving..."
+                : isEditMode
+                  ? "Update Worker"
+                  : "Add Worker"}
             </span>
           </Button>
           <Button
