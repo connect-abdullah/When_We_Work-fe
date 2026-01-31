@@ -49,3 +49,11 @@ export interface JobsListResponseApi {
   data: JobGetSchema[];
   errors: unknown;
 }
+
+/** Single job API response wrapper (create/update). */
+export interface JobSingleResponseApi {
+  success: boolean;
+  message: string;
+  data: JobGetSchema;
+  errors: unknown;
+}

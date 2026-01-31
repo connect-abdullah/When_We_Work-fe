@@ -17,7 +17,7 @@ interface JobModalProps {
   isOpen: boolean;
   job?: JobGetSchema | null;
   onClose: () => void;
-  onSubmit: (jobData: Partial<JobGetSchema>) => void;
+  onSubmit: (jobData: Partial<JobGetSchema>) => void | Promise<void>;
 }
 
 const JobModal: React.FC<JobModalProps> = ({
@@ -43,6 +43,7 @@ const JobModal: React.FC<JobModalProps> = ({
   });
 
   const [characteristicsInput, setCharacteristicsInput] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Initialize form data when job changes
   useEffect(() => {
@@ -83,17 +84,22 @@ const JobModal: React.FC<JobModalProps> = ({
     return null;
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const characteristics = characteristicsInput
       .split(",")
       .map((c) => c.trim())
       .filter((c) => c.length > 0);
-
-    onSubmit({
+    const payload: Partial<JobGetSchema> = {
       ...formData,
       characteristics: characteristics.length > 0 ? characteristics : undefined,
-    });
-    onClose();
+    };
+    setIsSubmitting(true);
+    try {
+      await onSubmit(payload);
+      // Parent closes modal on success via handleCloseModal
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const isFormValid = () => {
@@ -313,11 +319,17 @@ const JobModal: React.FC<JobModalProps> = ({
             variant="primary"
             size="sm"
             onClick={handleSubmit}
-            disabled={!isFormValid()}
+            disabled={!isFormValid() || isSubmitting}
             className="text-[9px] px-3 py-1 bg-green-600 hover:bg-green-700"
           >
             <Check size={12} className="mr-1" />
-            {isEditMode ? "Update Job" : "Create Job"}
+            {isSubmitting
+              ? isEditMode
+                ? "Updating..."
+                : "Creating..."
+              : isEditMode
+                ? "Update Job"
+                : "Create Job"}
           </Button>
         </div>
       </div>

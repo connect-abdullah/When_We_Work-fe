@@ -1,7 +1,8 @@
-import { get, post, put } from "@/lib/api/http";
+import { del, get, post, put } from "@/lib/api/http";
 import {
   JobCreate,
   JobGetSchema,
+  JobSingleResponseApi,
   JobsListResponseApi,
 } from "@/lib/api/jobs/schema";
 
@@ -11,19 +12,26 @@ export const getJobs = async (): Promise<JobGetSchema[]> => {
       admin_id: 2, // TODO: from auth
     },
   });
-  console.warn("getJobs response", response);
   return response?.data ?? [];
 };
 
 export const createJob = async (job: JobCreate): Promise<JobGetSchema> => {
-    const response = await post<JobGetSchema>("/jobs", job, {
-        params: {
-            admin_id: job.admin_id,
-        }});
-    return response;
+  const response = await post<JobSingleResponseApi>("/jobs", job);
+  return response?.data;
 };
 
-export const updateJob = async (job: JobGetSchema): Promise<JobGetSchema> => {
-  const response = await put<JobGetSchema>("/jobs", job);
-  return response;
+export const updateJob = async (
+  job: JobGetSchema,
+  jobId: number,
+): Promise<JobGetSchema> => {
+  const response = await put<JobSingleResponseApi>(
+    `/jobs/${jobId}`,
+    job,
+  );
+  return response?.data;
 };
+
+export const deleteJob = async (jobId: number): Promise<void> => {
+  await del(`/jobs/${jobId}`);
+};
+

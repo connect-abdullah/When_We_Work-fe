@@ -16,6 +16,7 @@ interface JobCardProps {
   job: JobGetSchema;
   onEditClick?: () => void;
   onPlaygroundClick?: () => void;
+  onDeleteClick?: () => void;
   onClick?: () => void;
   isUser?: boolean;
 }
@@ -56,9 +57,11 @@ const JobCard: React.FC<JobCardProps> = ({
   job,
   onEditClick,
   onPlaygroundClick,
+  onDeleteClick,
   onClick,
   isUser = false,
 }) => {
+  const handleDelete = onDeleteClick ?? onPlaygroundClick;
   const needed = job.workers_required ?? 0;
   const hired = job.workers_hired ?? 0;
   const hiringRate = needed > 0 ? Math.round((hired / needed) * 100) : 0;
@@ -119,18 +122,17 @@ const JobCard: React.FC<JobCardProps> = ({
                 <Edit size={12} className="text-gray-500" />
               </button>
               )}
-              {!isUser && (<button
-                className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (onPlaygroundClick) {
-                    onPlaygroundClick();
-                  }
-                }}
-                title="Playground"
-              >
-                <Trash size={12} className="text-gray-500" />
-              </button>
+              {!isUser && (
+                <button
+                  className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete?.();
+                  }}
+                  title="Delete"
+                >
+                  <Trash size={12} className="text-gray-500" />
+                </button>
               )}
             </div>
           </div>

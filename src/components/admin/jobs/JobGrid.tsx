@@ -10,6 +10,7 @@ interface JobGridProps {
   totalJobs: number;
   onEditClick: (job: JobGetSchema) => void;
   onCardClick?: (job: JobGetSchema) => void;
+  onDeleteClick?: (job: JobGetSchema) => void;
 }
 
 const JobGrid: React.FC<JobGridProps> = ({
@@ -17,6 +18,7 @@ const JobGrid: React.FC<JobGridProps> = ({
   totalJobs,
   onEditClick,
   onCardClick,
+  onDeleteClick,
 }) => {
   if (jobs.length === 0) {
     return (
@@ -41,6 +43,7 @@ const JobGrid: React.FC<JobGridProps> = ({
             job={job}
             onEditClick={() => onEditClick(job)}
             onClick={() => onCardClick?.(job)}
+            onDeleteClick={onDeleteClick ? () => onDeleteClick(job) : undefined}
           />
         ))}
       </div>

@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { PageHeader } from "@/components/ui";
 import { Plus } from "lucide-react";
 import type { JobCreate, JobGetSchema } from "@/lib/api/jobs/schema";
-import { createJob, getJobs, updateJob } from "@/lib/api/jobs";
+import { createJob, deleteJob, getJobs, updateJob } from "@/lib/api/jobs";
 import JobFilters from "@/components/admin/jobs/JobFilters";
 import JobGrid from "@/components/admin/jobs/JobGrid";
 import JobStats from "@/components/admin/jobs/JobStats";
@@ -121,7 +121,7 @@ export default function JobPage() {
         workers_hired: jobData.workers_hired ?? 0,
         salary: jobData.salary ?? 0,
         salary_type: (jobData.salary_type as JobCreate["salary_type"]) ?? ("hourly" as JobCreate["salary_type"]),
-        admin_id: 0, // TODO: from auth
+        admin_id: 2, // TODO: from auth
       };
       await createJob(payload);
       await fetchJobs();
@@ -160,13 +160,32 @@ export default function JobPage() {
   };
 
   const handleUpdateJob = async (jobData: Partial<JobGetSchema>) => {
-    if (!selectedJob?.id) {
+    if (selectedJob?.id == null) {
       return;
     }
     try {
-      await updateJob({ ...selectedJob, ...jobData });
+      const payload = { ...selectedJob, ...jobData, admin_id: 2 } as JobGetSchema;
+      await updateJob(payload, selectedJob.id);
       await fetchJobs();
       handleCloseModal();
+    } catch {
+      // TODO: show error toast
+    }
+  };
+
+  const handleDeleteJob = async (job: JobGetSchema) => {
+    if (job?.id == null) {
+      return;
+    }
+    if (!window.confirm(`Delete job "${job.title ?? "this job"}"?`)) {
+      return;
+    }
+    try {
+      await deleteJob(job.id);
+      if (detailJob?.id === job.id) {
+        handleCloseDetailModal();
+      }
+      await fetchJobs();
     } catch {
       // TODO: show error toast
     }
@@ -214,6 +233,7 @@ export default function JobPage() {
                 totalJobs={totalJobs}
                 onEditClick={(job) => handleOpenModal(job)}
                 onCardClick={handleOpenDetailModal}
+                onDeleteClick={handleDeleteJob}
               />
             )}
           </div>
