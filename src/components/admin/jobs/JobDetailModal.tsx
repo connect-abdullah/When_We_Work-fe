@@ -85,7 +85,8 @@ const JobDetailModal: React.FC<JobDetailModalProps> = ({
               <span
                 className={`px-2.5 py-1 rounded-lg text-xs font-medium border ${getStatusColor(job.status ?? "inactive")}`}
               >
-                {(job.status ?? "inactive").charAt(0).toUpperCase() + (job.status ?? "inactive").slice(1)}
+                {(job.status ?? "inactive").charAt(0).toUpperCase() +
+                  (job.status ?? "inactive").slice(1)}
               </span>
             </div>
             <p className="text-sm text-gray-500">
@@ -166,16 +167,16 @@ const JobDetailModal: React.FC<JobDetailModalProps> = ({
             <div className="space-y-2">
               <div className="p-3 bg-gray-50 rounded-lg">
                 <p className="text-xs text-gray-500 mb-0.5">Tone</p>
-                <p
-                  className={`text-sm font-medium ${getToneColor(tone)}`}
-                >
+                <p className={`text-sm font-medium ${getToneColor(tone)}`}>
                   {tone.charAt(0).toUpperCase() + tone.slice(1)}
                 </p>
               </div>
               <div className="p-3 bg-gray-50 rounded-lg">
                 <p className="text-xs text-gray-500 mb-0.5">Salary Type</p>
                 <p className="text-sm font-medium text-gray-900">
-                  {(job.salary_type ?? "hourly") === "hourly" ? "Per Hour" : "Fixed"}
+                  {(job.salary_type ?? "hourly") === "hourly"
+                    ? "Per Hour"
+                    : "Fixed"}
                 </p>
               </div>
               {job.minimum_education && (

@@ -21,24 +21,6 @@ export interface DashboardCard {
   icon: React.ReactNode;
 }
 
-export interface Booking {
-  id: string;
-  customerName: string;
-  status: "Booked" | "Reserved" | "Cancelled";
-  date: string;
-  service: string;
-  source: "instagram" | "messenger" | "whatsapp" | "sms" | "web";
-}
-
-export interface Chat {
-  id: string;
-  customerName: string;
-  lastMessage: string;
-  timestamp: string;
-  unread: boolean;
-  source: "instagram" | "messenger" | "whatsapp" | "sms" | "web";
-}
-
 export interface User {
   id: string;
   name: string;
@@ -53,26 +35,6 @@ export interface Payment {
   status: "Completed" | "Pending" | "Failed";
   date: string;
   service: string;
-}
-
-export interface JobSchema {
-  id: string;
-  title: string;
-  description: string;
-  email: string;
-  phone?: string;
-  profileImage?: string;
-  minimum_education: string;
-  tone: "professional" | "friendly" | "casual" | "formal" | "empathetic";
-  characteristics: string[];
-  status: "active" | "inactive" | "completed" | "cancelled";
-  job_type?: "contract" | "full_time" | "part_time" | "freelance";
-  joinDate?: string;
-  people_needed: number;
-  people_hired: number;
-  salary: number;
-  salary_type: "per_hour" | "fixed";
-  languages?: string[];
 }
 
 export interface SalesAgent {

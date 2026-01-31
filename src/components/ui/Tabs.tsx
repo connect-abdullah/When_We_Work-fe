@@ -30,7 +30,7 @@ const Tabs: React.FC<TabsProps> = ({ tabs, defaultTab, className }) => {
               "px-3 py-1.5 text-[10px] font-medium transition-colors border-b-2",
               activeTab === tab.id
                 ? "text-[#5A6ACF] border-[#5A6ACF] bg-[#F1F2F7]"
-                : "text-[#5A6ACF]/70 border-transparent hover:text-[#5A6ACF] hover:border-[#5A6ACF]/30",
+                : "text-[#5A6ACF]/70 border-transparent hover:text-[#5A6ACF] hover:border-[#5A6ACF]/30"
             )}
           >
             {tab.label}

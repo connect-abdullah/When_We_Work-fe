@@ -194,7 +194,9 @@ const JobModal: React.FC<JobModalProps> = ({
                 <button
                   key={tone}
                   type="button"
-                  onClick={() => setFormData({ ...formData, tone_requirement: tone })}
+                  onClick={() =>
+                    setFormData({ ...formData, tone_requirement: tone })
+                  }
                   className={`px-2 py-1.5 text-[9px] font-medium rounded-lg border-2 transition-all ${
                     formData.tone_requirement === tone
                       ? "border-[#5A6ACF] bg-[#5A6ACF]/10 text-[#5A6ACF]"
@@ -225,7 +227,7 @@ const JobModal: React.FC<JobModalProps> = ({
             onChange={(value) =>
               setFormData({
                 ...formData,
-                status: (value ? (value as JobStatus) : JobStatus.active),
+                status: value ? (value as JobStatus) : JobStatus.active,
               })
             }
             required

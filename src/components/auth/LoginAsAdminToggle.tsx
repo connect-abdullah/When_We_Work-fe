@@ -18,10 +18,7 @@ export default function LoginAsAdminToggle({
 }: LoginAsAdminToggleProps) {
   return (
     <div
-      className={cn(
-        "flex items-center justify-center gap-3 py-2",
-        className,
-      )}
+      className={cn("flex items-center justify-center gap-3 py-2", className)}
     >
       <label className="flex items-center gap-2 cursor-pointer select-none">
         <span className="text-sm text-gray-600">Login as admin</span>
@@ -35,13 +32,13 @@ export default function LoginAsAdminToggle({
           className={cn(
             "relative inline-flex h-6 w-11 shrink-0 rounded-full border-2 border-transparent transition-colors focus:outline-none focus:ring-2 focus:ring-[#5A6ACF]/30 focus:ring-offset-2",
             checked ? "bg-[#5A6ACF]" : "bg-gray-200",
-            disabled && "opacity-50 cursor-not-allowed",
+            disabled && "opacity-50 cursor-not-allowed"
           )}
         >
           <span
             className={cn(
               "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition",
-              checked ? "translate-x-5" : "translate-x-0.5",
+              checked ? "translate-x-5" : "translate-x-0.5"
             )}
           />
         </button>

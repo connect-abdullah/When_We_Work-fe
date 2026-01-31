@@ -115,7 +115,7 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
   const handleSubmit = async () => {
     if (!formData.first_name || !formData.last_name || !formData.email) {
       alert(
-        "Please fill in all required fields (First Name, Last Name, Email)",
+        "Please fill in all required fields (First Name, Last Name, Email)"
       );
       return;
     }
@@ -266,7 +266,8 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  employment_type: (e.target.value as EmploymentType) ?? "full_time",
+                  employment_type:
+                    (e.target.value as EmploymentType) ?? "full_time",
                 })
               }
             />

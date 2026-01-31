@@ -10,9 +10,9 @@ import type { SignupStep2Data } from "@/types";
 interface SignupStepContactProps {
   data: SignupStep2Data;
   errors: Record<string, string>;
-  onChange: (section: "step2") => (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => void;
+  onChange: (
+    section: "step2"
+  ) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   onPhotoChange: (file: File | null, previewUrl: string | null) => void;
   photoValue: File | string | null;
   onNext: () => void;

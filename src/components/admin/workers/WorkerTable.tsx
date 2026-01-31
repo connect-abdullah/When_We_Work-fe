@@ -1,8 +1,7 @@
 "use client";
 import React from "react";
 import { Edit, Eye, Trash2 } from "lucide-react";
-import type { WorkerResponseSchema } from "@/lib/api/workers/schema";
-import { EmploymentType } from "@/lib/api/workers/schema";
+import { EmploymentType, WorkerResponseSchema } from "@/lib/api/workers/schema";
 
 interface WorkerTableProps {
   customers: WorkerResponseSchema[];
@@ -17,7 +16,7 @@ const WorkerTable: React.FC<WorkerTableProps> = ({
   onView,
   onEdit,
   onDelete,
-  formatDate,
+  formatDate: _formatDate,
 }) => {
   if (customers.length === 0) {
     return (

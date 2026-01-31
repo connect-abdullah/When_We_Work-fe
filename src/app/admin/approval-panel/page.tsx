@@ -90,7 +90,7 @@ export default function ApprovalPanelPage() {
     return jobs.filter(
       (job) =>
         job.name.toLowerCase().includes(searchLower) ||
-        job.jobId.toLowerCase().includes(searchLower),
+        job.jobId.toLowerCase().includes(searchLower)
     );
   }, [jobs, searchTerm]);
 
@@ -102,7 +102,7 @@ export default function ApprovalPanelPage() {
           const updatedApplicants = job.applicants.map((applicant) =>
             applicant.id === personId
               ? { ...applicant, availabilityStatus: "available" as const }
-              : applicant,
+              : applicant
           );
 
           // Check if this person was already accepted
@@ -118,7 +118,7 @@ export default function ApprovalPanelPage() {
           };
         }
         return job;
-      }),
+      })
     );
 
     // TODO: Make API call to accept the person
@@ -131,7 +131,7 @@ export default function ApprovalPanelPage() {
         if (job.id === jobId) {
           // Remove the person from applicants
           const updatedApplicants = job.applicants.filter(
-            (applicant) => applicant.id !== personId,
+            (applicant) => applicant.id !== personId
           );
 
           // Check if this person was accepted
@@ -147,7 +147,7 @@ export default function ApprovalPanelPage() {
           };
         }
         return job;
-      }),
+      })
     );
 
     // TODO: Make API call to decline the person
@@ -157,27 +157,27 @@ export default function ApprovalPanelPage() {
   return (
     <div className="flex flex-col w-full h-full pt-4 px-2 sm:px-4 overflow-y-auto">
       <PageHeader
-            title="Approval Panel"
-            description="Review and manage job applications"
+        title="Approval Panel"
+        description="Review and manage job applications"
+      />
+
+      <div className="px-2 sm:px-4 pb-8 mt-4 space-y-3">
+        {/* Search Bar */}
+        <Card className="bg-white border border-gray-100" padding="sm">
+          <SearchInput
+            placeholder="Search jobs by name or ID..."
+            value={searchTerm}
+            onChange={setSearchTerm}
           />
+        </Card>
 
-          <div className="px-2 sm:px-4 pb-8 mt-4 space-y-3">
-            {/* Search Bar */}
-            <Card className="bg-white border border-gray-100" padding="sm">
-              <SearchInput
-                placeholder="Search jobs by name or ID..."
-                value={searchTerm}
-                onChange={setSearchTerm}
-              />
-            </Card>
-
-            {/* Jobs Section */}
-            <JobSection
-              jobs={filteredJobs}
-              onAccept={handleAccept}
-              onDecline={handleDecline}
-            />
-          </div>
+        {/* Jobs Section */}
+        <JobSection
+          jobs={filteredJobs}
+          onAccept={handleAccept}
+          onDecline={handleDecline}
+        />
+      </div>
     </div>
   );
 }

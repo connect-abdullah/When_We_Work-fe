@@ -9,9 +9,9 @@ import type { SignupStep1Data } from "@/types";
 interface SignupStepPersonalProps {
   data: SignupStep1Data;
   errors: Record<string, string>;
-  onChange: (section: "step1") => (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => void;
+  onChange: (
+    section: "step1"
+  ) => (e: React.ChangeEvent<HTMLInputElement>) => void;
   onNext: () => void;
 }
 
@@ -21,7 +21,8 @@ export default function SignupStepPersonal({
   onChange,
   onNext,
 }: SignupStepPersonalProps) {
-  const isPasswordMatch = Boolean(data.confirm_password) && data.password === data.confirm_password;
+  const isPasswordMatch =
+    Boolean(data.confirm_password) && data.password === data.confirm_password;
 
   return (
     <div className="space-y-4">

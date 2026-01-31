@@ -109,9 +109,7 @@ export default function SignupStepVerification({
         <p className="text-sm text-gray-600">
           We&apos;ve sent a 6-digit verification code to
         </p>
-        <p className="text-sm font-medium text-gray-900 mt-1">
-          {email}
-        </p>
+        <p className="text-sm font-medium text-gray-900 mt-1">{email}</p>
       </div>
 
       <div className="space-y-4">
@@ -143,9 +141,7 @@ export default function SignupStepVerification({
               />
             ))}
           </div>
-          {error && (
-            <p className="text-xs text-red-500 text-center">{error}</p>
-          )}
+          {error && <p className="text-xs text-red-500 text-center">{error}</p>}
         </div>
 
         <div className="text-center">

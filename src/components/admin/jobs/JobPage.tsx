@@ -46,9 +46,7 @@ export default function JobPage() {
       const title = (job.title ?? "").toLowerCase();
       const education = (job.minimum_education ?? "").toLowerCase();
       const term = searchTerm.toLowerCase();
-      const matchesSearch =
-        title.includes(term) ||
-        education.includes(term);
+      const matchesSearch = title.includes(term) || education.includes(term);
       const matchesStatus =
         statusFilter === "all" || job.status === statusFilter;
       const salaryTypeMatch =
@@ -62,11 +60,11 @@ export default function JobPage() {
   const activeJobs = jobs.filter((a) => a.status === "active").length;
   const totalPeopleNeeded = jobs.reduce(
     (sum, a) => sum + (a.workers_required ?? 0),
-    0,
+    0
   );
   const totalPeopleHired = jobs.reduce(
     (sum, a) => sum + (a.workers_hired ?? 0),
-    0,
+    0
   );
   const stats = [
     {
@@ -112,15 +110,23 @@ export default function JobPage() {
       const payload: JobCreate = {
         title: jobData.title ?? "",
         description: jobData.description ?? "",
-        status: (jobData.status as JobCreate["status"]) ?? ("active" as JobCreate["status"]),
+        status:
+          (jobData.status as JobCreate["status"]) ??
+          ("active" as JobCreate["status"]),
         minimum_education: jobData.minimum_education ?? "",
-        job_category: (jobData.job_category as JobCreate["job_category"]) ?? ("full_time" as JobCreate["job_category"]),
-        tone_requirement: (jobData.tone_requirement as JobCreate["tone_requirement"]) ?? ("professional" as JobCreate["tone_requirement"]),
+        job_category:
+          (jobData.job_category as JobCreate["job_category"]) ??
+          ("full_time" as JobCreate["job_category"]),
+        tone_requirement:
+          (jobData.tone_requirement as JobCreate["tone_requirement"]) ??
+          ("professional" as JobCreate["tone_requirement"]),
         characteristics: jobData.characteristics,
         workers_required: jobData.workers_required ?? 0,
         workers_hired: jobData.workers_hired ?? 0,
         salary: jobData.salary ?? 0,
-        salary_type: (jobData.salary_type as JobCreate["salary_type"]) ?? ("hourly" as JobCreate["salary_type"]),
+        salary_type:
+          (jobData.salary_type as JobCreate["salary_type"]) ??
+          ("hourly" as JobCreate["salary_type"]),
         admin_id: 2, // TODO: from auth
       };
       await createJob(payload);
@@ -164,7 +170,11 @@ export default function JobPage() {
       return;
     }
     try {
-      const payload = { ...selectedJob, ...jobData, admin_id: 2 } as JobGetSchema;
+      const payload = {
+        ...selectedJob,
+        ...jobData,
+        admin_id: 2,
+      } as JobGetSchema;
       await updateJob(payload, selectedJob.id);
       await fetchJobs();
       handleCloseModal();
@@ -194,49 +204,49 @@ export default function JobPage() {
   return (
     <div className="flex flex-col w-full h-full pt-4 px-2 sm:px-4 overflow-y-auto">
       {/* Header */}
-          <PageHeader
-            title="Jobs"
-            description="Manage and view your sales team performance"
-            button={{
-              label: "Add New Job",
-              icon: Plus,
-              onClick: () => handleOpenModal(),
-            }}
+      <PageHeader
+        title="Jobs"
+        description="Manage and view your sales team performance"
+        button={{
+          label: "Add New Job",
+          icon: Plus,
+          onClick: () => handleOpenModal(),
+        }}
+      />
+
+      {/* Stats Cards */}
+      <JobStats stats={stats} />
+
+      {/* Filters and Search */}
+      <div className="px-2 sm:px-4 mb-2">
+        <JobFilters
+          searchTerm={searchTerm}
+          statusFilter={statusFilter}
+          typeFilter={typeFilter}
+          onSearchChange={setSearchTerm}
+          onStatusFilterChange={(status) =>
+            setStatusFilter(status as "all" | "active" | "inactive")
+          }
+          onTypeFilterChange={setTypeFilter}
+        />
+      </div>
+
+      {/* Jobs Grid */}
+      <div className="px-2 sm:px-4 mb-2">
+        {loading ? (
+          <div className="py-12 text-center text-sm text-gray-500">
+            Loading jobs...
+          </div>
+        ) : (
+          <JobGrid
+            jobs={filteredJobs}
+            totalJobs={totalJobs}
+            onEditClick={(job) => handleOpenModal(job)}
+            onCardClick={handleOpenDetailModal}
+            onDeleteClick={handleDeleteJob}
           />
-
-          {/* Stats Cards */}
-          <JobStats stats={stats} />
-
-          {/* Filters and Search */}
-          <div className="px-2 sm:px-4 mb-2">
-            <JobFilters
-              searchTerm={searchTerm}
-              statusFilter={statusFilter}
-              typeFilter={typeFilter}
-              onSearchChange={setSearchTerm}
-              onStatusFilterChange={(status) =>
-                setStatusFilter(status as "all" | "active" | "inactive")
-              }
-              onTypeFilterChange={setTypeFilter}
-            />
-          </div>
-
-          {/* Jobs Grid */}
-          <div className="px-2 sm:px-4 mb-2">
-            {loading ? (
-              <div className="py-12 text-center text-sm text-gray-500">
-                Loading jobs...
-              </div>
-            ) : (
-              <JobGrid
-                jobs={filteredJobs}
-                totalJobs={totalJobs}
-                onEditClick={(job) => handleOpenModal(job)}
-                onCardClick={handleOpenDetailModal}
-                onDeleteClick={handleDeleteJob}
-              />
-            )}
-          </div>
+        )}
+      </div>
 
       {/* Job Modal - Used for both create and edit */}
       <JobModal

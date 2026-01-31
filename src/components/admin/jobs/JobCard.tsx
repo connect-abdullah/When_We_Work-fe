@@ -109,18 +109,18 @@ const JobCard: React.FC<JobCardProps> = ({
             {/* Action Buttons */}
             <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
               {isUser && (
-              <button
-                className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (onEditClick) {
-                    onEditClick();
-                  }
-                }}
-                title="Edit"
-              >
-                <Edit size={12} className="text-gray-500" />
-              </button>
+                <button
+                  className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (onEditClick) {
+                      onEditClick();
+                    }
+                  }}
+                  title="Edit"
+                >
+                  <Edit size={12} className="text-gray-500" />
+                </button>
               )}
               {!isUser && (
                 <button
@@ -139,31 +139,25 @@ const JobCard: React.FC<JobCardProps> = ({
 
           {/* Key Metrics - Horizontal Compact */}
           <div className="grid grid-cols-4 gap-2 mb-3">
-          <div className="text-center p-2 bg-gray-50 rounded-lg">
+            <div className="text-center p-2 bg-gray-50 rounded-lg">
               <div className="flex items-center justify-center mb-1">
                 <Target size={12} className="text-emerald-600" />
               </div>
-              <p className="text-xs font-bold text-gray-900">
-                {needed}
-              </p>
+              <p className="text-xs font-bold text-gray-900">{needed}</p>
               <p className="text-[9px] text-gray-500">Needed</p>
             </div>
             <div className="text-center p-2 bg-gray-50 rounded-lg">
               <div className="flex items-center justify-center mb-1">
                 <Users size={12} className="text-blue-600" />
               </div>
-              <p className="text-xs font-bold text-gray-900">
-                {hired}
-              </p>
+              <p className="text-xs font-bold text-gray-900">{hired}</p>
               <p className="text-[9px] text-gray-500">Hired</p>
             </div>
             <div className="text-center p-2 bg-gray-50 rounded-lg">
               <div className="flex items-center justify-center mb-1">
                 <DollarSign size={12} className="text-violet-600" />
               </div>
-              <p className="text-xs font-bold text-gray-900">
-                ${job.salary}
-              </p>
+              <p className="text-xs font-bold text-gray-900">${job.salary}</p>
               <p className="text-[9px] text-gray-500">Salary</p>
             </div>
             <div className="text-center p-2 bg-gray-50 rounded-lg">

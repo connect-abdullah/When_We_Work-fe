@@ -8,9 +8,9 @@ import type { SignupBusinessData } from "@/types";
 interface SignupStepBusinessProps {
   data: SignupBusinessData;
   errors: Record<string, string>;
-  onChange: (section: "business") => (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => void;
+  onChange: (
+    section: "business"
+  ) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onSubmit: () => void;
   onBack: () => void;
   isLoading: boolean;

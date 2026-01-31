@@ -1,16 +1,7 @@
 "use client";
 import React from "react";
-import {
-  Award,
-  Briefcase,
-  Mail,
-  MapPin,
-  Phone,
-  Shield,
-  X,
-} from "lucide-react";
-import type { WorkerResponseSchema } from "@/lib/api/workers/schema";
-import { EmploymentType } from "@/lib/api/workers/schema";
+import { Award, Briefcase, Mail, MapPin, Phone, Shield, X } from "lucide-react";
+import { EmploymentType, WorkerResponseSchema } from "@/lib/api/workers/schema";
 
 interface WorkerViewModalProps {
   isOpen: boolean;

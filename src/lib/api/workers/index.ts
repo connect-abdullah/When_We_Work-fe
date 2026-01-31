@@ -1,7 +1,7 @@
 import { del, get, post, put } from "@/lib/api/http";
 import {
-  WorkerSchema,
   WorkerResponseSchema,
+  WorkerSchema,
   WorkerSingleResponseApi,
   WorkersListResponseApi,
 } from "@/lib/api/workers/schema";
@@ -18,7 +18,7 @@ export const getWorkers = async (): Promise<WorkerResponseSchema[]> => {
 };
 
 export const createWorker = async (
-  worker: WorkerSchema,
+  worker: WorkerSchema
 ): Promise<WorkerResponseSchema> => {
   const response = await post<WorkerSingleResponseApi>(baseUrl, worker);
   return response?.data as WorkerResponseSchema;
@@ -26,16 +26,18 @@ export const createWorker = async (
 
 export const updateWorker = async (
   workerId: number,
-  worker: Partial<WorkerSchema>,
+  worker: Partial<WorkerSchema>
 ): Promise<WorkerResponseSchema> => {
   const response = await put<WorkerSingleResponseApi>(
     `${baseUrl}/${workerId}`,
-    worker,
+    worker
   );
   return response?.data as WorkerResponseSchema;
 };
 
-export const deleteWorker = async (workerId: number): Promise<WorkerSingleResponseApi> => {
+export const deleteWorker = async (
+  workerId: number
+): Promise<WorkerSingleResponseApi> => {
   const response = await del<WorkerSingleResponseApi>(`${baseUrl}/${workerId}`);
   return response;
 };

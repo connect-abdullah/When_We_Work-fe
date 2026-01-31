@@ -3,7 +3,11 @@
 import React, { useState } from "react";
 import { Lock, Mail } from "lucide-react";
 import { Button, FormInput } from "@/components/ui";
-import { AuthLayout, LoginAsAdminToggle, PasswordInput } from "@/components/auth";
+import {
+  AuthLayout,
+  LoginAsAdminToggle,
+  PasswordInput,
+} from "@/components/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 

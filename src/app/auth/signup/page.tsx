@@ -66,22 +66,26 @@ export default function SignupPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
-  const handleChange = (section: "step1" | "step2" | "business") => (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value } = e.target;
-    if (section === "step1") {
-      setStep1((prev) => ({ ...prev, [name]: value }));
-    } else if (section === "step2") {
-      setStep2((prev) => ({ ...prev, [name]: value }));
-    } else {
-      setBusiness((prev) => ({ ...prev, [name]: value }));
-    }
-    if (errors[name]) {
-      const { [name]: _, ...rest } = errors;
-      setErrors(rest);
-    }
-  };
+  const handleChange =
+    (section: "step1" | "step2" | "business") =>
+    (
+      e: React.ChangeEvent<
+        HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+      >
+    ) => {
+      const { name, value } = e.target;
+      if (section === "step1") {
+        setStep1((prev) => ({ ...prev, [name]: value }));
+      } else if (section === "step2") {
+        setStep2((prev) => ({ ...prev, [name]: value }));
+      } else {
+        setBusiness((prev) => ({ ...prev, [name]: value }));
+      }
+      if (errors[name]) {
+        const { [name]: _, ...rest } = errors;
+        setErrors(rest);
+      }
+    };
 
   const handlePhotoChange = (file: File | null, previewUrl: string | null) => {
     setPhotoFile(file);
@@ -237,14 +241,21 @@ export default function SignupPage() {
               <h2 className="text-2xl font-bold text-gray-900">Signup</h2>
               <p className="text-sm text-gray-600 mt-1">
                 Already have an account?{" "}
-                <Link href="/auth/login" className="font-medium text-[#5A6ACF] hover:text-[#4A5ABF]">
+                <Link
+                  href="/auth/login"
+                  className="font-medium text-[#5A6ACF] hover:text-[#4A5ABF]"
+                >
                   Sign in
                 </Link>
               </p>
             </div>
 
             {!showSuccess && (
-              <StepIndicator steps={STEPS} currentStep={currentStep} className="mb-8" />
+              <StepIndicator
+                steps={STEPS}
+                currentStep={currentStep}
+                className="mb-8"
+              />
             )}
 
             {showSuccess ? (
@@ -292,7 +303,11 @@ export default function SignupPage() {
                   />
                 )}
 
-                {errors.submit && <p className="text-sm text-red-500 text-center mt-4">{errors.submit}</p>}
+                {errors.submit && (
+                  <p className="text-sm text-red-500 text-center mt-4">
+                    {errors.submit}
+                  </p>
+                )}
 
                 {currentStep < 4 && (
                   <p className="text-center text-xs text-gray-500 pt-4">

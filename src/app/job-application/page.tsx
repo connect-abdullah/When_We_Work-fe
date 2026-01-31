@@ -3,9 +3,9 @@
 import React, { useMemo, useState } from "react";
 import { Button, Card, PageHeader } from "@/components/ui";
 import { Job_Details } from "@/constants/jobs";
-import { JobSchema } from "@/types";
 import JobCard from "@/components/admin/jobs/JobCard";
 import JobFilters from "@/components/admin/jobs/JobFilters";
+import type { JobGetSchema } from "@/lib/api/jobs/schema";
 import { Briefcase, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -16,16 +16,14 @@ export default function JobApplicationPage() {
     "all" | "active" | "inactive"
   >("active");
   const [typeFilter, setTypeFilter] = useState<string>("all");
-  const [appliedJobs, setAppliedJobs] = useState<Set<string>>(new Set());
-  const [hiredJobs] = useState<Set<string>>(new Set());
-  const [isLoading, setIsLoading] = useState<string | null>(null);
+  const [appliedJobs, setAppliedJobs] = useState<Set<number>>(new Set());
+  const [hiredJobs] = useState<Set<number>>(new Set());
+  const [isLoading, setIsLoading] = useState<number | null>(null);
 
-  // Base filter for all jobs
   const baseFilteredJobs = useMemo(() => {
     return Job_Details.filter((job) => {
       const matchesSearch =
         job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        job.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
         job.minimum_education
           .toLowerCase()
           .includes(searchTerm.toLowerCase()) ||
@@ -36,13 +34,12 @@ export default function JobApplicationPage() {
         typeFilter === "all"
           ? true
           : typeFilter === "hourly"
-            ? job.salary_type === "per_hour"
+            ? job.salary_type === "hourly"
             : job.salary_type === typeFilter;
       return matchesSearch && matchesStatus && salaryTypeMatch;
     });
   }, [searchTerm, statusFilter, typeFilter]);
 
-  // Filter jobs based on active tab
   const filteredJobs = useMemo(() => {
     if (activeTabId === "applied") {
       return baseFilteredJobs.filter((job) => appliedJobs.has(job.id));
@@ -53,27 +50,20 @@ export default function JobApplicationPage() {
     return baseFilteredJobs;
   }, [baseFilteredJobs, activeTabId, appliedJobs, hiredJobs]);
 
-  const handleApply = async (jobId: string) => {
+  const handleApply = async (jobId: number) => {
     setIsLoading(jobId);
     try {
       // TODO: Implement actual API call to apply for job
-      // This would check if user is logged in and submit application
       await new Promise((resolve) => setTimeout(resolve, 1000));
-
       setAppliedJobs((prev) => new Set([...prev, jobId]));
-      // You could show a success toast here
-    } catch (error) {
-      console.error("Error applying to job:", error);
-      // You could show an error toast here
+    } catch {
+      // handle error
     } finally {
       setIsLoading(null);
     }
   };
 
-  // Note: handleMarkAsHired would typically be called from backend when employer accepts application
-  // For now, hired jobs are tracked separately and would come from API
-
-  const renderJobCardWithApply = (job: JobSchema) => {
+  const renderJobCardWithApply = (job: JobGetSchema) => {
     const isApplied = appliedJobs.has(job.id);
     const isHired = hiredJobs.has(job.id);
     const isApplying = isLoading === job.id;
@@ -81,13 +71,8 @@ export default function JobApplicationPage() {
     return (
       <div key={job.id} className="flex flex-col">
         <div className="relative pb-12">
-          <JobCard
-            job={job}
-            // Don't pass onEditClick to hide edit buttons
-            isUser={true}
-          />
+          <JobCard job={job} isUser={true} />
         </div>
-        {/* Apply Button */}
         <div className="px-3 -mt-10">
           {isHired ? (
             <Button
@@ -106,7 +91,6 @@ export default function JobApplicationPage() {
               className="w-full text-[10px] font-medium"
               disabled
             >
-              <CheckCircle2 size={12} />
               Applied
             </Button>
           ) : (
@@ -177,49 +161,45 @@ export default function JobApplicationPage() {
 
   return (
     <div className="flex flex-col w-full h-full pt-4 px-2 sm:px-4 overflow-y-auto">
-      {/* Header */}
-          <PageHeader
-            title="Job Applications"
-            description="Browse and apply to available job opportunities"
-          />
+      <PageHeader
+        title="Job Applications"
+        description="Browse and apply to available job opportunities"
+      />
 
-          {/* Filters and Search */}
-          <div className="px-2 sm:px-4 mb-4">
-            <JobFilters
-              searchTerm={searchTerm}
-              statusFilter={statusFilter}
-              typeFilter={typeFilter}
-              onSearchChange={setSearchTerm}
-              onStatusFilterChange={(status) =>
-                setStatusFilter(status as "all" | "active" | "inactive")
-              }
-              onTypeFilterChange={setTypeFilter}
-            />
+      <div className="px-2 sm:px-4 mb-4">
+        <JobFilters
+          searchTerm={searchTerm}
+          statusFilter={statusFilter}
+          typeFilter={typeFilter}
+          onSearchChange={setSearchTerm}
+          onStatusFilterChange={(status) =>
+            setStatusFilter(status as "all" | "active" | "inactive")
+          }
+          onTypeFilterChange={setTypeFilter}
+        />
+      </div>
+
+      <div className="px-2 sm:px-4 mb-4">
+        <div className="w-full">
+          <div className="flex border-b border-[#C8CBD9] mb-2">
+            {tabItems.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTabId(tab.id)}
+                className={cn(
+                  "px-3 py-1.5 text-[10px] font-medium transition-colors border-b-2",
+                  activeTabId === tab.id
+                    ? "text-[#5A6ACF] border-[#5A6ACF] bg-[#F1F2F7]"
+                    : "text-[#5A6ACF]/70 border-transparent hover:text-[#5A6ACF] hover:border-[#5A6ACF]/30"
+                )}
+              >
+                {tab.label}
+              </button>
+            ))}
           </div>
-
-          {/* Tabs */}
-          <div className="px-2 sm:px-4 mb-4">
-            <div className="w-full">
-              {/* Tab Headers */}
-              <div className="flex border-b border-[#C8CBD9] mb-2">
-                {tabItems.map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTabId(tab.id)}
-                    className={cn(
-                      "px-3 py-1.5 text-[10px] font-medium transition-colors border-b-2",
-                      activeTabId === tab.id
-                        ? "text-[#5A6ACF] border-[#5A6ACF] bg-[#F1F2F7]"
-                        : "text-[#5A6ACF]/70 border-transparent hover:text-[#5A6ACF] hover:border-[#5A6ACF]/30")}>
-                    {tab.label}
-                  </button>
-                ))}
-              </div>
-
-              {/* Tab Content */}
-              <div className="w-full">{renderJobsGrid()}</div>
-            </div>
-          </div>
+          <div className="w-full">{renderJobsGrid()}</div>
+        </div>
+      </div>
     </div>
   );
 }

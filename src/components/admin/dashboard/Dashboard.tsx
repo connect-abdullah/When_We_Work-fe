@@ -19,22 +19,22 @@ const Dashboard: React.FC = () => {
   return (
     <div className="flex flex-col w-full h-full px-2 sm:px-4">
       <div className="flex justify-between items-center gap-2 mb-2">
-            <h1 className="text-lg sm:text-lg font-bold text-gray-700 p-2 sm:p-4">
-              Overview
-            </h1>
-            <div className="flex items-center gap-2 p-2">
-              {/* <Calendar className="w-4 h-4 text-gray-700" /> */}
-              <select
-                value={dateRange}
-                onChange={handleDateRangeChange}
-                className="text-xs px-3 py-1 border border-gray-300 rounded-lg bg-white text-gray-700 font-medium cursor-pointer hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-              >
-                <option value="today">Today</option>
-                <option value="7days">Last 7 days</option>
-                <option value="30days">Last 30 days</option>
-              </select>
-            </div>
-          </div>
+        <h1 className="text-lg sm:text-lg font-bold text-gray-700 p-2 sm:p-4">
+          Overview
+        </h1>
+        <div className="flex items-center gap-2 p-2">
+          {/* <Calendar className="w-4 h-4 text-gray-700" /> */}
+          <select
+            value={dateRange}
+            onChange={handleDateRangeChange}
+            className="text-xs px-3 py-1 border border-gray-300 rounded-lg bg-white text-gray-700 font-medium cursor-pointer hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+          >
+            <option value="today">Today</option>
+            <option value="7days">Last 7 days</option>
+            <option value="30days">Last 30 days</option>
+          </select>
+        </div>
+      </div>
 
       {/* Business Metrics Cards */}
       <BusinessMetricsCards dateRange={dateRange} />
