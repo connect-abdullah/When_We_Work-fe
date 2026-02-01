@@ -17,6 +17,7 @@ interface SignupStepContactProps {
   photoValue: File | string | null;
   onNext: () => void;
   onBack: () => void;
+  isLoading?: boolean;
 }
 
 export default function SignupStepContact({
@@ -27,6 +28,7 @@ export default function SignupStepContact({
   photoValue,
   onNext,
   onBack,
+  isLoading = false,
 }: SignupStepContactProps) {
   return (
     <div className="space-y-4">
@@ -76,6 +78,7 @@ export default function SignupStepContact({
           size="md"
           className="flex-1 py-2.5"
           onClick={onBack}
+          disabled={isLoading}
         >
           Back
         </Button>
@@ -85,8 +88,9 @@ export default function SignupStepContact({
           size="md"
           className="flex-1 py-2.5"
           onClick={onNext}
+          disabled={isLoading}
         >
-          Next
+          {isLoading ? "Creating account..." : "Complete"}
         </Button>
       </div>
     </div>

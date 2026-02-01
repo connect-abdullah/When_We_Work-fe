@@ -13,6 +13,7 @@ interface SignupStepPersonalProps {
     section: "step1"
   ) => (e: React.ChangeEvent<HTMLInputElement>) => void;
   onNext: () => void;
+  onBack?: () => void;
 }
 
 export default function SignupStepPersonal({
@@ -20,6 +21,7 @@ export default function SignupStepPersonal({
   errors,
   onChange,
   onNext,
+  onBack,
 }: SignupStepPersonalProps) {
   const isPasswordMatch =
     Boolean(data.confirm_password) && data.password === data.confirm_password;
@@ -92,15 +94,28 @@ export default function SignupStepPersonal({
           icon={<CheckCircle2 size={14} className="text-gray-400" />}
         />
       </div>
-      <Button
-        type="button"
-        variant="primary"
-        size="md"
-        className="w-full py-2.5"
-        onClick={onNext}
-      >
-        Next
-      </Button>
+      <div className={onBack ? "flex gap-3 pt-2" : ""}>
+        {onBack && (
+          <Button
+            type="button"
+            variant="outline"
+            size="md"
+            className="flex-1 py-2.5"
+            onClick={onBack}
+          >
+            Back
+          </Button>
+        )}
+        <Button
+          type="button"
+          variant="primary"
+          size="md"
+          className={onBack ? "flex-1 py-2.5" : "w-full py-2.5"}
+          onClick={onNext}
+        >
+          Next
+        </Button>
+      </div>
     </div>
   );
 }

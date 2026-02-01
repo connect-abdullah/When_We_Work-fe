@@ -12,12 +12,18 @@ import {
   SignupSuccess,
   StepIndicator,
 } from "@/components/auth";
+import { createAdmin } from "@/lib/api/admin";
+import type { AdminCreate } from "@/lib/api/admin/schema";
+import { createBusiness } from "@/lib/api/business";
+import type { BusinessCreate } from "@/lib/api/business/schema";
+import { Gender } from "@/lib/api/workers/schema";
 import type {
-  AdminSignupPayload,
   SignupBusinessData,
   SignupStep1Data,
   SignupStep2Data,
 } from "@/types";
+
+const VERIFICATION_BYPASS_CODE = "111111";
 
 const defaultStep1: SignupStep1Data = {
   first_name: "",
@@ -48,10 +54,10 @@ const defaultBusiness: SignupBusinessData = {
 };
 
 const STEPS = [
-  { label: "Personal" },
-  { label: "Contact" },
   { label: "Business" },
   { label: "Verify" },
+  { label: "Personal" },
+  { label: "Contact" },
 ];
 
 export default function SignupPage() {
@@ -60,6 +66,9 @@ export default function SignupPage() {
   const [step1, setStep1] = useState<SignupStep1Data>(defaultStep1);
   const [step2, setStep2] = useState<SignupStep2Data>(defaultStep2);
   const [business, setBusiness] = useState<SignupBusinessData>(defaultBusiness);
+  const [createdBusinessId, setCreatedBusinessId] = useState<number | null>(
+    null,
+  );
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreviewUrl, setPhotoPreviewUrl] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -70,8 +79,7 @@ export default function SignupPage() {
     (section: "step1" | "step2" | "business") =>
     (
       e: React.ChangeEvent<
-        HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-      >
+        HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement >,
     ) => {
       const { name, value } = e.target;
       if (section === "step1") {
@@ -166,15 +174,10 @@ export default function SignupPage() {
   };
 
   const handleNext = () => {
-    let isValid = false;
-    if (currentStep === 1) {
-      isValid = validateStep1();
-    } else if (currentStep === 2) {
-      isValid = validateStep2();
-    }
-
-    if (isValid && currentStep < 4) {
-      setCurrentStep(currentStep + 1);
+    if (currentStep === 3) {
+      if (validateStep1()) {
+        setCurrentStep(4);
+      }
     }
   };
 
@@ -185,41 +188,77 @@ export default function SignupPage() {
     }
   };
 
-  const handleBusinessSubmit = async () => {
+  const handleBusinessSubmit = () => {
     if (!validateStep3()) {
       return;
     }
+    setCurrentStep(2);
+  };
+
+  const handleVerify = async (code: string) => {
+    if (code !== VERIFICATION_BYPASS_CODE) {
+      setErrors({ submit: "Invalid code. Use 111111 to continue." });
+      return;
+    }
     setIsLoading(true);
+    setErrors({});
     try {
-      const photoUrl = photoPreviewUrl ?? null;
-      const _payload: AdminSignupPayload = {
-        ...step1,
-        ...step2,
-        photo: photoUrl,
-        business,
+      const businessPayload: BusinessCreate = {
+        business_name: business.business_name,
+        email: business.email,
+        phone: business.phone,
+        address: business.address,
+        city: business.city,
+        state: business.state,
+        zip_code: business.zip_code,
+        country: business.country,
+        description: business.description ?? null,
       };
-      // TODO: API call to register admin with _payload
-      await new Promise((r) => setTimeout(r, 1000));
-      // Move to verification step
-      setCurrentStep(4);
+      const created = await createBusiness(businessPayload);
+      if (created?.success === true) {
+        setCreatedBusinessId(created?.data?.id);
+      }
+      setCurrentStep(3);
     } catch (err) {
       console.error(err);
-      setErrors({ submit: "Something went wrong" });
+      setErrors({ submit: "Could not create business. Please try again." });
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleVerify = async (_code: string) => {
+  const handleCompleteSignup = async () => {
+    if (!validateStep1() || !validateStep2()) {
+      return;
+    }
+    if (createdBusinessId == null) {
+      setErrors({ submit: "Business not created. Please go back and verify." });
+      return;
+    }
     setIsLoading(true);
+    setErrors({});
     try {
-      // TODO: API call to verify code with _code parameter
-      await new Promise((r) => setTimeout(r, 1000));
-      // Show success screen
-      setShowSuccess(true);
+      const genderValue =
+        step2.gender === "prefer_not_to_say" ? Gender.other : (step2.gender as Gender);
+      const adminPayload: AdminCreate = {
+        first_name: step1.first_name,
+        middle_name: step1.middle_name || null,
+        last_name: step1.last_name,
+        email: step1.email,
+        password: step1.password,
+        phone: step2.phone,
+        photo: photoPreviewUrl ?? null,
+        language: step2.language ?? undefined,
+        gender: genderValue,
+        business_id: createdBusinessId,
+      };
+      const created = await createAdmin(adminPayload);
+      if (created?.success === true) {
+        setShowSuccess(true);
+      }
     } catch (err) {
       console.error(err);
-      setErrors({ submit: "Verification failed" });
+      setErrors({ submit: "Could not create account. Please try again." });
     } finally {
       setIsLoading(false);
     }
@@ -262,28 +301,7 @@ export default function SignupPage() {
               <SignupSuccess onContinue={handleContinueToDashboard} />
             ) : (
               <>
-                {currentStep === 1 && (
-                  <SignupStepPersonal
-                    data={step1}
-                    errors={errors}
-                    onChange={handleChange}
-                    onNext={handleNext}
-                  />
-                )}
-
-                {currentStep === 2 && (
-                  <SignupStepContact
-                    data={step2}
-                    errors={errors}
-                    onChange={handleChange}
-                    onPhotoChange={handlePhotoChange}
-                    photoValue={photoFile ?? photoPreviewUrl}
-                    onNext={handleNext}
-                    onBack={handleBack}
-                  />
-                )}
-
-                {currentStep === 3 && (
+                    {currentStep === 1 && (
                   <SignupStepBusiness
                     data={business}
                     errors={errors}
@@ -294,10 +312,33 @@ export default function SignupPage() {
                   />
                 )}
 
-                {currentStep === 4 && (
+                {currentStep === 2 && (
                   <SignupStepVerification
-                    email={step1.email}
+                    email={business.email}
                     onVerify={handleVerify}
+                    onBack={handleBack}
+                    isLoading={isLoading}
+                  />
+                )}
+
+                {currentStep === 3 && (
+                  <SignupStepPersonal
+                    data={step1}
+                    errors={errors}
+                    onChange={handleChange}
+                    onNext={handleNext}
+                    onBack={handleBack}
+                  />
+                )}
+
+                {currentStep === 4 && (
+                  <SignupStepContact
+                    data={step2}
+                    errors={errors}
+                    onChange={handleChange}
+                    onPhotoChange={handlePhotoChange}
+                    photoValue={photoFile ?? photoPreviewUrl}
+                    onNext={handleCompleteSignup}
                     onBack={handleBack}
                     isLoading={isLoading}
                   />

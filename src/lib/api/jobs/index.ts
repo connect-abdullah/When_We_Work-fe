@@ -30,6 +30,7 @@ export const updateJob = async (
   return response?.data;
 };
 
-export const deleteJob = async (jobId: number): Promise<void> => {
-  await del(`${baseUrl}/${jobId}`);
+export const deleteJob = async (jobId: number): Promise<JobSingleResponseApi> => {
+  const response = await del<JobSingleResponseApi>(`${baseUrl}/${jobId}`);
+  return response;
 };
