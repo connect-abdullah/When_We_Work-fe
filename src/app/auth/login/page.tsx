@@ -8,6 +8,7 @@ import {
   LoginAsAdminToggle,
   PasswordInput,
 } from "@/components/auth";
+import { loginAdmin, loginWorker } from "@/lib/api/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -19,6 +20,7 @@ interface FormData {
 interface FormErrors {
   email?: string;
   password?: string;
+  submit?: string;
 }
 
 const LoginPage: React.FC = () => {
@@ -76,18 +78,22 @@ const LoginPage: React.FC = () => {
     }
 
     setIsLoading(true);
+    setErrors((prev) => ({ ...prev, submit: undefined }));
 
     try {
-      // TODO: Implement actual login logic here
-      // console.log("Login data:", formData);
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Redirect based on login type
+      const payload = { email: formData.email, password: formData.password };
+      if (loginAsAdmin) {
+        await loginAdmin(payload);
+      } else {
+        await loginWorker(payload);
+      }
       router.push(loginAsAdmin ? "/admin/dashboard" : "/dashboard");
     } catch (error) {
       console.error("Login error:", error);
+      setErrors((prev) => ({
+        ...prev,
+        submit: "Invalid email or password. Please try again.",
+      }));
     } finally {
       setIsLoading(false);
     }
@@ -160,6 +166,10 @@ const LoginPage: React.FC = () => {
             Forgot password?
           </Link>
         </div>
+
+        {errors.submit && (
+          <p className="text-sm text-red-500 text-center">{errors.submit}</p>
+        )}
 
         <Button
           type="submit"
