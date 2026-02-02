@@ -9,11 +9,7 @@ import {
 const baseUrl = "/workers";
 
 export const getWorkers = async (): Promise<WorkerResponseSchema[]> => {
-  const response = await get<WorkersListResponseApi>(baseUrl, {
-    params: {
-      admin_id: 2, // TODO: from auth
-    },
-  });
+  const response = await get<WorkersListResponseApi>(baseUrl);
   return response?.data ?? [];
 };
 

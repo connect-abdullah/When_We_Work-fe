@@ -9,11 +9,7 @@ import {
 const baseUrl = "/jobs";
 
 export const getJobs = async (): Promise<JobGetSchema[]> => {
-  const response = await get<JobsListResponseApi>(baseUrl, {
-    params: {
-      admin_id: 2, // TODO: from auth
-    },
-  });
+  const response = await get<JobsListResponseApi>(baseUrl);
   return response?.data ?? [];
 };
 

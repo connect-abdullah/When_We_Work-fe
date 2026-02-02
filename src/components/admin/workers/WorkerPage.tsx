@@ -22,8 +22,6 @@ import type {
   WorkerSchema,
 } from "@/lib/api/workers/schema";
 
-const DEFAULT_ADMIN_ID = 2; // TODO: from auth
-
 function getNewWorkersCount(_workers: WorkerResponseSchema[]): number {
   return 0;
 }
@@ -103,7 +101,6 @@ export default function WorkersPage() {
           gender: workerData.gender!,
           employment_type: workerData.employment_type!,
           user_role: workerData.user_role!,
-          admin_id: workerData.admin_id ?? DEFAULT_ADMIN_ID,
           middle_name: workerData.middle_name ?? null,
           address: workerData.address ?? null,
           emergency_contact: workerData.emergency_contact ?? null,

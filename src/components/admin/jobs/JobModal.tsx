@@ -8,7 +8,6 @@ import {
   JobGetSchema,
   JobStatus,
   SalaryType,
-  ToneRequirement,
 } from "@/lib/api/jobs/schema";
 import JobTypeSelect from "./JobTypeSelect";
 import JobStatusSelect from "./JobStatusSelect";
@@ -32,14 +31,14 @@ const JobModal: React.FC<JobModalProps> = ({
     title: "",
     description: "",
     minimum_education: "",
-    tone_requirement: ToneRequirement.professional,
     characteristics: [],
     status: JobStatus.active,
     job_category: undefined,
     workers_required: 0,
-    workers_hired: 0,
     salary: 0,
     salary_type: SalaryType.hourly,
+    from_date_time: "",
+    to_date_time: "",
   });
 
   const [characteristicsInput, setCharacteristicsInput] = useState("");
@@ -52,14 +51,18 @@ const JobModal: React.FC<JobModalProps> = ({
         title: job.title ?? "",
         description: job.description ?? "",
         minimum_education: job.minimum_education ?? "",
-        tone_requirement: job.tone_requirement ?? ToneRequirement.professional,
         characteristics: job.characteristics ?? [],
         status: job.status ?? JobStatus.active,
         job_category: job.job_category,
         workers_required: job.workers_required ?? 0,
-        workers_hired: job.workers_hired ?? 0,
         salary: job.salary ?? 0,
         salary_type: job.salary_type ?? SalaryType.hourly,
+        from_date_time: job.from_date_time
+          ? new Date(job.from_date_time).toISOString().slice(0, 16)
+          : "",
+        to_date_time: job.to_date_time
+          ? new Date(job.to_date_time).toISOString().slice(0, 16)
+          : "",
       });
       setCharacteristicsInput((job.characteristics ?? []).join(", "));
     } else {
@@ -67,12 +70,10 @@ const JobModal: React.FC<JobModalProps> = ({
         title: "",
         description: "",
         minimum_education: "",
-        tone_requirement: ToneRequirement.professional,
         characteristics: [],
         status: JobStatus.active,
         job_category: undefined,
         workers_required: 0,
-        workers_hired: 0,
         salary: 0,
         salary_type: SalaryType.hourly,
       });
@@ -108,10 +109,15 @@ const JobModal: React.FC<JobModalProps> = ({
       (formData.description?.trim() ?? "") !== "" &&
       (formData.minimum_education?.trim() ?? "") !== "" &&
       formData.workers_required !== undefined &&
-      formData.workers_hired !== undefined &&
-      formData.salary !== undefined
+      formData.salary !== undefined &&
+      (formData.from_date_time?.trim() ?? "") !== "" &&
+      (formData.to_date_time?.trim() ?? "") !== ""
     );
   };
+
+  const toISO = (local: string) =>
+    local ? new Date(local).toISOString() : "";
+
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
@@ -181,36 +187,6 @@ const JobModal: React.FC<JobModalProps> = ({
 
           <div>
             <label className="block text-[9px] font-medium text-gray-700 mb-1">
-              Tone
-            </label>
-            <div className="grid grid-cols-5 gap-1.5">
-              {[
-                ToneRequirement.professional,
-                ToneRequirement.friendly,
-                ToneRequirement.casual,
-                ToneRequirement.formal,
-                ToneRequirement.empathic,
-              ].map((tone) => (
-                <button
-                  key={tone}
-                  type="button"
-                  onClick={() =>
-                    setFormData({ ...formData, tone_requirement: tone })
-                  }
-                  className={`px-2 py-1.5 text-[9px] font-medium rounded-lg border-2 transition-all ${
-                    formData.tone_requirement === tone
-                      ? "border-[#5A6ACF] bg-[#5A6ACF]/10 text-[#5A6ACF]"
-                      : "border-gray-200 bg-white text-gray-700 hover:border-gray-300"
-                  }`}
-                >
-                  {tone.charAt(0).toUpperCase() + tone.slice(1)}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-[9px] font-medium text-gray-700 mb-1">
               Characteristics (comma-separated)
             </label>
             <input
@@ -233,37 +209,20 @@ const JobModal: React.FC<JobModalProps> = ({
             required
           />
 
-          <div className="grid grid-cols-2 gap-3">
-            <FormInput
-              label="Workers Needed"
-              name="workers_required"
-              type="number"
-              value={formData.workers_required?.toString() ?? ""}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  workers_required: parseInt(e.target.value, 10) || 0,
-                })
-              }
-              placeholder="0"
-              required
-            />
-
-            <FormInput
-              label="Workers Hired"
-              name="workers_hired"
-              type="number"
-              value={formData.workers_hired?.toString() ?? ""}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  workers_hired: parseInt(e.target.value, 10) || 0,
-                })
-              }
-              placeholder="0"
-              required
-            />
-          </div>
+          <FormInput
+            label="Workers Needed"
+            name="workers_required"
+            type="number"
+            value={formData.workers_required?.toString() ?? ""}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                workers_required: parseInt(e.target.value, 10) || 0,
+              })
+            }
+            placeholder="0"
+            required
+          />
 
           <div className="grid grid-cols-2 gap-3">
             <FormInput
@@ -304,6 +263,35 @@ const JobModal: React.FC<JobModalProps> = ({
                 ))}
               </div>
             </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <FormInput
+              label="From (date & time)"
+              name="from_date_time"
+              type="datetime-local"
+              value={formData.from_date_time ?? ""}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  from_date_time: e.target.value,
+                })
+              }
+              required
+            />
+            <FormInput
+              label="To (date & time)"
+              name="to_date_time"
+              type="datetime-local"
+              value={formData.to_date_time ?? ""}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  to_date_time: e.target.value,
+                })
+              }
+              required
+            />
           </div>
         </div>
 

@@ -10,13 +10,6 @@ export enum JobStatus {
   completed = "completed",
   cancelled = "cancelled",
 }
-export enum ToneRequirement {
-  professional = "professional",
-  casual = "casual",
-  formal = "formal",
-  friendly = "friendly",
-  empathic = "empathetic",
-}
 export enum SalaryType {
   hourly = "hourly",
   fixed = "fixed",
@@ -28,18 +21,21 @@ export interface JobCreate {
   status: JobStatus;
   minimum_education: string;
   job_category: JobCategory;
-  tone_requirement: ToneRequirement;
   characteristics?: string[]; // optional, may be undefined
   workers_required: number;
-  workers_hired: number;
   salary: number;
   salary_type?: SalaryType; // optional, may be undefined
   language?: string[]; // optional, may be undefined
-  admin_id: number;
+  /** ISO datetime string (e.g. from datetime-local or toISOString) */
+  from_date_time: string;
+  /** ISO datetime string */
+  to_date_time: string;
 }
 
 export interface JobGetSchema extends JobCreate {
   id: number;
+  /** Read-only: backend sets/increments; never sent on create or update from frontend. */
+  workers_hired?: number;
 }
 
 /** Jobs list API response wrapper. */

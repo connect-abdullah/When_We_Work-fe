@@ -32,7 +32,6 @@ export interface WorkerSchema {
   user_role: UserRoleEnum;
   roles?: string[] | null;
   remarks?: string | null;
-  admin_id: number;
 }
 
 export interface WorkerResponseSchema extends WorkerSchema {

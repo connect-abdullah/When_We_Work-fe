@@ -21,23 +21,6 @@ interface JobCardProps {
   isUser?: boolean;
 }
 
-const getToneColor = (tone: string) => {
-  switch (tone) {
-    case "professional":
-      return "text-blue-600";
-    case "friendly":
-      return "text-emerald-600";
-    case "casual":
-      return "text-amber-600";
-    case "formal":
-      return "text-violet-600";
-    case "empathetic":
-      return "text-rose-600";
-    default:
-      return "text-gray-600";
-  }
-};
-
 const getStatusDot = (status: string) => {
   switch (status) {
     case "active":
@@ -65,7 +48,6 @@ const JobCard: React.FC<JobCardProps> = ({
   const needed = job.workers_required ?? 0;
   const hired = job.workers_hired ?? 0;
   const hiringRate = needed > 0 ? Math.round((hired / needed) * 100) : 0;
-  const tone = job.tone_requirement ?? "professional";
   const salaryType = job.salary_type ?? "hourly";
 
   return (
@@ -84,12 +66,6 @@ const JobCard: React.FC<JobCardProps> = ({
                 {job.title ?? ""}
               </h3>
               <div className="flex items-center gap-2 mb-2">
-                <span
-                  className={`text-[10px] font-medium ${getToneColor(tone)}`}
-                >
-                  {tone}
-                </span>
-                <span className="text-gray-300">•</span>
                 <span className="text-[10px] text-gray-500">
                   {salaryType === "hourly" ? "Hourly" : "Fixed"}
                 </span>

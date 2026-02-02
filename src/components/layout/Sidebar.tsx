@@ -5,8 +5,9 @@ import Image from "next/image";
 import Logo from "@/public/Logo.png";
 import { MenuItem, type SidebarMenuConfig } from "@/types";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { X } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { clearAuthStorage } from "@/lib/auth";
 
 export type { SidebarMenuConfig };
 
@@ -24,6 +25,7 @@ export default function Sidebar({
   onToggle,
 }: SidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const {
     topItems,
     bottomItems,
@@ -32,25 +34,48 @@ export default function Sidebar({
     logoAlt = "WhenWeWork",
   } = menuConfig;
 
+  const handleLogout = () => {
+    clearAuthStorage();
+    router.push("/auth/login");
+  };
+
   const renderMenuItem = (item: MenuItem, index: number) => {
     const isActive =
       pathname === item.link || pathname.startsWith(item.link + "/");
+    const isLogout = item.label === "Logout";
+
+    const content = (
+      <div
+        className={`
+          flex flex-row items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer transition-all duration-200
+          ${
+            isActive
+              ? "bg-white text-[#5A6ACF] shadow-sm"
+              : "text-white/80 hover:bg-white/10 hover:text-white"
+          }
+        `}
+      >
+        <item.icon size={14} />
+        <span className="text-[10px] font-medium">{item.label}</span>
+      </div>
+    );
+
+    if (isLogout) {
+      return (
+        <button
+          type="button"
+          onClick={handleLogout}
+          key={index}
+          className="w-full text-left"
+        >
+          {content}
+        </button>
+      );
+    }
 
     return (
       <Link href={item.link} passHref key={index}>
-        <div
-          className={`
-            flex flex-row items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer transition-all duration-200
-            ${
-              isActive
-                ? "bg-white text-[#5A6ACF] shadow-sm"
-                : "text-white/80 hover:bg-white/10 hover:text-white"
-            }
-          `}
-        >
-          <item.icon size={14} />
-          <span className="text-[10px] font-medium">{item.label}</span>
-        </div>
+        {content}
       </Link>
     );
   };

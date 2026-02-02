@@ -3,7 +3,6 @@ import {
   JobGetSchema,
   JobStatus,
   SalaryType,
-  ToneRequirement,
 } from "@/lib/api/jobs/schema";
 
 export const Job_Details: JobGetSchema[] = [
@@ -13,7 +12,6 @@ export const Job_Details: JobGetSchema[] = [
     description:
       "Experienced professional with a passion for helping businesses grow through excellent customer service.",
     minimum_education: "MBA in Business Administration",
-    tone_requirement: ToneRequirement.professional,
     characteristics: [
       "Patient",
       "Detail-oriented",
@@ -27,7 +25,8 @@ export const Job_Details: JobGetSchema[] = [
     salary: 12600,
     salary_type: SalaryType.hourly,
     language: ["English", "Spanish"],
-    admin_id: 1,
+    from_date_time: "2025-02-01T09:00:00.000Z",
+    to_date_time: "2025-02-01T17:00:00.000Z",
   },
   {
     id: 2,
@@ -35,7 +34,6 @@ export const Job_Details: JobGetSchema[] = [
     description:
       "Creative professional specializing in building long-term customer relationships.",
     minimum_education: "BS in Marketing & Communications",
-    tone_requirement: ToneRequirement.friendly,
     characteristics: ["Outgoing", "Persuasive", "Goal-driven", "Team player"],
     status: JobStatus.active,
     job_category: JobCategory.full_time,
@@ -44,7 +42,8 @@ export const Job_Details: JobGetSchema[] = [
     salary: 11400,
     salary_type: SalaryType.fixed,
     language: ["English", "Mandarin"],
-    admin_id: 1,
+    from_date_time: "2025-02-02T08:00:00.000Z",
+    to_date_time: "2025-02-02T16:00:00.000Z",
   },
   {
     id: 3,
@@ -52,7 +51,6 @@ export const Job_Details: JobGetSchema[] = [
     description:
       "Psychology background helps understand customer needs and provide personalized solutions.",
     minimum_education: "BA in Psychology",
-    tone_requirement: ToneRequirement.empathic,
     characteristics: [
       "Understanding",
       "Compassionate",
@@ -66,7 +64,8 @@ export const Job_Details: JobGetSchema[] = [
     salary: 10500,
     salary_type: SalaryType.hourly,
     language: ["English", "Spanish", "French"],
-    admin_id: 1,
+    from_date_time: "2025-02-03T10:00:00.000Z",
+    to_date_time: "2025-02-03T18:00:00.000Z",
   },
   {
     id: 4,
@@ -74,7 +73,6 @@ export const Job_Details: JobGetSchema[] = [
     description:
       "Detail-oriented professional for data management and entry tasks.",
     minimum_education: "High School Diploma",
-    tone_requirement: ToneRequirement.professional,
     characteristics: ["Accurate", "Fast", "Organized", "Reliable"],
     status: JobStatus.inactive,
     job_category: JobCategory.full_time,
@@ -83,6 +81,7 @@ export const Job_Details: JobGetSchema[] = [
     salary: 8000,
     salary_type: SalaryType.fixed,
     language: ["English"],
-    admin_id: 1,
+    from_date_time: "2025-02-04T09:00:00.000Z",
+    to_date_time: "2025-02-04T17:00:00.000Z",
   },
 ];

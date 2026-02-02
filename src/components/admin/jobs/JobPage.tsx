@@ -117,17 +117,14 @@ export default function JobPage() {
         job_category:
           (jobData.job_category as JobCreate["job_category"]) ??
           ("full_time" as JobCreate["job_category"]),
-        tone_requirement:
-          (jobData.tone_requirement as JobCreate["tone_requirement"]) ??
-          ("professional" as JobCreate["tone_requirement"]),
         characteristics: jobData.characteristics,
         workers_required: jobData.workers_required ?? 0,
-        workers_hired: jobData.workers_hired ?? 0,
         salary: jobData.salary ?? 0,
         salary_type:
           (jobData.salary_type as JobCreate["salary_type"]) ??
           ("hourly" as JobCreate["salary_type"]),
-        admin_id: 2, // TODO: from auth
+        from_date_time: jobData.from_date_time ?? "",
+        to_date_time: jobData.to_date_time ?? "",
       };
       await createJob(payload);
       await fetchJobs();
@@ -170,11 +167,9 @@ export default function JobPage() {
       return;
     }
     try {
-      const payload = {
-        ...selectedJob,
-        ...jobData,
-        admin_id: 2,
-      } as JobGetSchema;
+      // Never send workers_hired from frontend; backend increments it
+      const { workers_hired: _w, ...rest } = { ...selectedJob, ...jobData };
+      const payload = { ...rest } as JobGetSchema;
       await updateJob(payload, selectedJob.id);
       await fetchJobs();
       handleCloseModal();

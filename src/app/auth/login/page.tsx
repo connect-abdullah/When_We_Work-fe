@@ -82,12 +82,21 @@ const LoginPage: React.FC = () => {
 
     try {
       const payload = { email: formData.email, password: formData.password };
-      if (loginAsAdmin) {
-        await loginAdmin(payload);
-      } else {
-        await loginWorker(payload);
+      const response = loginAsAdmin ? await loginAdmin(payload) : await loginWorker(payload);
+      try {
+      const { access_token, ...userWithoutToken } = response?.data ?? {};
+      localStorage.setItem("auth:token", response?.data?.access_token);
+      localStorage.setItem("auth:user", JSON.stringify(userWithoutToken));
+      } catch (error) {
+        console.error("Error saving user data:", error);
       }
-      router.push(loginAsAdmin ? "/admin/dashboard" : "/dashboard");
+      if(response?.success === true) {
+        router.push(loginAsAdmin ? "/admin/dashboard" : "/job-application");
+      } else {
+        setErrors((prev) => ({
+          submit: response?.message
+        }));
+      }
     } catch (error) {
       console.error("Login error:", error);
       setErrors((prev) => ({

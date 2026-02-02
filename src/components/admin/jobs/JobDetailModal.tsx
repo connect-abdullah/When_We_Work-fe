@@ -34,23 +34,6 @@ const getStatusColor = (status: string) => {
   }
 };
 
-const getToneColor = (tone: string) => {
-  switch (tone) {
-    case "professional":
-      return "text-blue-600";
-    case "friendly":
-      return "text-emerald-600";
-    case "casual":
-      return "text-amber-600";
-    case "formal":
-      return "text-violet-600";
-    case "empathetic":
-      return "text-rose-600";
-    default:
-      return "text-gray-600";
-  }
-};
-
 const JobDetailModal: React.FC<JobDetailModalProps> = ({
   isOpen,
   onClose,
@@ -64,7 +47,6 @@ const JobDetailModal: React.FC<JobDetailModalProps> = ({
   const needed = job.workers_required ?? 0;
   const hired = job.workers_hired ?? 0;
   const hiringRate = needed > 0 ? Math.round((hired / needed) * 100) : 0;
-  const tone = job.tone_requirement ?? "professional";
 
   return (
     <div
@@ -165,12 +147,6 @@ const JobDetailModal: React.FC<JobDetailModalProps> = ({
               Job Details
             </h3>
             <div className="space-y-2">
-              <div className="p-3 bg-gray-50 rounded-lg">
-                <p className="text-xs text-gray-500 mb-0.5">Tone</p>
-                <p className={`text-sm font-medium ${getToneColor(tone)}`}>
-                  {tone.charAt(0).toUpperCase() + tone.slice(1)}
-                </p>
-              </div>
               <div className="p-3 bg-gray-50 rounded-lg">
                 <p className="text-xs text-gray-500 mb-0.5">Salary Type</p>
                 <p className="text-sm font-medium text-gray-900">
