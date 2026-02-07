@@ -3,12 +3,8 @@
 import React, { useState } from "react";
 import { Lock, Mail } from "lucide-react";
 import { Button, FormInput } from "@/components/ui";
-import {
-  AuthLayout,
-  LoginAsAdminToggle,
-  PasswordInput,
-} from "@/components/auth";
-import { loginAdmin, loginWorker } from "@/lib/api/auth";
+import { AuthLayout, PasswordInput } from "@/components/auth";
+import { loginUser } from "@/lib/api/users";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -32,7 +28,6 @@ const LoginPage: React.FC = () => {
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
-  const [loginAsAdmin, setLoginAsAdmin] = useState(false);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -82,19 +77,18 @@ const LoginPage: React.FC = () => {
 
     try {
       const payload = { email: formData.email, password: formData.password };
-      const response = loginAsAdmin ? await loginAdmin(payload) : await loginWorker(payload);
-      try {
-      const { access_token, ...userWithoutToken } = response?.data ?? {};
-      localStorage.setItem("auth:token", response?.data?.access_token);
-      localStorage.setItem("auth:user", JSON.stringify(userWithoutToken));
-      } catch (error) {
-        console.error("Error saving user data:", error);
-      }
-      if(response?.success === true) {
-        router.push(loginAsAdmin ? "/admin/dashboard" : "/job-application");
+      const response = await loginUser(payload);
+
+      if (response?.success === true) {
+        const { access_token, ...userWithoutToken } = response?.data ?? {};
+        localStorage.setItem("auth:token", access_token);
+        localStorage.setItem("auth:user", JSON.stringify(userWithoutToken));
+        const isAdmin = response?.data?.user_role === "admin";
+        router.push(isAdmin ? "/admin/dashboard" : "/job-application");
       } else {
         setErrors((prev) => ({
-          submit: response?.message
+          ...prev,
+          submit: response?.message ?? "Login failed",
         }));
       }
     } catch (error) {
@@ -145,12 +139,6 @@ const LoginPage: React.FC = () => {
           error={errors.password}
           required
           icon={<Lock size={14} className="text-gray-400" />}
-        />
-
-        <LoginAsAdminToggle
-          checked={loginAsAdmin}
-          onChange={setLoginAsAdmin}
-          disabled={isLoading}
         />
 
         <div className="flex items-center justify-between pt-1">

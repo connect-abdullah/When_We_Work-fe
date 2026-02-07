@@ -6,16 +6,16 @@ import {
   EmploymentType,
   Gender,
   UserRoleEnum,
-  WorkerResponseSchema,
-  WorkerSchema,
-} from "@/lib/api/workers/schema";
+  UserGetSchema,
+  UserUpdate,
+} from "@/lib/api/users/schema";
 
 interface WorkerEditModalProps {
   isOpen: boolean;
   onClose: () => void;
-  customer: WorkerResponseSchema | null;
+  customer: UserGetSchema | null;
   isEditMode: boolean;
-  onSave?: (workerData: Partial<WorkerSchema>) => void | Promise<void>;
+  onSave?: (workerData: Partial<UserUpdate>) => void | Promise<void>;
 }
 
 const ROLE_OPTIONS = [
@@ -60,9 +60,8 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
   onSave,
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState<Partial<WorkerSchema>>({
+  const [formData, setFormData] = useState<Partial<UserUpdate>>({
     first_name: "",
-    middle_name: null,
     last_name: "",
     email: "",
     phone: "",
@@ -72,7 +71,7 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
     employment_type: EmploymentType.full_time,
     user_role: UserRoleEnum.worker,
     emergency_contact: null,
-    roles: [],
+    worker_roles: [],
     remarks: null,
   });
 
@@ -80,7 +79,6 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
     if (customer && isEditMode) {
       setFormData({
         first_name: customer.first_name || "",
-        middle_name: customer.middle_name ?? null,
         last_name: customer.last_name || "",
         email: customer.email || "",
         phone: customer.phone || "",
@@ -90,13 +88,12 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
         employment_type: customer.employment_type,
         user_role: UserRoleEnum.worker,
         emergency_contact: customer.emergency_contact ?? null,
-        roles: customer.roles ?? [],
+        worker_roles: customer.worker_roles ?? [],
         remarks: customer.remarks ?? null,
       });
     } else {
       setFormData({
         first_name: "",
-        middle_name: null,
         last_name: "",
         email: "",
         phone: "",
@@ -106,7 +103,7 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
         employment_type: EmploymentType.full_time,
         user_role: UserRoleEnum.worker,
         emergency_contact: null,
-        roles: [],
+        worker_roles: [],
         remarks: null,
       });
     }
@@ -120,7 +117,7 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
       return;
     }
 
-    if ((formData.roles ?? []).length === 0) {
+    if ((formData.worker_roles ?? []).length === 0) {
       alert("Please select at least one role");
       return;
     }
@@ -146,7 +143,7 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
           <h3 className="text-sm font-semibold text-gray-700 border-b pb-2">
             Personal Information
           </h3>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <FormInput
               label="First Name"
               placeholder="First name"
@@ -155,17 +152,6 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
                 setFormData({ ...formData, first_name: e.target.value })
               }
               required
-            />
-            <FormInput
-              label="Middle Name"
-              placeholder="Middle name"
-              value={formData.middle_name || ""}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  middle_name: e.target.value || null,
-                })
-              }
             />
             <FormInput
               label="Last Name"
@@ -276,8 +262,8 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
           <SearchableMultiSelect
             label="Roles"
             options={ROLE_OPTIONS}
-            selectedValues={formData.roles || []}
-            onChange={(roles) => setFormData({ ...formData, roles })}
+            selectedValues={formData.worker_roles || []}
+            onChange={(worker_roles) => setFormData({ ...formData, worker_roles })}
             placeholder="Select worker roles..."
             required
           />

@@ -12,17 +12,33 @@ import {
 import { CustomerInsightsData } from "@/constants/customers";
 import { Download, Plus } from "lucide-react";
 import {
-  getWorkers,
-  createWorker,
-  updateWorker,
-  deleteWorker,
-} from "@/lib/api/workers";
-import type {
-  WorkerResponseSchema,
-  WorkerSchema,
-} from "@/lib/api/workers/schema";
+  createUser,
+  deleteUser,
+  getUsers,
+  updateUser,
+} from "@/lib/api/users";
+import { EmploymentType, UserGetSchema, UserRoleEnum , UserUpdate } from "@/lib/api/users/schema";
 
-function getNewWorkersCount(_workers: WorkerResponseSchema[]): number {
+function userToWorker(u: UserGetSchema): UserGetSchema {
+  return {
+    id: u.id,
+    first_name: u.first_name,
+    last_name: u.last_name,
+    email: u.email,
+    phone: u.phone,
+    address: u.address ?? null,
+    emergency_contact: u.emergency_contact ?? null,
+    photo: u.photo ?? null,
+    availability: u.availability ?? true,
+    gender: u.gender,
+    employment_type: u.employment_type ?? EmploymentType.full_time,
+    user_role: u.user_role,
+    worker_roles: u.worker_roles ?? null,
+    remarks: u.remarks ?? null,
+  };
+}
+
+function getNewWorkersCount(_workers: UserGetSchema[]): number {
   return 0;
 }
 
@@ -33,19 +49,22 @@ export default function WorkersPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
   const [selectedWorker, setSelectedWorker] =
-    useState<WorkerResponseSchema | null>(null);
+    useState<UserGetSchema | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [workers, setWorkers] = useState<WorkerResponseSchema[]>([]);
+  const [workers, setWorkers] = useState<UserGetSchema[]>([]);
   const [loading, setLoading] = useState(true);
   const [isClient, setIsClient] = useState(false);
 
   const fetchWorkers = useCallback(async () => {
     setLoading(true);
     try {
-      const list = await getWorkers();
-      setWorkers(list ?? []);
+      const list = await getUsers();
+      const workersOnly = (list ?? []).filter(
+        (u) => u.user_role === UserRoleEnum.worker,
+      );
+      setWorkers(workersOnly.map(userToWorker));
     } catch {
       setWorkers([]);
     } finally {
@@ -61,23 +80,23 @@ export default function WorkersPage() {
     fetchWorkers();
   }, [fetchWorkers]);
 
-  const handleViewWorker = (worker: WorkerResponseSchema) => {
+  const handleViewWorker = (worker: UserGetSchema) => {
     setSelectedWorker(worker);
     setIsViewModalOpen(true);
   };
 
-  const handleEditWorker = (worker: WorkerResponseSchema) => {
+  const handleEditWorker = (worker: UserGetSchema) => {
     setSelectedWorker(worker);
     setIsEditModalOpen(true);
   };
 
-  const handleDeleteWorker = async (worker: WorkerResponseSchema) => {
+  const handleDeleteWorker = async (worker: UserGetSchema) => {
     const workerName = `${worker.first_name} ${worker.last_name}`.trim();
     if (!window.confirm(`Are you sure you want to delete ${workerName}?`)) {
       return;
     }
     try {
-      await deleteWorker(worker.id);
+      await deleteUser(worker.id);
       await fetchWorkers();
       if (selectedWorker?.id === worker.id) {
         setIsViewModalOpen(false);
@@ -88,29 +107,40 @@ export default function WorkersPage() {
     }
   };
 
-  const handleSaveWorker = async (workerData: Partial<WorkerSchema>) => {
+  const handleSaveWorker = async (workerData: Partial<UserUpdate>) => {
     try {
       if (isEditModalOpen && selectedWorker) {
-        await updateWorker(selectedWorker.id, workerData);
+        await updateUser(selectedWorker.id, {
+          first_name: workerData.first_name,
+          last_name: workerData.last_name,
+          email: workerData.email,
+          phone: workerData.phone,
+          address: workerData.address ?? null,
+          emergency_contact: workerData.emergency_contact ?? null,
+          photo: workerData.photo ?? null,
+          gender: workerData.gender,
+          availability: workerData.availability,
+          employment_type: workerData.employment_type ?? null,
+          user_role: UserRoleEnum.worker,
+          worker_roles: workerData.worker_roles ?? null,
+          remarks: workerData.remarks ?? null,
+        });
       } else {
-        const payload: WorkerSchema = {
+        await createUser({
           first_name: workerData.first_name ?? "",
           last_name: workerData.last_name ?? "",
           email: workerData.email ?? "",
           phone: workerData.phone ?? "",
-          gender: workerData.gender!,
-          employment_type: workerData.employment_type!,
-          user_role: workerData.user_role!,
-          middle_name: workerData.middle_name ?? null,
           address: workerData.address ?? null,
           emergency_contact: workerData.emergency_contact ?? null,
           photo: workerData.photo ?? null,
+          gender: workerData.gender!,
           availability: workerData.availability ?? true,
-          language: workerData.language ?? null,
-          roles: workerData.roles ?? null,
+          employment_type: workerData.employment_type ?? null,
+          user_role: UserRoleEnum.worker,
+          worker_roles: workerData.worker_roles ?? null,
           remarks: workerData.remarks ?? null,
-        };
-        await createWorker(payload);
+        });
       }
       await fetchWorkers();
       setIsEditModalOpen(false);
@@ -123,9 +153,7 @@ export default function WorkersPage() {
 
   const filteredWorkers = workers.filter((worker) => {
     const fullName =
-      `${worker.first_name} ${worker.middle_name || ""} ${worker.last_name}`
-        .trim()
-        .toLowerCase();
+      `${worker.first_name} ${worker.last_name}`.trim().toLowerCase();
     const matchesSearch =
       fullName.includes(searchTerm.toLowerCase()) ||
       worker.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -164,7 +192,9 @@ export default function WorkersPage() {
     setCurrentPage(page);
   };
 
-  const handleExport = () => {};
+  const handleExport = () => {
+    return;
+  };
 
   const computedInsightsData = useMemo(() => {
     if (!isClient) {

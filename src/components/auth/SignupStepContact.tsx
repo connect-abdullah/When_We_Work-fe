@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
-import { Globe, Phone, User } from "lucide-react";
+import { Phone, User } from "lucide-react";
 import { Button, FormSelect } from "@/components/ui";
 import { PhoneInput, PhotoUpload } from "@/components/auth";
-import { GENDERS, LANGUAGES } from "@/constants/auth";
+import { GENDERS } from "@/constants/auth";
 import type { SignupStep2Data } from "@/types";
 
 interface SignupStepContactProps {
@@ -41,18 +41,6 @@ export default function SignupStepContact({
           icon={<Phone size={14} className="text-gray-400" />}
         />
         <FormSelect
-          label="Language"
-          name="language"
-          value={data.language}
-          onChange={onChange("step2")}
-          error={errors.language}
-          required
-          options={LANGUAGES.map((l) => ({ value: l.value, label: l.label }))}
-          icon={<Globe size={14} className="text-gray-400" />}
-        />
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <FormSelect
           label="Gender"
           name="gender"
           value={data.gender}
@@ -62,14 +50,14 @@ export default function SignupStepContact({
           options={GENDERS.map((g) => ({ value: g.value, label: g.label }))}
           icon={<User size={14} className="text-gray-400" />}
         />
-        <div>
-          <PhotoUpload
-            value={photoValue}
-            onChange={onPhotoChange}
-            label="Photo (optional)"
-            error={errors.photo}
-          />
-        </div>
+      </div>
+      <div>
+        <PhotoUpload
+          value={photoValue}
+          onChange={onPhotoChange}
+          label="Photo (optional)"
+          error={errors.photo}
+        />
       </div>
       <div className="flex gap-3 pt-2">
         <Button

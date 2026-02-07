@@ -1,13 +1,13 @@
 "use client";
 import React from "react";
 import { Edit, Eye, Trash2 } from "lucide-react";
-import { EmploymentType, WorkerResponseSchema } from "@/lib/api/workers/schema";
+import { EmploymentType, UserGetSchema } from "@/lib/api/users/schema";
 
 interface WorkerTableProps {
-  customers: WorkerResponseSchema[];
-  onView: (customer: WorkerResponseSchema) => void;
-  onEdit: (customer: WorkerResponseSchema) => void;
-  onDelete: (customer: WorkerResponseSchema) => void;
+  customers: UserGetSchema[];
+  onView: (customer: UserGetSchema) => void;
+  onEdit: (customer: UserGetSchema) => void;
+  onDelete: (customer: UserGetSchema) => void;
   formatDate: (dateString: string) => string;
 }
 
@@ -26,8 +26,8 @@ const WorkerTable: React.FC<WorkerTableProps> = ({
     );
   }
 
-  const getFullName = (worker: WorkerResponseSchema) => {
-    return `${worker.first_name}${worker.middle_name ? ` ${worker.middle_name}` : ""} ${worker.last_name}`;
+  const getFullName = (worker: UserGetSchema) => {
+    return `${worker.first_name} ${worker.last_name}`.trim();
   };
 
   return (
@@ -97,7 +97,7 @@ const WorkerTable: React.FC<WorkerTableProps> = ({
                 Employment
               </p>
               <p className="text-[10px] text-gray-600">
-                {customer.employment_type.replace("_", " ")}
+                {customer.employment_type?.replace("_", " ")}
               </p>
             </div>
             <div className="space-y-1">

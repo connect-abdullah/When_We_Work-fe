@@ -28,7 +28,7 @@ export default function SignupStepPersonal({
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <FormInput
           label="First name"
           name="first_name"
@@ -37,15 +37,6 @@ export default function SignupStepPersonal({
           error={errors.first_name}
           placeholder="First"
           required
-          icon={<User size={14} className="text-gray-400" />}
-        />
-        <FormInput
-          label="Middle (opt.)"
-          name="middle_name"
-          value={data.middle_name}
-          onChange={onChange("step1")}
-          error={errors.middle_name}
-          placeholder="Middle"
           icon={<User size={14} className="text-gray-400" />}
         />
         <FormInput

@@ -1,12 +1,12 @@
 "use client";
 import React from "react";
 import { Award, Briefcase, Mail, MapPin, Phone, Shield, X } from "lucide-react";
-import { EmploymentType, WorkerResponseSchema } from "@/lib/api/workers/schema";
+import { EmploymentType, UserGetSchema } from "@/lib/api/users/schema";
 
 interface WorkerViewModalProps {
   isOpen: boolean;
   onClose: () => void;
-  customer: WorkerResponseSchema | null;
+  customer: UserGetSchema | null;
 }
 
 const WorkerViewModal: React.FC<WorkerViewModalProps> = ({
@@ -19,7 +19,7 @@ const WorkerViewModal: React.FC<WorkerViewModalProps> = ({
   }
 
   const getFullName = () => {
-    return `${customer.first_name}${customer.middle_name ? ` ${customer.middle_name}` : ""} ${customer.last_name}`;
+    return `${customer.first_name} ${customer.last_name}`.trim();
   };
 
   const availability = customer.availability ?? true;
@@ -51,7 +51,7 @@ const WorkerViewModal: React.FC<WorkerViewModalProps> = ({
               <span className="px-2.5 py-1 rounded-lg text-xs font-medium border bg-blue-50 text-blue-700 border-blue-100">
                 {customer.employment_type === EmploymentType.freelancer
                   ? "Freelancer"
-                  : customer.employment_type.replace("_", " ")}
+                  : customer.employment_type?.replace("_", " ")}
               </span>
             </div>
             <p className="text-sm font-medium text-gray-700">
@@ -93,7 +93,7 @@ const WorkerViewModal: React.FC<WorkerViewModalProps> = ({
                 </p>
               </div>
               <p className="text-sm font-semibold text-gray-900">
-                {customer.employment_type.replace("_", " ")}
+                {customer.employment_type?.replace("_", " ")}
               </p>
             </div>
             <div className="p-4 bg-amber-50 rounded-xl">
@@ -104,8 +104,8 @@ const WorkerViewModal: React.FC<WorkerViewModalProps> = ({
                 </p>
               </div>
               <p className="text-sm font-semibold text-gray-900">
-                {(customer.roles?.length ?? 0) > 0
-                  ? (customer.roles ?? [])[0]
+                {(customer.worker_roles?.length ?? 0) > 0
+                  ? (customer.worker_roles ?? [])[0]
                   : "Unassigned"}
               </p>
             </div>
@@ -181,7 +181,7 @@ const WorkerViewModal: React.FC<WorkerViewModalProps> = ({
                       Employment Type
                     </p>
                     <p className="text-sm text-gray-900">
-                      {customer.employment_type.replace("_", " ")}
+                      {customer.employment_type?.replace("_", " ")}
                     </p>
                   </div>
                 </div>
@@ -194,9 +194,9 @@ const WorkerViewModal: React.FC<WorkerViewModalProps> = ({
             <h3 className="text-sm font-semibold text-gray-700 mb-3">
               Assigned Roles
             </h3>
-            {(customer.roles?.length ?? 0) > 0 ? (
+            {(customer.worker_roles?.length ?? 0) > 0 ? (
               <div className="flex flex-wrap gap-2">
-                {(customer.roles ?? []).map((role) => (
+                {(customer.worker_roles ?? []).map((role: string) => (
                   <span
                     key={role}
                     className="px-3 py-1.5 bg-[#5A6ACF]/10 text-[#5A6ACF] text-sm font-medium rounded-lg"

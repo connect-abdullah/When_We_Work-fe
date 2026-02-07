@@ -50,7 +50,6 @@ export interface SalesAgent {
 /** Admin signup – step 1 (personal) */
 export interface SignupStep1Data {
   first_name: string;
-  middle_name: string;
   last_name: string;
   email: string;
   password: string;
@@ -61,7 +60,6 @@ export interface SignupStep1Data {
 export interface SignupStep2Data {
   phone: string;
   photo: string | null;
-  language: string;
   gender: string;
 }
 

@@ -12,11 +12,10 @@ import {
   SignupSuccess,
   StepIndicator,
 } from "@/components/auth";
-import { createAdmin } from "@/lib/api/admin";
-import type { AdminCreate } from "@/lib/api/admin/schema";
+import { createUser } from "@/lib/api/users";
 import { createBusiness } from "@/lib/api/business";
 import type { BusinessCreate } from "@/lib/api/business/schema";
-import { Gender } from "@/lib/api/workers/schema";
+import { Gender, UserRoleEnum } from "@/lib/api/users/schema";
 import type {
   SignupBusinessData,
   SignupStep1Data,
@@ -27,7 +26,6 @@ const VERIFICATION_BYPASS_CODE = "111111";
 
 const defaultStep1: SignupStep1Data = {
   first_name: "",
-  middle_name: "",
   last_name: "",
   email: "",
   password: "",
@@ -37,7 +35,6 @@ const defaultStep1: SignupStep1Data = {
 const defaultStep2: SignupStep2Data = {
   phone: "",
   photo: null,
-  language: "en",
   gender: "",
 };
 
@@ -132,9 +129,6 @@ export default function SignupPage() {
     const e: Record<string, string> = {};
     if (!step2.phone?.trim()) {
       e.phone = "Required";
-    }
-    if (!step2.language) {
-      e.language = "Required";
     }
     if (!step2.gender) {
       e.gender = "Required";
@@ -240,20 +234,23 @@ export default function SignupPage() {
     try {
       const genderValue =
         step2.gender === "prefer_not_to_say" ? Gender.other : (step2.gender as Gender);
-      const adminPayload: AdminCreate = {
+      const userPayload = {
         first_name: step1.first_name,
-        middle_name: step1.middle_name || null,
         last_name: step1.last_name,
         email: step1.email,
         password: step1.password,
         phone: step2.phone,
         photo: photoPreviewUrl ?? null,
-        language: step2.language ?? undefined,
         gender: genderValue,
-        business_id: createdBusinessId,
+        user_role: UserRoleEnum.admin,
+        business_id: createdBusinessId ?? undefined,
       };
-      const created = await createAdmin(adminPayload);
+
+      const created = await createUser(userPayload);
       if (created?.success === true) {
+        const { access_token, ...userWithoutToken } = created.data;
+        localStorage.setItem("auth:token", access_token);
+        localStorage.setItem("auth:user", JSON.stringify(userWithoutToken.user));
         setShowSuccess(true);
       }
     } catch (err) {
