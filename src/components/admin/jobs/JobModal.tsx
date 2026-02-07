@@ -115,7 +115,7 @@ const JobModal: React.FC<JobModalProps> = ({
     );
   };
 
-  const toISO = (local: string) =>
+  const _toISO = (local: string) =>
     local ? new Date(local).toISOString() : "";
 
 

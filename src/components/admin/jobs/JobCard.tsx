@@ -22,7 +22,9 @@ function formatJobTimingRange(
   fromIso: string | undefined,
   toIso: string | undefined,
 ): { date: string; time: string } {
-  if (!fromIso && !toIso) return { date: "—", time: "—" };
+  if (!fromIso && !toIso) {
+    return { date: "—", time: "—" };
+  }
   try {
     const from = fromIso ? new Date(fromIso) : null;
     const to = toIso ? new Date(toIso) : null;
@@ -38,7 +40,9 @@ function formatJobTimingRange(
         time: from.toLocaleTimeString(undefined, timeOpt),
       };
     }
-    if (!from || !to) return { date: "—", time: "—" };
+    if (!from || !to) {
+      return { date: "—", time: "—" };
+    }
     const sameDay =
       from.getDate() === to.getDate() &&
       from.getMonth() === to.getMonth() &&

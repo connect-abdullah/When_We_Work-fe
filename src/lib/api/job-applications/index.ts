@@ -1,8 +1,8 @@
 import { get, post } from "@/lib/api/http";
 import {
   JobApplicationCreate,
-  JobApplicationResponse,
   JobApplicationListResponse,
+  JobApplicationResponse,
 } from "@/lib/api/job-applications/schema";
 
 const baseUrl = "/job_applications";

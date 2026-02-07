@@ -87,7 +87,7 @@ http.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 /** Request config for typed helpers. */
@@ -96,7 +96,7 @@ export type RequestConfig = AxiosRequestConfig;
 /** Typed GET. Returns response data. */
 export async function get<T = unknown>(
   url: string,
-  config?: RequestConfig
+  config?: RequestConfig,
 ): Promise<T> {
   const res = await http.get<T>(url, config);
   return res.data;
@@ -106,7 +106,7 @@ export async function get<T = unknown>(
 export async function post<T = unknown, B = unknown>(
   url: string,
   body?: B,
-  config?: RequestConfig
+  config?: RequestConfig,
 ): Promise<T> {
   const res = await http.post<T>(url, body, config);
   return res.data;
@@ -116,7 +116,7 @@ export async function post<T = unknown, B = unknown>(
 export async function put<T = unknown, B = unknown>(
   url: string,
   body?: B,
-  config?: RequestConfig
+  config?: RequestConfig,
 ): Promise<T> {
   const res = await http.put<T>(url, body, config);
   return res.data;
@@ -126,7 +126,7 @@ export async function put<T = unknown, B = unknown>(
 export async function patch<T = unknown, B = unknown>(
   url: string,
   body?: B,
-  config?: RequestConfig
+  config?: RequestConfig,
 ): Promise<T> {
   const res = await http.patch<T>(url, body, config);
   return res.data;
@@ -135,7 +135,7 @@ export async function patch<T = unknown, B = unknown>(
 /** Typed DELETE. Returns response data. */
 export async function del<T = unknown>(
   url: string,
-  config?: RequestConfig
+  config?: RequestConfig,
 ): Promise<T> {
   const res = await http.delete<T>(url, config);
   return res.data;

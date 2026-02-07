@@ -27,15 +27,23 @@ function formatJobTimingForModal(
   fromIso: string | undefined,
   toIso: string | undefined,
 ): { from: string; to: string } {
-  if (!fromIso && !toIso) return { from: "—", to: "—" };
+  if (!fromIso && !toIso) {
+    return { from: "—", to: "—" };
+  }
   try {
     const from = fromIso ? new Date(fromIso) : null;
     const to = toIso ? new Date(toIso) : null;
     const fmt = (d: Date) =>
       `${d.toLocaleDateString(undefined, dateOpt)}, ${d.toLocaleTimeString(undefined, timeOpt)}`;
-    if (!from && to) return { from: "—", to: fmt(to) };
-    if (from && !to) return { from: fmt(from), to: "—" };
-    if (!from || !to) return { from: "—", to: "—" };
+    if (!from && to) {
+      return { from: "—", to: fmt(to) };
+    }
+    if (from && !to) {
+      return { from: fmt(from), to: "—" };
+    }
+    if (!from || !to) {
+      return { from: "—", to: "—" };
+    }
     return { from: fmt(from), to: fmt(to) };
   } catch {
     return { from: "—", to: "—" };
