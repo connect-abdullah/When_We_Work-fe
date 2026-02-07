@@ -60,11 +60,11 @@ export default function JobPage() {
   const activeJobs = jobs.filter((a) => a.status === "active").length;
   const totalPeopleNeeded = jobs.reduce(
     (sum, a) => sum + (a.workers_required ?? 0),
-    0,
+    0
   );
   const totalPeopleHired = jobs.reduce(
     (sum, a) => sum + (a.workers_hired ?? 0),
-    0,
+    0
   );
   const stats = [
     {
@@ -165,7 +165,11 @@ export default function JobPage() {
     }
     try {
       // Never send workers_hired from frontend; salary_type handled by backend
-      const { workers_hired: _w, salary_type: _s, ...rest } = {
+      const {
+        workers_hired: _w,
+        salary_type: _s,
+        ...rest
+      } = {
         ...selectedJob,
         ...jobData,
       };

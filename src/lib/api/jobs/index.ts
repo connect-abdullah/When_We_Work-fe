@@ -20,13 +20,15 @@ export const createJob = async (job: JobCreate): Promise<JobGetSchema> => {
 
 export const updateJob = async (
   job: JobGetSchema,
-  jobId: number,
+  jobId: number
 ): Promise<JobGetSchema> => {
   const response = await put<JobSingleResponseApi>(`${baseUrl}/${jobId}`, job);
   return response?.data;
 };
 
-export const deleteJob = async (jobId: number): Promise<JobSingleResponseApi> => {
+export const deleteJob = async (
+  jobId: number
+): Promise<JobSingleResponseApi> => {
   const response = await del<JobSingleResponseApi>(`${baseUrl}/${jobId}`);
   return response;
 };

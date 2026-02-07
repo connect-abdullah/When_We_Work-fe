@@ -20,7 +20,7 @@ const timeOpt = { hour: "numeric", minute: "2-digit", hour12: true } as const;
 
 function formatJobTimingRange(
   fromIso: string | undefined,
-  toIso: string | undefined,
+  toIso: string | undefined
 ): { date: string; time: string } {
   if (!fromIso && !toIso) {
     return { date: "—", time: "—" };
@@ -205,20 +205,32 @@ const JobCard: React.FC<JobCardProps> = ({
           </div>
 
           {/* Schedule - same visual language as metrics */}
-          {(job.from_date_time || job.to_date_time) && (() => {
-            const { date, time } = formatJobTimingRange(job.from_date_time, job.to_date_time);
-            return (
-              <div className="flex items-center gap-2 p-2 mb-2 bg-slate-50/80 rounded-lg border border-slate-100">
-                <div className="flex items-center justify-center w-7 h-7 rounded-md bg-white border border-slate-100 shrink-0">
-                  <Clock size={12} className="text-slate-500" strokeWidth={2} />
+          {(job.from_date_time || job.to_date_time) &&
+            (() => {
+              const { date, time } = formatJobTimingRange(
+                job.from_date_time,
+                job.to_date_time
+              );
+              return (
+                <div className="flex items-center gap-2 p-2 mb-2 bg-slate-50/80 rounded-lg border border-slate-100">
+                  <div className="flex items-center justify-center w-7 h-7 rounded-md bg-white border border-slate-100 shrink-0">
+                    <Clock
+                      size={12}
+                      className="text-slate-500"
+                      strokeWidth={2}
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[10px] font-medium text-slate-700 truncate">
+                      {date}
+                    </p>
+                    <p className="text-[9px] text-slate-500 tabular-nums">
+                      {time}
+                    </p>
+                  </div>
                 </div>
-                <div className="min-w-0 flex-1">
-                  <p className="text-[10px] font-medium text-slate-700 truncate">{date}</p>
-                  <p className="text-[9px] text-slate-500 tabular-nums">{time}</p>
-                </div>
-              </div>
-            );
-          })()}
+              );
+            })()}
 
           {/* Bottom Section - Characteristics */}
           <div className="space-y-2 pt-2 border-t border-gray-100">

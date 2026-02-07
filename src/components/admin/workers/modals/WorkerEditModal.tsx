@@ -112,7 +112,7 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
   const handleSubmit = async () => {
     if (!formData.first_name || !formData.last_name || !formData.email) {
       alert(
-        "Please fill in all required fields (First Name, Last Name, Email)",
+        "Please fill in all required fields (First Name, Last Name, Email)"
       );
       return;
     }
@@ -263,7 +263,9 @@ const WorkerEditModal: React.FC<WorkerEditModalProps> = ({
             label="Roles"
             options={ROLE_OPTIONS}
             selectedValues={formData.worker_roles || []}
-            onChange={(worker_roles) => setFormData({ ...formData, worker_roles })}
+            onChange={(worker_roles) =>
+              setFormData({ ...formData, worker_roles })
+            }
             placeholder="Select worker roles..."
             required
           />

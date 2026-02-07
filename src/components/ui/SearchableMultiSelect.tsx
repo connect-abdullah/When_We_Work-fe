@@ -40,7 +40,7 @@ const SearchableMultiSelect: React.FC<SearchableMultiSelectProps> = ({
 
   // Filter options based on search
   const filteredOptions = options.filter((option) =>
-    option.toLowerCase().includes(searchTerm.toLowerCase()),
+    option.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleToggle = (value: string) => {

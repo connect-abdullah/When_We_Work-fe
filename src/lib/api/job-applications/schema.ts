@@ -5,8 +5,8 @@ export enum JobApplicationStatus {
 }
 
 export interface JobApplicationCreate {
-    job_id: number;
-    approved_status?: JobApplicationStatus;
+  job_id: number;
+  approved_status?: JobApplicationStatus;
 }
 export interface JobApplicationRead {
   id: number;

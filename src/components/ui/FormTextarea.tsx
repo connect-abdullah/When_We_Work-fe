@@ -20,7 +20,7 @@ const FormTextarea: React.FC<FormTextareaProps> = ({
         className={cn(
           "w-full px-3 py-2 text-[10px] border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#5A6ACF] focus:border-transparent resize-none",
           error && "border-red-500",
-          className,
+          className
         )}
         rows={3}
         {...props}

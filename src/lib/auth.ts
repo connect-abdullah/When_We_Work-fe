@@ -12,6 +12,5 @@ export function clearAuthStorage(): void {
 
   document.cookie =
     "auth:token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-  document.cookie =
-    "auth:user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+  document.cookie = "auth:user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
 }

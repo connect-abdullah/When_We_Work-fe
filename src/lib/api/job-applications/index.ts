@@ -8,13 +8,14 @@ import {
 const baseUrl = "/job_applications";
 
 export const createJobApplication = async (
-  payload: JobApplicationCreate,
+  payload: JobApplicationCreate
 ): Promise<JobApplicationResponse> => {
   const response = await post<JobApplicationResponse>(baseUrl, payload);
   return response;
 };
 
-export const getJobApplications = async (): Promise<JobApplicationListResponse> => {
-  const response = await get<JobApplicationListResponse>(baseUrl);
-  return response;
-};
+export const getJobApplications =
+  async (): Promise<JobApplicationListResponse> => {
+    const response = await get<JobApplicationListResponse>(baseUrl);
+    return response;
+  };

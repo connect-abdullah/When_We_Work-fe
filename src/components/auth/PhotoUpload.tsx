@@ -58,7 +58,7 @@ export default function PhotoUpload({
           onClick={() => inputRef.current?.click()}
           className={cn(
             "flex h-24 w-24 shrink-0 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed bg-gray-50 transition-colors hover:bg-gray-100",
-            error ? "border-red-500" : "border-gray-300",
+            error ? "border-red-500" : "border-gray-300"
           )}
         >
           <input

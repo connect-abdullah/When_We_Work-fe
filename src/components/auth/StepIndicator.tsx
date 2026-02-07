@@ -33,7 +33,9 @@ export default function StepIndicator({
                     isActive && "border-[#5A6ACF] bg-[#5A6ACF] text-white",
                     !isActive &&
                       !isCompleted &&
-                      "border-gray-300 bg-white text-gray-500" )}>
+                      "border-gray-300 bg-white text-gray-500"
+                  )}
+                >
                   {isCompleted ? (
                     <svg
                       className="h-5 w-5"
@@ -53,7 +55,9 @@ export default function StepIndicator({
                 <span
                   className={cn(
                     "mt-1.5 text-xs font-medium",
-                    isActive || isCompleted ? "text-[#5A6ACF]" : "text-gray-500" )}>
+                    isActive || isCompleted ? "text-[#5A6ACF]" : "text-gray-500"
+                  )}
+                >
                   {step.label}
                 </span>
               </div>
@@ -61,7 +65,9 @@ export default function StepIndicator({
                 <div
                   className={cn(
                     "mx-1 h-0.5 flex-1 min-w-[20px]",
-                    isCompleted ? "bg-[#5A6ACF]" : "bg-gray-200")} />
+                    isCompleted ? "bg-[#5A6ACF]" : "bg-gray-200"
+                  )}
+                />
               )}
             </React.Fragment>
           );

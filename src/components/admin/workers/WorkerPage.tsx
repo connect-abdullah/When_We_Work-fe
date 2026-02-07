@@ -11,13 +11,13 @@ import {
 } from "@/components/admin/workers";
 import { CustomerInsightsData } from "@/constants/customers";
 import { Download, Plus } from "lucide-react";
+import { createUser, deleteUser, getUsers, updateUser } from "@/lib/api/users";
 import {
-  createUser,
-  deleteUser,
-  getUsers,
-  updateUser,
-} from "@/lib/api/users";
-import { EmploymentType, UserGetSchema, UserRoleEnum , UserUpdate } from "@/lib/api/users/schema";
+  EmploymentType,
+  UserGetSchema,
+  UserRoleEnum,
+  UserUpdate,
+} from "@/lib/api/users/schema";
 
 function userToWorker(u: UserGetSchema): UserGetSchema {
   return {
@@ -48,8 +48,9 @@ export default function WorkersPage() {
   const [sortBy, setSortBy] = useState<string>("name");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
-  const [selectedWorker, setSelectedWorker] =
-    useState<UserGetSchema | null>(null);
+  const [selectedWorker, setSelectedWorker] = useState<UserGetSchema | null>(
+    null
+  );
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -62,7 +63,7 @@ export default function WorkersPage() {
     try {
       const list = await getUsers();
       const workersOnly = (list ?? []).filter(
-        (u) => u.user_role === UserRoleEnum.worker,
+        (u) => u.user_role === UserRoleEnum.worker
       );
       setWorkers(workersOnly.map(userToWorker));
     } catch {
@@ -152,8 +153,9 @@ export default function WorkersPage() {
   };
 
   const filteredWorkers = workers.filter((worker) => {
-    const fullName =
-      `${worker.first_name} ${worker.last_name}`.trim().toLowerCase();
+    const fullName = `${worker.first_name} ${worker.last_name}`
+      .trim()
+      .toLowerCase();
     const matchesSearch =
       fullName.includes(searchTerm.toLowerCase()) ||
       worker.email.toLowerCase().includes(searchTerm.toLowerCase()) ||

@@ -2,11 +2,7 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Card, PageHeader } from "@/components/ui";
-import {
-  JobCard,
-  JobDetailModal,
-  JobFilters,
-} from "@/components/admin/jobs";
+import { JobCard, JobDetailModal, JobFilters } from "@/components/admin/jobs";
 import {
   createJobApplication,
   getJobApplications,
@@ -15,7 +11,10 @@ import { getJobs } from "@/lib/api/jobs";
 import type { JobGetSchema } from "@/lib/api/jobs/schema";
 import { Briefcase } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { JobApplicationCreate, JobApplicationStatus } from "@/lib/api/job-applications/schema";
+import {
+  JobApplicationCreate,
+  JobApplicationStatus,
+} from "@/lib/api/job-applications/schema";
 
 export default function JobApplicationPage() {
   const [jobs, setJobs] = useState<JobGetSchema[]>([]);
@@ -163,7 +162,7 @@ export default function JobApplicationPage() {
   };
 
   const notAppliedCount = baseFilteredJobs.filter(
-    (job) => !appliedJobs.has(job.id),
+    (job) => !appliedJobs.has(job.id)
   ).length;
   const tabItems = [
     { id: "all", label: `Available (${notAppliedCount})` },
@@ -202,7 +201,7 @@ export default function JobApplicationPage() {
                   "px-3 py-1.5 text-[10px] font-medium transition-colors border-b-2",
                   activeTabId === tab.id
                     ? "text-[#5A6ACF] border-[#5A6ACF] bg-[#F1F2F7]"
-                    : "text-[#5A6ACF]/70 border-transparent hover:text-[#5A6ACF] hover:border-[#5A6ACF]/30",
+                    : "text-[#5A6ACF]/70 border-transparent hover:text-[#5A6ACF] hover:border-[#5A6ACF]/30"
                 )}
               >
                 {tab.label}

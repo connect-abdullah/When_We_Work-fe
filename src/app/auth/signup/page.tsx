@@ -64,7 +64,7 @@ export default function SignupPage() {
   const [step2, setStep2] = useState<SignupStep2Data>(defaultStep2);
   const [business, setBusiness] = useState<SignupBusinessData>(defaultBusiness);
   const [createdBusinessId, setCreatedBusinessId] = useState<number | null>(
-    null,
+    null
   );
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreviewUrl, setPhotoPreviewUrl] = useState<string | null>(null);
@@ -76,7 +76,8 @@ export default function SignupPage() {
     (section: "step1" | "step2" | "business") =>
     (
       e: React.ChangeEvent<
-        HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement >,
+        HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+      >
     ) => {
       const { name, value } = e.target;
       if (section === "step1") {
@@ -233,7 +234,9 @@ export default function SignupPage() {
     setErrors({});
     try {
       const genderValue =
-        step2.gender === "prefer_not_to_say" ? Gender.other : (step2.gender as Gender);
+        step2.gender === "prefer_not_to_say"
+          ? Gender.other
+          : (step2.gender as Gender);
       const userPayload = {
         first_name: step1.first_name,
         last_name: step1.last_name,
@@ -250,7 +253,10 @@ export default function SignupPage() {
       if (created?.success === true) {
         const { access_token, ...userWithoutToken } = created.data;
         localStorage.setItem("auth:token", access_token);
-        localStorage.setItem("auth:user", JSON.stringify(userWithoutToken.user));
+        localStorage.setItem(
+          "auth:user",
+          JSON.stringify(userWithoutToken.user)
+        );
         setShowSuccess(true);
       }
     } catch (err) {
@@ -298,7 +304,7 @@ export default function SignupPage() {
               <SignupSuccess onContinue={handleContinueToDashboard} />
             ) : (
               <>
-                    {currentStep === 1 && (
+                {currentStep === 1 && (
                   <SignupStepBusiness
                     data={business}
                     errors={errors}
