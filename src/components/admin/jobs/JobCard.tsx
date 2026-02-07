@@ -2,8 +2,11 @@
 
 import React from "react";
 import Card from "@/components/ui/Card";
+import { Button } from "@/components/ui";
 import type { JobGetSchema } from "@/lib/api/jobs/schema";
 import {
+  CheckCircle2,
+  Clock,
   DollarSign,
   Edit,
   Target,
@@ -12,6 +15,49 @@ import {
   Users,
 } from "lucide-react";
 
+const dateOpt = { month: "short", day: "numeric", year: "numeric" } as const;
+const timeOpt = { hour: "numeric", minute: "2-digit", hour12: true } as const;
+
+function formatJobTimingRange(
+  fromIso: string | undefined,
+  toIso: string | undefined,
+): { date: string; time: string } {
+  if (!fromIso && !toIso) return { date: "—", time: "—" };
+  try {
+    const from = fromIso ? new Date(fromIso) : null;
+    const to = toIso ? new Date(toIso) : null;
+    if (!from && to) {
+      return {
+        date: to.toLocaleDateString(undefined, dateOpt),
+        time: to.toLocaleTimeString(undefined, timeOpt),
+      };
+    }
+    if (from && !to) {
+      return {
+        date: from.toLocaleDateString(undefined, dateOpt),
+        time: from.toLocaleTimeString(undefined, timeOpt),
+      };
+    }
+    if (!from || !to) return { date: "—", time: "—" };
+    const sameDay =
+      from.getDate() === to.getDate() &&
+      from.getMonth() === to.getMonth() &&
+      from.getFullYear() === to.getFullYear();
+    if (sameDay) {
+      return {
+        date: from.toLocaleDateString(undefined, dateOpt),
+        time: `${from.toLocaleTimeString(undefined, timeOpt)} – ${to.toLocaleTimeString(undefined, timeOpt)}`,
+      };
+    }
+    return {
+      date: `${from.toLocaleDateString(undefined, dateOpt)} – ${to.toLocaleDateString(undefined, dateOpt)}`,
+      time: `${from.toLocaleTimeString(undefined, timeOpt)} – ${to.toLocaleTimeString(undefined, timeOpt)}`,
+    };
+  } catch {
+    return { date: "—", time: "—" };
+  }
+}
+
 interface JobCardProps {
   job: JobGetSchema;
   onEditClick?: () => void;
@@ -19,6 +65,11 @@ interface JobCardProps {
   onDeleteClick?: () => void;
   onClick?: () => void;
   isUser?: boolean;
+  /** When set, renders Apply / Applied / Hired button inside the card (e.g. job application page). */
+  isApplied?: boolean;
+  isHired?: boolean;
+  isApplying?: boolean;
+  onApply?: () => void;
 }
 
 const getStatusDot = (status: string) => {
@@ -43,6 +94,10 @@ const JobCard: React.FC<JobCardProps> = ({
   onDeleteClick,
   onClick,
   isUser = false,
+  isApplied = false,
+  isHired = false,
+  isApplying = false,
+  onApply,
 }) => {
   const handleDelete = onDeleteClick ?? onPlaygroundClick;
   const needed = job.workers_required ?? 0;
@@ -82,39 +137,39 @@ const JobCard: React.FC<JobCardProps> = ({
               </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
-              {isUser && (
-                <button
-                  className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (onEditClick) {
+            {/* Action Buttons - same as admin job posting when handlers provided */}
+            {((isUser && onEditClick) || (!isUser && handleDelete)) && (
+              <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                {isUser && onEditClick && (
+                  <button
+                    className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+                    onClick={(e) => {
+                      e.stopPropagation();
                       onEditClick();
-                    }
-                  }}
-                  title="Edit"
-                >
-                  <Edit size={12} className="text-gray-500" />
-                </button>
-              )}
-              {!isUser && (
-                <button
-                  className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDelete?.();
-                  }}
-                  title="Delete"
-                >
-                  <Trash size={12} className="text-gray-500" />
-                </button>
-              )}
-            </div>
+                    }}
+                    title="Edit"
+                  >
+                    <Edit size={12} className="text-gray-500" />
+                  </button>
+                )}
+                {!isUser && handleDelete && (
+                  <button
+                    className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDelete();
+                    }}
+                    title="Delete"
+                  >
+                    <Trash size={12} className="text-gray-500" />
+                  </button>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Key Metrics - Horizontal Compact */}
-          <div className="grid grid-cols-4 gap-2 mb-3">
+          <div className="grid grid-cols-4 gap-2 mb-2">
             <div className="text-center p-2 bg-gray-50 rounded-lg">
               <div className="flex items-center justify-center mb-1">
                 <Target size={12} className="text-emerald-600" />
@@ -145,6 +200,22 @@ const JobCard: React.FC<JobCardProps> = ({
             </div>
           </div>
 
+          {/* Schedule - same visual language as metrics */}
+          {(job.from_date_time || job.to_date_time) && (() => {
+            const { date, time } = formatJobTimingRange(job.from_date_time, job.to_date_time);
+            return (
+              <div className="flex items-center gap-2 p-2 mb-2 bg-slate-50/80 rounded-lg border border-slate-100">
+                <div className="flex items-center justify-center w-7 h-7 rounded-md bg-white border border-slate-100 shrink-0">
+                  <Clock size={12} className="text-slate-500" strokeWidth={2} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[10px] font-medium text-slate-700 truncate">{date}</p>
+                  <p className="text-[9px] text-slate-500 tabular-nums">{time}</p>
+                </div>
+              </div>
+            );
+          })()}
+
           {/* Bottom Section - Characteristics */}
           <div className="space-y-2 pt-2 border-t border-gray-100">
             {job.characteristics && job.characteristics.length > 0 && (
@@ -165,6 +236,45 @@ const JobCard: React.FC<JobCardProps> = ({
               </div>
             )}
           </div>
+
+          {/* Apply button inside card (job application page) */}
+          {(isHired || isApplied || onApply) && (
+            <div className="mt-3 pt-3 border-t border-gray-100">
+              {isHired ? (
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  className="w-full text-[10px] font-medium bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
+                  disabled
+                >
+                  <CheckCircle2 size={12} />
+                  Hired
+                </Button>
+              ) : isApplied ? (
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  className="w-full text-[10px] font-medium"
+                  disabled
+                >
+                  Applied
+                </Button>
+              ) : (
+                <Button
+                  variant="primary"
+                  size="sm"
+                  className="w-full text-[10px] font-medium"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onApply?.();
+                  }}
+                  disabled={isApplying}
+                >
+                  {isApplying ? "Applying..." : "Apply Now"}
+                </Button>
+              )}
+            </div>
+          )}
         </div>
       </Card>
     </div>

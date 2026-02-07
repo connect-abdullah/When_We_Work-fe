@@ -120,9 +120,6 @@ export default function JobPage() {
         characteristics: jobData.characteristics,
         workers_required: jobData.workers_required ?? 0,
         salary: jobData.salary ?? 0,
-        salary_type:
-          (jobData.salary_type as JobCreate["salary_type"]) ??
-          ("hourly" as JobCreate["salary_type"]),
         from_date_time: jobData.from_date_time ?? "",
         to_date_time: jobData.to_date_time ?? "",
       };
@@ -167,8 +164,11 @@ export default function JobPage() {
       return;
     }
     try {
-      // Never send workers_hired from frontend; backend increments it
-      const { workers_hired: _w, ...rest } = { ...selectedJob, ...jobData };
+      // Never send workers_hired from frontend; salary_type handled by backend
+      const { workers_hired: _w, salary_type: _s, ...rest } = {
+        ...selectedJob,
+        ...jobData,
+      };
       const payload = { ...rest } as JobGetSchema;
       await updateJob(payload, selectedJob.id);
       await fetchJobs();

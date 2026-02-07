@@ -2,6 +2,7 @@
 
 import React from "react";
 import {
+  Clock,
   DollarSign,
   Edit,
   GraduationCap,
@@ -17,6 +18,28 @@ interface JobDetailModalProps {
   onClose: () => void;
   job: JobGetSchema | null;
   onEdit?: () => void;
+}
+
+const dateOpt = { month: "short", day: "numeric", year: "numeric" } as const;
+const timeOpt = { hour: "numeric", minute: "2-digit", hour12: true } as const;
+
+function formatJobTimingForModal(
+  fromIso: string | undefined,
+  toIso: string | undefined,
+): { from: string; to: string } {
+  if (!fromIso && !toIso) return { from: "—", to: "—" };
+  try {
+    const from = fromIso ? new Date(fromIso) : null;
+    const to = toIso ? new Date(toIso) : null;
+    const fmt = (d: Date) =>
+      `${d.toLocaleDateString(undefined, dateOpt)}, ${d.toLocaleTimeString(undefined, timeOpt)}`;
+    if (!from && to) return { from: "—", to: fmt(to) };
+    if (from && !to) return { from: fmt(from), to: "—" };
+    if (!from || !to) return { from: "—", to: "—" };
+    return { from: fmt(from), to: fmt(to) };
+  } catch {
+    return { from: "—", to: "—" };
+  }
 }
 
 const getStatusColor = (status: string) => {
@@ -155,6 +178,23 @@ const JobDetailModal: React.FC<JobDetailModalProps> = ({
                     : "Fixed"}
                 </p>
               </div>
+              {(job.from_date_time || job.to_date_time) && (() => {
+                const { from, to } = formatJobTimingForModal(job.from_date_time, job.to_date_time);
+                return (
+                  <div className="flex gap-3 p-3 bg-slate-50/80 rounded-lg border border-slate-100">
+                    <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-white border border-slate-100 shrink-0">
+                      <Clock size={18} className="text-slate-500" strokeWidth={2} />
+                    </div>
+                    <div className="flex-1 min-w-0 space-y-1.5">
+                      <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Schedule</p>
+                      <div className="space-y-1 text-sm text-slate-800 tabular-nums">
+                        <p><span className="text-slate-500 font-medium">From</span> {from}</p>
+                        <p><span className="text-slate-500 font-medium">To</span> {to}</p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
               {job.minimum_education && (
                 <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                   <GraduationCap size={16} className="text-gray-400" />

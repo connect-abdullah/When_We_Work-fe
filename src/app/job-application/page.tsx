@@ -1,27 +1,61 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
-import { Button, Card, PageHeader } from "@/components/ui";
-import { Job_Details } from "@/constants/jobs";
-import JobCard from "@/components/admin/jobs/JobCard";
-import JobFilters from "@/components/admin/jobs/JobFilters";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Card, PageHeader } from "@/components/ui";
+import {
+  JobCard,
+  JobDetailModal,
+  JobFilters,
+} from "@/components/admin/jobs";
+import {
+  createJobApplication,
+  getJobApplications,
+} from "@/lib/api/job-applications";
+import { getJobs } from "@/lib/api/jobs";
 import type { JobGetSchema } from "@/lib/api/jobs/schema";
-import { Briefcase, CheckCircle2 } from "lucide-react";
+import { Briefcase } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { JobApplicationCreate, JobApplicationStatus } from "@/lib/api/job-applications/schema";
 
 export default function JobApplicationPage() {
+  const [jobs, setJobs] = useState<JobGetSchema[]>([]);
+  const [jobsLoading, setJobsLoading] = useState(true);
+  const [appliedJobs, setAppliedJobs] = useState<Set<number>>(new Set());
   const [activeTabId, setActiveTabId] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<
     "all" | "active" | "inactive"
   >("active");
   const [typeFilter, setTypeFilter] = useState<string>("all");
-  const [appliedJobs, setAppliedJobs] = useState<Set<number>>(new Set());
   const [hiredJobs] = useState<Set<number>>(new Set());
   const [isLoading, setIsLoading] = useState<number | null>(null);
+  const [detailJob, setDetailJob] = useState<JobGetSchema | null>(null);
+
+  const fetchJobs = useCallback(async () => {
+    setJobsLoading(true);
+    try {
+      const [list, applicationsRes] = await Promise.all([
+        getJobs(),
+        getJobApplications(),
+      ]);
+      setJobs(list ?? []);
+      const appliedIds =
+        applicationsRes?.data?.map((a) => a.job_id).filter(Boolean) ?? [];
+      setAppliedJobs(new Set(appliedIds));
+    } catch {
+      setJobs([]);
+      setAppliedJobs(new Set());
+    } finally {
+      setJobsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchJobs();
+  }, [fetchJobs]);
 
   const baseFilteredJobs = useMemo(() => {
-    return Job_Details.filter((job) => {
+    return jobs.filter((job) => {
       const matchesSearch =
         job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         job.minimum_education
@@ -38,7 +72,7 @@ export default function JobApplicationPage() {
             : job.salary_type === typeFilter;
       return matchesSearch && matchesStatus && salaryTypeMatch;
     });
-  }, [searchTerm, statusFilter, typeFilter]);
+  }, [jobs, searchTerm, statusFilter, typeFilter]);
 
   const filteredJobs = useMemo(() => {
     if (activeTabId === "applied") {
@@ -47,15 +81,20 @@ export default function JobApplicationPage() {
     if (activeTabId === "hired") {
       return baseFilteredJobs.filter((job) => hiredJobs.has(job.id));
     }
-    return baseFilteredJobs;
+    return baseFilteredJobs.filter((job) => !appliedJobs.has(job.id));
   }, [baseFilteredJobs, activeTabId, appliedJobs, hiredJobs]);
 
   const handleApply = async (jobId: number) => {
     setIsLoading(jobId);
+    const payload: JobApplicationCreate = {
+      job_id: jobId,
+      approved_status: JobApplicationStatus.applied,
+    };
     try {
-      // TODO: Implement actual API call to apply for job
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setAppliedJobs((prev) => new Set([...prev, jobId]));
+      const response = await createJobApplication(payload);
+      if (response?.success) {
+        setAppliedJobs((prev) => new Set([...prev, jobId]));
+      }
     } catch {
       // handle error
     } finally {
@@ -63,56 +102,26 @@ export default function JobApplicationPage() {
     }
   };
 
-  const renderJobCardWithApply = (job: JobGetSchema) => {
-    const isApplied = appliedJobs.has(job.id);
-    const isHired = hiredJobs.has(job.id);
-    const isApplying = isLoading === job.id;
-
-    return (
-      <div key={job.id} className="flex flex-col">
-        <div className="relative pb-12">
-          <JobCard job={job} isUser={true} />
-        </div>
-        <div className="px-3 -mt-10">
-          {isHired ? (
-            <Button
-              variant="secondary"
-              size="sm"
-              className="w-full text-[10px] font-medium bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
-              disabled
-            >
-              <CheckCircle2 size={12} />
-              Hired
-            </Button>
-          ) : isApplied ? (
-            <Button
-              variant="secondary"
-              size="sm"
-              className="w-full text-[10px] font-medium"
-              disabled
-            >
-              Applied
-            </Button>
-          ) : (
-            <Button
-              variant="primary"
-              size="sm"
-              className="w-full text-[10px] font-medium"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleApply(job.id);
-              }}
-              disabled={isApplying}
-            >
-              {isApplying ? "Applying..." : "Apply Now"}
-            </Button>
-          )}
-        </div>
-      </div>
-    );
-  };
+  const renderJobCardWithApply = (job: JobGetSchema) => (
+    <JobCard
+      key={job.id}
+      job={job}
+      isApplied={appliedJobs.has(job.id)}
+      isHired={hiredJobs.has(job.id)}
+      isApplying={isLoading === job.id}
+      onApply={() => handleApply(job.id)}
+      onClick={() => setDetailJob(job)}
+    />
+  );
 
   const renderJobsGrid = () => {
+    if (jobsLoading) {
+      return (
+        <Card className="p-8 text-center">
+          <p className="text-sm text-gray-600">Loading jobs...</p>
+        </Card>
+      );
+    }
     if (filteredJobs.length === 0) {
       return (
         <Card className="p-8 text-center">
@@ -139,12 +148,12 @@ export default function JobApplicationPage() {
         <div className="text-[10px] text-gray-500 mt-2 text-center">
           Showing {filteredJobs.length} of{" "}
           {activeTabId === "all"
-            ? baseFilteredJobs.length
+            ? notAppliedCount
             : activeTabId === "applied"
               ? appliedJobs.size
               : hiredJobs.size}{" "}
           {activeTabId === "all"
-            ? "jobs"
+            ? "available jobs"
             : activeTabId === "applied"
               ? "applied jobs"
               : "hired jobs"}
@@ -153,8 +162,11 @@ export default function JobApplicationPage() {
     );
   };
 
+  const notAppliedCount = baseFilteredJobs.filter(
+    (job) => !appliedJobs.has(job.id),
+  ).length;
   const tabItems = [
-    { id: "all", label: `All Jobs (${baseFilteredJobs.length})` },
+    { id: "all", label: `Available (${notAppliedCount})` },
     { id: "applied", label: `Applied (${appliedJobs.size})` },
     { id: "hired", label: `Hired (${hiredJobs.size})` },
   ];
@@ -190,7 +202,7 @@ export default function JobApplicationPage() {
                   "px-3 py-1.5 text-[10px] font-medium transition-colors border-b-2",
                   activeTabId === tab.id
                     ? "text-[#5A6ACF] border-[#5A6ACF] bg-[#F1F2F7]"
-                    : "text-[#5A6ACF]/70 border-transparent hover:text-[#5A6ACF] hover:border-[#5A6ACF]/30"
+                    : "text-[#5A6ACF]/70 border-transparent hover:text-[#5A6ACF] hover:border-[#5A6ACF]/30",
                 )}
               >
                 {tab.label}
@@ -200,6 +212,12 @@ export default function JobApplicationPage() {
           <div className="w-full">{renderJobsGrid()}</div>
         </div>
       </div>
+
+      <JobDetailModal
+        isOpen={Boolean(detailJob)}
+        job={detailJob}
+        onClose={() => setDetailJob(null)}
+      />
     </div>
   );
 }
