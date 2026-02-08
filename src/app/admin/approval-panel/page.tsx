@@ -7,8 +7,7 @@ import {
   getApprovalPanel,
   updateApprovalPanelStatus,
 } from "@/lib/api/job-applications";
-import { JobApplicationStatus } from "@/lib/api/job-applications/schema";
-import type { ApprovalPanelItem } from "@/lib/api/job-applications/schema";
+import { JobApplicationStatus, ApprovalPanelItem } from "@/lib/api/job-applications/schema";
 import type { ApprovalPanelJobGroup } from "@/components/admin/approval-panel/types";
 
 function groupByJob(items: ApprovalPanelItem[]): ApprovalPanelJobGroup[] {
@@ -64,15 +63,22 @@ export default function ApprovalPanelPage() {
     );
   }, [groups, searchTerm]);
 
-  const handleAccept = useCallback(
-    async (jobId: number, applicationId: number, workerId: number) => {
+  const handleStatusChange = useCallback(
+    async (
+      jobId: number,
+      applicationId: number,
+      workerId: number,
+      isApproved: boolean,
+    ) => {
       setUpdating(applicationId);
       try {
         await updateApprovalPanelStatus({
           id: applicationId,
           job_id: jobId,
           worker_id: workerId,
-          approved_status: JobApplicationStatus.approved,
+          approved_status: isApproved
+            ? JobApplicationStatus.approved
+            : JobApplicationStatus.rejected,
         });
         await fetchApprovalPanel();
       } catch {
@@ -84,24 +90,16 @@ export default function ApprovalPanelPage() {
     [fetchApprovalPanel],
   );
 
+  const handleAccept = useCallback(
+    (jobId: number, applicationId: number, workerId: number) =>
+      handleStatusChange(jobId, applicationId, workerId, true),
+    [handleStatusChange],
+  );
+
   const handleDecline = useCallback(
-    async (jobId: number, applicationId: number, workerId: number) => {
-      setUpdating(applicationId);
-      try {
-        await updateApprovalPanelStatus({
-          id: applicationId,
-          job_id: jobId,
-          worker_id: workerId,
-          approved_status: JobApplicationStatus.rejected,
-        });
-        await fetchApprovalPanel();
-      } catch {
-        // Error handled by API / could toast
-      } finally {
-        setUpdating(null);
-      }
-    },
-    [fetchApprovalPanel],
+    (jobId: number, applicationId: number, workerId: number) =>
+      handleStatusChange(jobId, applicationId, workerId, false),
+    [handleStatusChange],
   );
 
   return (
