@@ -27,3 +27,34 @@ export interface JobApplicationListResponse {
   data?: JobApplicationRead[];
   errors: unknown;
 }
+
+/** GET /job_applications/approval-panel – item per application (worker + job). id required for PUT. */
+export interface ApprovalPanelItem {
+  id: number;
+  job_id: number;
+  job_name: string;
+  worker_id: number;
+  worker_name: string;
+  worker_email: string;
+  availability: boolean;
+  gender: string;
+  employment_type?: string | null;
+  approved_status?: JobApplicationStatus;
+  workers_required?: number;
+  workers_hired?: number | null;
+}
+
+export interface ApprovalPanelListResponse {
+  success: boolean;
+  message: string;
+  data?: ApprovalPanelItem[];
+  errors: unknown;
+}
+
+/** PUT /job_applications/approval-panel – update application status. */
+export interface ApprovalPanelUpdatePayload {
+  id: number;
+  job_id: number;
+  worker_id: number;
+  approved_status: JobApplicationStatus;
+}

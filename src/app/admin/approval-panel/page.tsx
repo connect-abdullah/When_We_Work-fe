@@ -1,158 +1,108 @@
 "use client";
-import React, { useMemo, useState } from "react";
-import { Card, PageHeader, SearchInput } from "@/components/ui";
-import { Job, JobSection } from "@/components/admin/approval-panel";
 
-// Mock data - In a real app, this would come from your database/API
-const MOCK_JOBS: Job[] = [
-  {
-    id: 1,
-    name: "Senior Frontend Developer",
-    jobId: "JOB-001",
-    totalRequired: 5,
-    acceptedCount: 2,
-    applicants: [
-      {
-        id: 1,
-        name: "John Doe",
-        profession: "Frontend Developer",
-        availabilityStatus: "available",
-      },
-      {
-        id: 2,
-        name: "Jane Smith",
-        profession: "React Developer",
-        availabilityStatus: "available",
-      },
-      {
-        id: 3,
-        name: "Mike Johnson",
-        profession: "UI/UX Developer",
-        availabilityStatus: "unavailable",
-      },
-    ],
-  },
-  {
-    id: 2,
-    name: "Backend Engineer",
-    jobId: "JOB-002",
-    totalRequired: 3,
-    acceptedCount: 1,
-    applicants: [
-      {
-        id: 4,
-        name: "Sarah Williams",
-        profession: "Node.js Developer",
-        availabilityStatus: "available",
-      },
-      {
-        id: 5,
-        name: "David Brown",
-        profession: "Python Developer",
-        availabilityStatus: "unavailable",
-      },
-    ],
-  },
-  {
-    id: 3,
-    name: "Full Stack Developer",
-    jobId: "JOB-003",
-    totalRequired: 10,
-    acceptedCount: 5,
-    applicants: [
-      {
-        id: 6,
-        name: "Emily Davis",
-        profession: "Full Stack Developer",
-        availabilityStatus: "available",
-      },
-      {
-        id: 7,
-        name: "Chris Wilson",
-        profession: "MERN Stack Developer",
-        availabilityStatus: "available",
-      },
-    ],
-  },
-];
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Card, PageHeader, SearchInput } from "@/components/ui";
+import { JobSection } from "@/components/admin/approval-panel";
+import {
+  getApprovalPanel,
+  updateApprovalPanelStatus,
+} from "@/lib/api/job-applications";
+import { JobApplicationStatus } from "@/lib/api/job-applications/schema";
+import type { ApprovalPanelItem } from "@/lib/api/job-applications/schema";
+import type { ApprovalPanelJobGroup } from "@/components/admin/approval-panel/types";
+
+function groupByJob(items: ApprovalPanelItem[]): ApprovalPanelJobGroup[] {
+  const byJob = new Map<number, { job_name: string; items: ApprovalPanelItem[] }>();
+  for (const item of items) {
+    const existing = byJob.get(item.job_id);
+    if (existing) {
+      existing.items.push(item);
+    } else {
+      byJob.set(item.job_id, {
+        job_name: item.job_name,
+        items: [item],
+      });
+    }
+  }
+  return Array.from(byJob.entries())
+    .map(([job_id, { job_name, items }]) => ({ job_id, job_name, items }))
+    .sort((a, b) => a.job_id - b.job_id);
+}
 
 export default function ApprovalPanelPage() {
-  const [jobs, setJobs] = useState<Job[]>(MOCK_JOBS);
+  const [groups, setGroups] = useState<ApprovalPanelJobGroup[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [updating, setUpdating] = useState<number | null>(null);
 
-  // Filter jobs based on search term
-  const filteredJobs = useMemo(() => {
-    if (!searchTerm.trim()) {
-      return jobs;
+  const fetchApprovalPanel = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await getApprovalPanel();
+      const list = res?.data ?? [];
+      setGroups(groupByJob(list));
+    } catch {
+      setGroups([]);
+    } finally {
+      setLoading(false);
     }
+  }, []);
 
+  useEffect(() => {
+    fetchApprovalPanel();
+  }, [fetchApprovalPanel]);
+
+  const filteredGroups = useMemo(() => {
+    if (!searchTerm.trim()) {
+      return groups;
+    }
     const searchLower = searchTerm.toLowerCase().trim();
-    return jobs.filter(
-      (job) =>
-        job.name.toLowerCase().includes(searchLower) ||
-        job.jobId.toLowerCase().includes(searchLower)
+    return groups.filter(
+      (g) =>
+        g.job_name.toLowerCase().includes(searchLower) ||
+        String(g.job_id).includes(searchTerm),
     );
-  }, [jobs, searchTerm]);
+  }, [groups, searchTerm]);
 
-  const handleAccept = (jobId: number, personId: number) => {
-    setJobs((prevJobs) =>
-      prevJobs.map((job) => {
-        if (job.id === jobId) {
-          // Update the person's status and increment accepted count
-          const updatedApplicants = job.applicants.map((applicant) =>
-            applicant.id === personId
-              ? { ...applicant, availabilityStatus: "available" as const }
-              : applicant
-          );
+  const handleAccept = useCallback(
+    async (jobId: number, applicationId: number, workerId: number) => {
+      setUpdating(applicationId);
+      try {
+        await updateApprovalPanelStatus({
+          id: applicationId,
+          job_id: jobId,
+          worker_id: workerId,
+          approved_status: JobApplicationStatus.approved,
+        });
+        await fetchApprovalPanel();
+      } catch {
+        // Error handled by API / could toast
+      } finally {
+        setUpdating(null);
+      }
+    },
+    [fetchApprovalPanel],
+  );
 
-          // Check if this person was already accepted
-          const person = job.applicants.find((p) => p.id === personId);
-          const wasAlreadyAccepted = person?.availabilityStatus === "available";
-
-          return {
-            ...job,
-            applicants: updatedApplicants,
-            acceptedCount: wasAlreadyAccepted
-              ? job.acceptedCount
-              : job.acceptedCount + 1,
-          };
-        }
-        return job;
-      })
-    );
-
-    // TODO: Make API call to accept the person
-    // console.log(`Accepted person ${personId} for job ${jobId}`);
-  };
-
-  const handleDecline = (jobId: number, personId: number) => {
-    setJobs((prevJobs) =>
-      prevJobs.map((job) => {
-        if (job.id === jobId) {
-          // Remove the person from applicants
-          const updatedApplicants = job.applicants.filter(
-            (applicant) => applicant.id !== personId
-          );
-
-          // Check if this person was accepted
-          const person = job.applicants.find((p) => p.id === personId);
-          const wasAccepted = person?.availabilityStatus === "available";
-
-          return {
-            ...job,
-            applicants: updatedApplicants,
-            acceptedCount: wasAccepted
-              ? Math.max(0, job.acceptedCount - 1)
-              : job.acceptedCount,
-          };
-        }
-        return job;
-      })
-    );
-
-    // TODO: Make API call to decline the person
-    // console.log(`Declined person ${personId} for job ${jobId}`);
-  };
+  const handleDecline = useCallback(
+    async (jobId: number, applicationId: number, workerId: number) => {
+      setUpdating(applicationId);
+      try {
+        await updateApprovalPanelStatus({
+          id: applicationId,
+          job_id: jobId,
+          worker_id: workerId,
+          approved_status: JobApplicationStatus.rejected,
+        });
+        await fetchApprovalPanel();
+      } catch {
+        // Error handled by API / could toast
+      } finally {
+        setUpdating(null);
+      }
+    },
+    [fetchApprovalPanel],
+  );
 
   return (
     <div className="flex flex-col w-full h-full pt-4 px-2 sm:px-4 overflow-y-auto">
@@ -162,7 +112,6 @@ export default function ApprovalPanelPage() {
       />
 
       <div className="px-2 sm:px-4 pb-8 mt-4 space-y-3">
-        {/* Search Bar */}
         <Card className="bg-white border border-gray-100" padding="sm">
           <SearchInput
             placeholder="Search jobs by name or ID..."
@@ -171,12 +120,18 @@ export default function ApprovalPanelPage() {
           />
         </Card>
 
-        {/* Jobs Section */}
-        <JobSection
-          jobs={filteredJobs}
-          onAccept={handleAccept}
-          onDecline={handleDecline}
-        />
+        {loading ? (
+          <div className="text-center py-8 text-sm text-gray-500">
+            Loading...
+          </div>
+        ) : (
+          <JobSection
+            groups={filteredGroups}
+            onAccept={handleAccept}
+            onDecline={handleDecline}
+            updatingApplicationId={updating}
+          />
+        )}
       </div>
     </div>
   );

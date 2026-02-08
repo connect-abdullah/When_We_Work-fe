@@ -1,16 +1,10 @@
-export interface Worker {
-  id: number;
-  name: string;
-  image?: string;
-  profession: string;
-  availabilityStatus: "available" | "unavailable" | "pending";
-}
+import type { ApprovalPanelItem } from "@/lib/api/job-applications/schema";
 
-export interface Job {
-  id: number;
-  name: string;
-  jobId: string;
-  totalRequired: number;
-  acceptedCount: number;
-  applicants: Worker[];
+export type { ApprovalPanelItem };
+
+/** Group of approval-panel items for the same job (same naming as API). */
+export interface ApprovalPanelJobGroup {
+  job_id: number;
+  job_name: string;
+  items: ApprovalPanelItem[];
 }
