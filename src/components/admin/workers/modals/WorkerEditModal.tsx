@@ -9,6 +9,7 @@ import {
   UserRoleEnum,
   UserUpdate,
 } from "@/lib/api/users/schema";
+import { ROLE_OPTIONS } from "@/constants/workers";
 
 interface WorkerEditModalProps {
   isOpen: boolean;
@@ -17,24 +18,6 @@ interface WorkerEditModalProps {
   isEditMode: boolean;
   onSave?: (workerData: Partial<UserUpdate>) => void | Promise<void>;
 }
-
-const ROLE_OPTIONS = [
-  "Plumber",
-  "Electrician",
-  "Carpenter",
-  "Painter",
-  "HVAC Technician",
-  "Welder",
-  "General Labor",
-  "Decorator",
-  "Fabricator",
-  "Mason",
-  "Roofer",
-  "Landscaper",
-  "Mechanic",
-  "Tile Setter",
-  "Drywall Installer",
-];
 
 const GENDER_OPTIONS: { value: Gender | ""; label: string }[] = [
   { value: "", label: "Select gender" },

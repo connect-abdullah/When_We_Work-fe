@@ -9,6 +9,7 @@ interface SearchableMultiSelectProps {
   onChange: (values: string[]) => void;
   placeholder?: string;
   required?: boolean;
+  disabled?: boolean;
 }
 
 const SearchableMultiSelect: React.FC<SearchableMultiSelectProps> = ({
@@ -18,6 +19,7 @@ const SearchableMultiSelect: React.FC<SearchableMultiSelectProps> = ({
   onChange,
   placeholder = "Select options...",
   required = false,
+  disabled = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -65,8 +67,12 @@ const SearchableMultiSelect: React.FC<SearchableMultiSelectProps> = ({
       <div className="relative" ref={dropdownRef}>
         {/* Selected Values Display */}
         <div
-          onClick={() => setIsOpen(!isOpen)}
-          className="min-h-[42px] w-full px-3 py-2 border border-gray-300 rounded-lg bg-white cursor-pointer hover:border-gray-400 transition-colors focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent"
+          onClick={() => !disabled && setIsOpen(!isOpen)}
+          className={`min-h-[42px] w-full px-3 py-2 border border-gray-300 rounded-lg transition-colors focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent ${
+            disabled
+              ? "bg-gray-50 cursor-not-allowed opacity-50"
+              : "bg-white cursor-pointer hover:border-gray-400"
+          }`}
         >
           <div className="flex flex-wrap gap-1.5 items-center">
             {selectedValues.length === 0 ? (
@@ -78,15 +84,17 @@ const SearchableMultiSelect: React.FC<SearchableMultiSelectProps> = ({
                   className="inline-flex items-center gap-1 px-2.5 py-1 bg-blue-50 text-blue-700 rounded-md text-xs font-medium border border-blue-200"
                 >
                   {value}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleRemove(value);
-                    }}
-                    className="hover:bg-blue-100 rounded-full p-0.5"
-                  >
-                    <X size={12} />
-                  </button>
+                  {!disabled && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemove(value);
+                      }}
+                      className="hover:bg-blue-100 rounded-full p-0.5"
+                    >
+                      <X size={12} />
+                    </button>
+                  )}
                 </span>
               ))
             )}
@@ -100,7 +108,7 @@ const SearchableMultiSelect: React.FC<SearchableMultiSelectProps> = ({
         </div>
 
         {/* Dropdown Menu */}
-        {isOpen && (
+        {isOpen && !disabled && (
           <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-64 overflow-hidden">
             {/* Search Input */}
             <div className="p-2 border-b border-gray-200 bg-gray-50">

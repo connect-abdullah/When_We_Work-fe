@@ -1,9 +1,11 @@
-import { Briefcase, DollarSign, LogOut, User } from "lucide-react";
+import { Briefcase, Calendar, ClipboardCheck, DollarSign, LogOut, User } from "lucide-react";
 import { MenuItem, type SidebarMenuConfig } from "@/types";
 
 export const USER_TOP_MENU_ITEMS: MenuItem[] = [
   { label: "Revenue", link: "/revenue", icon: DollarSign },
   { label: "Job Application", link: "/job-application", icon: Briefcase },
+  { label: "Job Status", link: "/job-status", icon: ClipboardCheck },
+  { label: "Calendar", link: "/calendar", icon: Calendar },
 ];
 
 export const USER_BOTTOM_MENU_ITEMS: MenuItem[] = [

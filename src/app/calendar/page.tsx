@@ -9,11 +9,11 @@ export default function CalendarPage() {
     <div className="flex flex-col w-full h-full pt-4 px-2 sm:px-4 overflow-y-auto">
       <PageHeader
         title="Job Calendar"
-        description="View all jobs and their schedules"
+        description="View all available jobs and their schedules"
       />
 
       <div className="px-2 sm:px-4 pb-8 mt-4">
-        <JobCalendar showApplyButton={false} />
+        <JobCalendar showApplyButton={true} />
       </div>
     </div>
   );

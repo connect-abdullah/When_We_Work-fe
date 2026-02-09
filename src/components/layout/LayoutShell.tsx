@@ -31,13 +31,13 @@ export default function LayoutShell({
   }
 
   return (
-    <div className="bg-[#F1F2F7] min-h-screen flex flex-row w-full">
+    <div className="bg-[#F1F2F7] h-screen flex flex-row w-full overflow-hidden">
       <Sidebar
         menuConfig={menuConfig}
         isOpen={sidebarOpen}
         onToggle={() => setSidebarOpen(!sidebarOpen)}
       />
-      <div className="flex flex-col flex-1 w-full min-h-screen">
+      <div className="flex flex-col flex-1 w-full h-screen overflow-hidden">
         {header}
         <div className="flex flex-col w-full h-full flex-1 min-h-0 overflow-y-auto">
           {children}

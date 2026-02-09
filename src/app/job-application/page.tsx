@@ -10,7 +10,6 @@ import {
 import { getJobs } from "@/lib/api/jobs";
 import type { JobGetSchema } from "@/lib/api/jobs/schema";
 import { Briefcase } from "lucide-react";
-import { cn } from "@/lib/utils";
 import {
   JobApplicationCreate,
   JobApplicationStatus,
@@ -20,13 +19,11 @@ export default function JobApplicationPage() {
   const [jobs, setJobs] = useState<JobGetSchema[]>([]);
   const [jobsLoading, setJobsLoading] = useState(true);
   const [appliedJobs, setAppliedJobs] = useState<Set<number>>(new Set());
-  const [activeTabId, setActiveTabId] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<
     "all" | "active" | "inactive"
   >("active");
   const [typeFilter, setTypeFilter] = useState<string>("all");
-  const [hiredJobs] = useState<Set<number>>(new Set());
   const [isLoading, setIsLoading] = useState<number | null>(null);
   const [detailJob, setDetailJob] = useState<JobGetSchema | null>(null);
 
@@ -53,8 +50,12 @@ export default function JobApplicationPage() {
     fetchJobs();
   }, [fetchJobs]);
 
-  const baseFilteredJobs = useMemo(() => {
+  const filteredJobs = useMemo(() => {
     return jobs.filter((job) => {
+      // Exclude jobs that have already been applied to
+      if (appliedJobs.has(job.id)) {
+        return false;
+      }
       const matchesSearch =
         job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         job.minimum_education
@@ -71,17 +72,7 @@ export default function JobApplicationPage() {
             : job.salary_type === typeFilter;
       return matchesSearch && matchesStatus && salaryTypeMatch;
     });
-  }, [jobs, searchTerm, statusFilter, typeFilter]);
-
-  const filteredJobs = useMemo(() => {
-    if (activeTabId === "applied") {
-      return baseFilteredJobs.filter((job) => appliedJobs.has(job.id));
-    }
-    if (activeTabId === "hired") {
-      return baseFilteredJobs.filter((job) => hiredJobs.has(job.id));
-    }
-    return baseFilteredJobs.filter((job) => !appliedJobs.has(job.id));
-  }, [baseFilteredJobs, activeTabId, appliedJobs, hiredJobs]);
+  }, [jobs, searchTerm, statusFilter, typeFilter, appliedJobs]);
 
   const handleApply = async (jobId: number) => {
     setIsLoading(jobId);
@@ -93,6 +84,8 @@ export default function JobApplicationPage() {
       const response = await createJobApplication(payload);
       if (response?.success) {
         setAppliedJobs((prev) => new Set([...prev, jobId]));
+        // Refresh the list to remove the applied job from view
+        await fetchJobs();
       }
     } catch {
       // handle error
@@ -105,8 +98,6 @@ export default function JobApplicationPage() {
     <JobCard
       key={job.id}
       job={job}
-      isApplied={appliedJobs.has(job.id)}
-      isHired={hiredJobs.has(job.id)}
       isApplying={isLoading === job.id}
       onApply={() => handleApply(job.id)}
       onClick={() => setDetailJob(job)}
@@ -129,11 +120,7 @@ export default function JobApplicationPage() {
             No jobs found
           </h3>
           <p className="text-[10px] text-gray-600">
-            {activeTabId === "applied"
-              ? "You haven't applied to any jobs yet"
-              : activeTabId === "hired"
-                ? "You haven't been hired for any jobs yet"
-                : "Try adjusting your search or filters"}
+            Try adjusting your search or filters
           </p>
         </Card>
       );
@@ -145,30 +132,11 @@ export default function JobApplicationPage() {
           {filteredJobs.map((job) => renderJobCardWithApply(job))}
         </div>
         <div className="text-[10px] text-gray-500 mt-2 text-center">
-          Showing {filteredJobs.length} of{" "}
-          {activeTabId === "all"
-            ? notAppliedCount
-            : activeTabId === "applied"
-              ? appliedJobs.size
-              : hiredJobs.size}{" "}
-          {activeTabId === "all"
-            ? "available jobs"
-            : activeTabId === "applied"
-              ? "applied jobs"
-              : "hired jobs"}
+          Showing {filteredJobs.length} of {jobs.length} jobs
         </div>
       </>
     );
   };
-
-  const notAppliedCount = baseFilteredJobs.filter(
-    (job) => !appliedJobs.has(job.id)
-  ).length;
-  const tabItems = [
-    { id: "all", label: `Available (${notAppliedCount})` },
-    { id: "applied", label: `Applied (${appliedJobs.size})` },
-    { id: "hired", label: `Hired (${hiredJobs.size})` },
-  ];
 
   return (
     <div className="flex flex-col w-full h-full pt-4 px-2 sm:px-4 overflow-y-auto">
@@ -191,25 +159,7 @@ export default function JobApplicationPage() {
       </div>
 
       <div className="px-2 sm:px-4 mb-4">
-        <div className="w-full">
-          <div className="flex border-b border-[#C8CBD9] mb-2">
-            {tabItems.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTabId(tab.id)}
-                className={cn(
-                  "px-3 py-1.5 text-[10px] font-medium transition-colors border-b-2",
-                  activeTabId === tab.id
-                    ? "text-[#5A6ACF] border-[#5A6ACF] bg-[#F1F2F7]"
-                    : "text-[#5A6ACF]/70 border-transparent hover:text-[#5A6ACF] hover:border-[#5A6ACF]/30"
-                )}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-          <div className="w-full">{renderJobsGrid()}</div>
-        </div>
+        <div className="w-full">{renderJobsGrid()}</div>
       </div>
 
       <JobDetailModal

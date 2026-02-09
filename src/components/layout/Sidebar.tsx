@@ -91,7 +91,7 @@ export default function Sidebar({
 
       <div
         className={`
-        bg-[#29232f] h-screen px-4 py-6 transition-transform duration-300 ease-in-out overflow-y-auto
+        bg-[#29232f] h-screen px-4 py-6 transition-transform duration-300 ease-in-out overflow-y-auto shrink-0
         ${isOpen ? "translate-x-0" : "-translate-x-full"}
         fixed lg:relative lg:translate-x-0
         w-[240px] z-50 shadow-lg

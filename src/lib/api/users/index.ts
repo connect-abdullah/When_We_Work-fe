@@ -31,14 +31,21 @@ export const getUser = async (
   return response?.data ?? null;
 };
 
-export const updateUser = async (
+export const updateUserByAdmin = async (
   userId: number,
   payload: UserUpdate
 ): Promise<UserSingleResponseApi> => {
   const response = await put<UserSingleResponseApi>(
-    `${baseUrl}/${userId}`,
+    `${baseUrl}/admin/${userId}`,
     payload
   );
+  return response;
+};
+
+export const updateUser = async (
+  payload: UserUpdate
+): Promise<UserSingleResponseApi> => {
+  const response = await put<UserSingleResponseApi>(`${baseUrl}/worker/me`, payload);
   return response;
 };
 

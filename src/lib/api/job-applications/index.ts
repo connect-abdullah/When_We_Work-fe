@@ -5,6 +5,7 @@ import {
   JobApplicationCreate,
   JobApplicationListResponse,
   JobApplicationResponse,
+  JobStatusPanelResponse,
 } from "@/lib/api/job-applications/schema";
 
 const baseUrl = "/job_applications";
@@ -33,5 +34,12 @@ export const updateApprovalPanelStatus = async (
   payload: ApprovalPanelUpdatePayload,
 ): Promise<JobApplicationResponse> => {
   const response = await put<JobApplicationResponse>(approvalPanelUrl, payload);
+  return response;
+};
+
+const jobStatusPanelUrl = `${baseUrl}/job-application-status-panel`;
+
+export const getJobStatusPanel = async (): Promise<JobStatusPanelResponse> => {
+  const response = await get<JobStatusPanelResponse>(jobStatusPanelUrl);
   return response;
 };

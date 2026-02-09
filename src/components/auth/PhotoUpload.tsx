@@ -12,6 +12,7 @@ interface PhotoUploadProps {
   error?: string;
   className?: string;
   accept?: string;
+  disabled?: boolean;
 }
 
 export default function PhotoUpload({
@@ -21,6 +22,7 @@ export default function PhotoUpload({
   error,
   className,
   accept = "image/*",
+  disabled = false,
 }: PhotoUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -55,10 +57,11 @@ export default function PhotoUpload({
       )}
       <div className="flex items-center gap-4">
         <div
-          onClick={() => inputRef.current?.click()}
+          onClick={() => !disabled && inputRef.current?.click()}
           className={cn(
-            "flex h-24 w-24 shrink-0 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed bg-gray-50 transition-colors hover:bg-gray-100",
-            error ? "border-red-500" : "border-gray-300"
+            "flex h-24 w-24 shrink-0 items-center justify-center rounded-lg border-2 border-dashed bg-gray-50 transition-colors",
+            error ? "border-red-500" : "border-gray-300",
+            disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer hover:bg-gray-100"
           )}
         >
           <input
@@ -67,6 +70,7 @@ export default function PhotoUpload({
             accept={accept}
             onChange={handleFileChange}
             className="hidden"
+            disabled={disabled}
           />
           {previewUrl ? (
             <Image
@@ -78,25 +82,27 @@ export default function PhotoUpload({
             <Camera size={28} className="text-gray-400" />
           )}
         </div>
-        <div className="flex flex-col gap-1">
-          <button
-            type="button"
-            onClick={() => inputRef.current?.click()}
-            className="text-xs font-medium text-[#5A6ACF] hover:text-[#4A5ABF]"
-          >
-            {previewUrl ? "Change photo" : "Upload photo"}
-          </button>
-          {previewUrl && (
+        {!disabled && (
+          <div className="flex flex-col gap-1">
             <button
               type="button"
-              onClick={handleClear}
-              className="flex items-center gap-1 text-xs text-gray-500 hover:text-red-600"
+              onClick={() => inputRef.current?.click()}
+              className="text-xs font-medium text-[#5A6ACF] hover:text-[#4A5ABF]"
             >
-              <X size={12} />
-              Remove
+              {previewUrl ? "Change photo" : "Upload photo"}
             </button>
-          )}
-        </div>
+            {previewUrl && (
+              <button
+                type="button"
+                onClick={handleClear}
+                className="flex items-center gap-1 text-xs text-gray-500 hover:text-red-600"
+              >
+                <X size={12} />
+                Remove
+              </button>
+            )}
+          </div>
+        )}
       </div>
       {error && <p className="text-xs text-red-500">{error}</p>}
     </div>

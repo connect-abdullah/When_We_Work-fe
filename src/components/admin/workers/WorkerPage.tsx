@@ -11,7 +11,7 @@ import {
 } from "@/components/admin/workers";
 import { CustomerInsightsData } from "@/constants/customers";
 import { Download, Plus } from "lucide-react";
-import { createUser, deleteUser, getUsers, updateUser } from "@/lib/api/users";
+import { createUser, deleteUser, getUsers, updateUserByAdmin } from "@/lib/api/users";
 import {
   EmploymentType,
   UserGetSchema,
@@ -111,7 +111,7 @@ export default function WorkersPage() {
   const handleSaveWorker = async (workerData: Partial<UserUpdate>) => {
     try {
       if (isEditModalOpen && selectedWorker) {
-        await updateUser(selectedWorker.id, {
+        await updateUserByAdmin(selectedWorker.id, {
           first_name: workerData.first_name,
           last_name: workerData.last_name,
           email: workerData.email,

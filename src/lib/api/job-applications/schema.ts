@@ -58,3 +58,30 @@ export interface ApprovalPanelUpdatePayload {
   worker_id: number;
   approved_status: JobApplicationStatus;
 }
+
+/** GET /job_applications/job-application-status-panel – job status panel for user side. */
+export interface JobStatusPanelItem {
+  approved_status: JobApplicationStatus;
+  job_details: {
+    title: string;
+    description: string;
+    status: string;
+    minimum_education: string;
+    job_category: string;
+    characteristics: string[] | null;
+    workers_required: number;
+    salary: number;
+    from_date_time: string;
+    to_date_time: string;
+    id: number;
+    admin_id: number;
+    workers_hired: number;
+  };
+}
+
+export interface JobStatusPanelResponse {
+  success: boolean;
+  message: string;
+  data?: JobStatusPanelItem[];
+  errors: unknown;
+}
