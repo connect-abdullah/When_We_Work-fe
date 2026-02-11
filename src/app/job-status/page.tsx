@@ -4,7 +4,10 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Card, PageHeader } from "@/components/ui";
 import { JobCard, JobDetailModal } from "@/components/admin/jobs";
 import { getJobStatusPanel } from "@/lib/api/job-applications";
-import { JobApplicationStatus, JobStatusPanelItem } from "@/lib/api/job-applications/schema";
+import {
+  JobApplicationStatus,
+  JobStatusPanelItem,
+} from "@/lib/api/job-applications/schema";
 import { Briefcase } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -12,7 +15,7 @@ export default function JobStatusPage() {
   const [statusData, setStatusData] = useState<JobStatusPanelItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<JobApplicationStatus>(
-    JobApplicationStatus.applied,
+    JobApplicationStatus.applied
   );
   const [detailJob, setDetailJob] = useState<JobStatusPanelItem | null>(null);
 
@@ -39,13 +42,13 @@ export default function JobStatusPage() {
   const counts = useMemo(() => {
     return {
       applied: statusData.filter(
-        (item) => item.approved_status === JobApplicationStatus.applied,
+        (item) => item.approved_status === JobApplicationStatus.applied
       ).length,
       rejected: statusData.filter(
-        (item) => item.approved_status === JobApplicationStatus.rejected,
+        (item) => item.approved_status === JobApplicationStatus.rejected
       ).length,
       approved: statusData.filter(
-        (item) => item.approved_status === JobApplicationStatus.approved,
+        (item) => item.approved_status === JobApplicationStatus.approved
       ).length,
     };
   }, [statusData]);
@@ -99,7 +102,9 @@ export default function JobStatusPage() {
                   to_date_time: job.to_date_time,
                   workers_hired: job.workers_hired,
                 }}
-                isApplied={item.approved_status === JobApplicationStatus.applied}
+                isApplied={
+                  item.approved_status === JobApplicationStatus.applied
+                }
                 isHired={item.approved_status === JobApplicationStatus.approved}
                 onClick={() => setDetailJob(item)}
               />
@@ -151,7 +156,7 @@ export default function JobStatusPage() {
                   "px-3 py-1.5 text-[10px] font-medium transition-colors border-b-2",
                   activeTab === tab.id
                     ? "text-[#5A6ACF] border-[#5A6ACF] bg-[#F1F2F7]"
-                    : "text-[#5A6ACF]/70 border-transparent hover:text-[#5A6ACF] hover:border-[#5A6ACF]/30",
+                    : "text-[#5A6ACF]/70 border-transparent hover:text-[#5A6ACF] hover:border-[#5A6ACF]/30"
                 )}
               >
                 {tab.label}

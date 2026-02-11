@@ -14,7 +14,7 @@ import {
 const baseUrl = "/job_applications";
 
 export const createJobApplication = async (
-  payload: JobApplicationCreate,
+  payload: JobApplicationCreate
 ): Promise<JobApplicationResponse> => {
   const response = await post<JobApplicationResponse>(baseUrl, payload);
   return response;
@@ -28,13 +28,14 @@ export const getJobApplications =
 
 const approvalPanelUrl = `${baseUrl}/approval-panel`;
 
-export const getApprovalPanel = async (): Promise<ApprovalPanelListResponse> => {
-  const response = await get<ApprovalPanelListResponse>(approvalPanelUrl);
-  return response;
-};
+export const getApprovalPanel =
+  async (): Promise<ApprovalPanelListResponse> => {
+    const response = await get<ApprovalPanelListResponse>(approvalPanelUrl);
+    return response;
+  };
 
 export const updateApprovalPanelStatus = async (
-  payload: ApprovalPanelUpdatePayload,
+  payload: ApprovalPanelUpdatePayload
 ): Promise<JobApplicationResponse> => {
   const response = await put<JobApplicationResponse>(approvalPanelUrl, payload);
   return response;
@@ -62,7 +63,7 @@ export const getAdminRevenue = async (): Promise<AdminRevenueResponse> => {
 };
 
 export const updateAdminRevenueStatus = async (
-  payload: AdminRevenueUpdatePayload,
+  payload: AdminRevenueUpdatePayload
 ): Promise<AdminRevenueResponse> => {
   const response = await put<AdminRevenueResponse>(adminRevenueUrl, payload);
   return response;

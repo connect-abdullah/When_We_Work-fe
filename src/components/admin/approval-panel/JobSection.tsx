@@ -11,12 +11,12 @@ interface JobSectionProps {
   onAccept: (
     job_id: number,
     applicationId: number,
-    worker_id: number,
+    worker_id: number
   ) => void | Promise<void>;
   onDecline: (
     job_id: number,
     applicationId: number,
-    worker_id: number,
+    worker_id: number
   ) => void | Promise<void>;
   updatingApplicationId?: number | null;
 }
@@ -55,7 +55,8 @@ export default function JobSection({
         {groups.map((group) => {
           const isExpanded = expandedJobIds.has(group.job_id);
           const first = group.items[0];
-          const workers_required = first?.workers_required ?? group.items.length;
+          const workers_required =
+            first?.workers_required ?? group.items.length;
           const workers_hired = first?.workers_hired ?? 0;
 
           return (

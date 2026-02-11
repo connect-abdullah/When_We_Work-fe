@@ -1,4 +1,11 @@
-import { Briefcase, Calendar, ClipboardCheck, DollarSign, LogOut, User } from "lucide-react";
+import {
+  Briefcase,
+  Calendar,
+  ClipboardCheck,
+  DollarSign,
+  LogOut,
+  User,
+} from "lucide-react";
 import { MenuItem, type SidebarMenuConfig } from "@/types";
 
 export const USER_TOP_MENU_ITEMS: MenuItem[] = [

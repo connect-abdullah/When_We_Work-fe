@@ -45,7 +45,10 @@ export const updateUserByAdmin = async (
 export const updateUser = async (
   payload: UserUpdate
 ): Promise<UserSingleResponseApi> => {
-  const response = await put<UserSingleResponseApi>(`${baseUrl}/worker/me`, payload);
+  const response = await put<UserSingleResponseApi>(
+    `${baseUrl}/worker/me`,
+    payload
+  );
   return response;
 };
 

@@ -88,15 +88,15 @@ export default function AdminPaymentsPage() {
       rows.reduce(
         (sum, job) =>
           job.payment_status === "pending" ? sum + (job.salary ?? 0) : sum,
-        0,
+        0
       ),
-    [rows],
+    [rows]
   );
 
   const handleStatusChange = async (
     index: number,
     status: PaymentStatus,
-    job: AdminRevenueJobItem,
+    job: AdminRevenueJobItem
   ) => {
     // Optimistically update UI
     setRows((prev) => {
@@ -176,9 +176,7 @@ export default function AdminPaymentsPage() {
 
           <Card className="p-4 flex flex-col justify-between bg-white shadow-md">
             <div>
-              <p className="text-xs font-medium text-gray-600 mb-2">
-                Actions
-              </p>
+              <p className="text-xs font-medium text-gray-600 mb-2">Actions</p>
             </div>
             <div className="flex flex-wrap gap-2 justify-start lg:justify-end">
               <Button
@@ -239,9 +237,7 @@ export default function AdminPaymentsPage() {
                     <th className="px-4 py-3 font-medium text-gray-700">
                       From
                     </th>
-                    <th className="px-4 py-3 font-medium text-gray-700">
-                      To
-                    </th>
+                    <th className="px-4 py-3 font-medium text-gray-700">To</th>
                     <th className="px-4 py-3 font-medium text-gray-700">
                       Status
                     </th>
@@ -280,11 +276,11 @@ export default function AdminPaymentsPage() {
                       <td className="px-4 py-3 text-gray-800 text-sm">
                         {(() => {
                           const { badge, dot } = getStatusClasses(
-                            job.payment_status,
+                            job.payment_status
                           );
                           const currentLabel =
                             PAYMENT_STATUS_OPTIONS.find(
-                              (o) => o.value === job.payment_status,
+                              (o) => o.value === job.payment_status
                             )?.label || job.payment_status;
 
                           return (
@@ -318,7 +314,7 @@ export default function AdminPaymentsPage() {
                                   handleStatusChange(
                                     index,
                                     e.target.value as PaymentStatus,
-                                    job,
+                                    job
                                   )
                                 }
                               >
@@ -343,4 +339,3 @@ export default function AdminPaymentsPage() {
     </div>
   );
 }
-

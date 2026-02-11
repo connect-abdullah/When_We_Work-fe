@@ -14,7 +14,7 @@ interface PersonCardProps {
 
 function getStatusColor(
   availability: boolean,
-  approved_status?: ApprovalPanelItem["approved_status"],
+  approved_status?: ApprovalPanelItem["approved_status"]
 ) {
   if (approved_status === "approved") {
     return "bg-green-100 text-green-700 border-green-200";
@@ -29,7 +29,7 @@ function getStatusColor(
 
 function getStatusText(
   availability: boolean,
-  approved_status?: ApprovalPanelItem["approved_status"],
+  approved_status?: ApprovalPanelItem["approved_status"]
 ) {
   if (approved_status === "approved") {
     return "Accepted";
@@ -90,7 +90,7 @@ export default function PersonCard({
           <span
             className={`inline-flex items-center px-2 py-1 rounded-full text-[9px] font-medium border ${getStatusColor(
               item.availability,
-              item.approved_status,
+              item.approved_status
             )}`}
           >
             {getStatusText(item.availability, item.approved_status)}

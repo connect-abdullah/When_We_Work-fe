@@ -7,11 +7,17 @@ import {
   getApprovalPanel,
   updateApprovalPanelStatus,
 } from "@/lib/api/job-applications";
-import { JobApplicationStatus, ApprovalPanelItem } from "@/lib/api/job-applications/schema";
+import {
+  JobApplicationStatus,
+  ApprovalPanelItem,
+} from "@/lib/api/job-applications/schema";
 import type { ApprovalPanelJobGroup } from "@/components/admin/approval-panel/types";
 
 function groupByJob(items: ApprovalPanelItem[]): ApprovalPanelJobGroup[] {
-  const byJob = new Map<number, { job_name: string; items: ApprovalPanelItem[] }>();
+  const byJob = new Map<
+    number,
+    { job_name: string; items: ApprovalPanelItem[] }
+  >();
   for (const item of items) {
     const existing = byJob.get(item.job_id);
     if (existing) {
@@ -59,7 +65,7 @@ export default function ApprovalPanelPage() {
     return groups.filter(
       (g) =>
         g.job_name.toLowerCase().includes(searchLower) ||
-        String(g.job_id).includes(searchTerm),
+        String(g.job_id).includes(searchTerm)
     );
   }, [groups, searchTerm]);
 
@@ -68,7 +74,7 @@ export default function ApprovalPanelPage() {
       jobId: number,
       applicationId: number,
       workerId: number,
-      isApproved: boolean,
+      isApproved: boolean
     ) => {
       setUpdating(applicationId);
       try {
@@ -87,19 +93,19 @@ export default function ApprovalPanelPage() {
         setUpdating(null);
       }
     },
-    [fetchApprovalPanel],
+    [fetchApprovalPanel]
   );
 
   const handleAccept = useCallback(
     (jobId: number, applicationId: number, workerId: number) =>
       handleStatusChange(jobId, applicationId, workerId, true),
-    [handleStatusChange],
+    [handleStatusChange]
   );
 
   const handleDecline = useCallback(
     (jobId: number, applicationId: number, workerId: number) =>
       handleStatusChange(jobId, applicationId, workerId, false),
-    [handleStatusChange],
+    [handleStatusChange]
   );
 
   return (

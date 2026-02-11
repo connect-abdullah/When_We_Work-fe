@@ -1,7 +1,14 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, Card, FormInput, FormSelect, FormTextarea, PageHeader } from "@/components/ui";
+import {
+  Button,
+  Card,
+  FormInput,
+  FormSelect,
+  FormTextarea,
+  PageHeader,
+} from "@/components/ui";
 import PhotoUpload from "@/components/auth/PhotoUpload";
 import PasswordInput from "@/components/auth/PasswordInput";
 import SearchableMultiSelect from "@/components/ui/SearchableMultiSelect";
@@ -15,7 +22,6 @@ const GENDER_OPTIONS: { value: Gender | ""; label: string }[] = [
   { value: Gender.female, label: "Female" },
   { value: Gender.other, label: "Other" },
 ];
-
 
 // Convert File to base64 string
 const fileToBase64 = (file: File): Promise<string> => {
@@ -35,7 +41,9 @@ export default function ProfilePage() {
   const [photoPreviewUrl, setPhotoPreviewUrl] = useState<string | null>(null);
   const [originalPhotoUrl, setOriginalPhotoUrl] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [originalFormData, setOriginalFormData] = useState<Partial<UserUpdate>>({});
+  const [originalFormData, setOriginalFormData] = useState<Partial<UserUpdate>>(
+    {}
+  );
 
   const [formData, setFormData] = useState<Partial<UserUpdate>>({
     first_name: "",
@@ -108,7 +116,9 @@ export default function ProfilePage() {
   }, [fetchUser]);
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -123,7 +133,9 @@ export default function ProfilePage() {
     setPhotoPreviewUrl(previewUrl);
   };
 
-  const handleAvailabilityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleAvailabilityChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     setFormData({
       ...formData,
       availability: e.target.value === "true",
@@ -190,7 +202,10 @@ export default function ProfilePage() {
   if (loading) {
     return (
       <div className="flex flex-col w-full h-full pt-4 px-2 sm:px-4 overflow-y-auto">
-        <PageHeader title="Profile" description="View and manage your profile" />
+        <PageHeader
+          title="Profile"
+          description="View and manage your profile"
+        />
         <div className="px-2 sm:px-4 pb-8 mt-4">
           <Card className="p-8 text-center">
             <p className="text-sm text-gray-600">Loading profile...</p>
@@ -203,7 +218,10 @@ export default function ProfilePage() {
   if (!user) {
     return (
       <div className="flex flex-col w-full h-full pt-4 px-2 sm:px-4 overflow-y-auto">
-        <PageHeader title="Profile" description="View and manage your profile" />
+        <PageHeader
+          title="Profile"
+          description="View and manage your profile"
+        />
         <div className="px-2 sm:px-4 pb-8 mt-4">
           <Card className="p-8 text-center">
             <p className="text-sm text-red-600">Failed to load profile data</p>
@@ -216,7 +234,10 @@ export default function ProfilePage() {
   return (
     <div className="flex flex-col w-full h-full overflow-y-auto">
       <div className="pt-4 px-2 sm:px-4">
-        <PageHeader title="Profile" description="View and manage your profile" />
+        <PageHeader
+          title="Profile"
+          description="View and manage your profile"
+        />
       </div>
 
       <div className="flex-1 px-2 sm:px-4 pb-8 mt-6 flex justify-center">
@@ -225,7 +246,9 @@ export default function ProfilePage() {
           <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8">
             {/* Header with Save Changes button */}
             <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
-              <h2 className="text-xl font-semibold text-[#1F384C]">Profile Information</h2>
+              <h2 className="text-xl font-semibold text-[#1F384C]">
+                Profile Information
+              </h2>
               <Button
                 variant="primary"
                 size="sm"
@@ -292,7 +315,8 @@ export default function ProfilePage() {
                       icon={<Mail size={16} className="text-gray-400" />}
                     />
                     <p className="text-xs text-gray-500 mt-1.5">
-                      Email cannot be changed by workers. Only admins can update email addresses.
+                      Email cannot be changed by workers. Only admins can update
+                      email addresses.
                     </p>
                   </div>
                   <PasswordInput

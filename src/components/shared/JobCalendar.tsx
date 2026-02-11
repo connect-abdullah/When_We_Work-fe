@@ -120,8 +120,8 @@ export default function JobCalendar({
 
   const handleApply = async (jobId: number) => {
     if (!showApplyButton) {
-        return;
-      }
+      return;
+    }
 
     setIsApplying(jobId);
     const payload: JobApplicationCreate = {
@@ -333,7 +333,7 @@ export default function JobCalendar({
                       ? Math.round(
                           ((selectedJob.workers_hired ?? 0) /
                             selectedJob.workers_required) *
-                            100,
+                            100
                         )
                       : 0}
                     %
@@ -373,11 +373,17 @@ export default function JobCalendar({
                             <span className="text-slate-500 font-medium">
                               From
                             </span>{" "}
-                            {new Date(selectedJob.from_date_time).toLocaleString()}
+                            {new Date(
+                              selectedJob.from_date_time
+                            ).toLocaleString()}
                           </p>
                           <p>
-                            <span className="text-slate-500 font-medium">To</span>{" "}
-                            {new Date(selectedJob.to_date_time).toLocaleString()}
+                            <span className="text-slate-500 font-medium">
+                              To
+                            </span>{" "}
+                            {new Date(
+                              selectedJob.to_date_time
+                            ).toLocaleString()}
                           </p>
                         </div>
                       </div>
@@ -436,7 +442,9 @@ export default function JobCalendar({
                     disabled={isApplying === selectedJob.id}
                     className="w-full px-4 py-2.5 bg-[#5A6ACF] hover:bg-[#5A6ACF]/90 text-white rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {isApplying === selectedJob.id ? "Applying..." : "Apply Now"}
+                    {isApplying === selectedJob.id
+                      ? "Applying..."
+                      : "Apply Now"}
                   </button>
                 )}
               </div>

@@ -79,10 +79,11 @@ export default function WorkerRevenuePage() {
   const totalAmount = useMemo(
     () =>
       allJobs.reduce(
-        (sum, job) => job.payment_status === "paid" ? sum + (job.salary ?? 0) : sum,
-        0,
+        (sum, job) =>
+          job.payment_status === "paid" ? sum + (job.salary ?? 0) : sum,
+        0
       ),
-    [allJobs],
+    [allJobs]
   );
 
   const handlePrint = () => {
@@ -119,9 +120,7 @@ export default function WorkerRevenuePage() {
 
           <Card className="p-4 flex flex-col justify-between bg-white shadow-md">
             <div>
-              <p className="text-xs font-medium text-gray-600 mb-2">
-                Actions
-              </p>
+              <p className="text-xs font-medium text-gray-600 mb-2">Actions</p>
             </div>
             <div className="flex flex-wrap gap-2 justify-start lg:justify-end">
               <Button
@@ -185,9 +184,7 @@ export default function WorkerRevenuePage() {
                     <th className="px-4 py-3 font-medium text-gray-700">
                       From
                     </th>
-                    <th className="px-4 py-3 font-medium text-gray-700">
-                      To
-                    </th>
+                    <th className="px-4 py-3 font-medium text-gray-700">To</th>
                     <th className="px-4 py-3 font-medium text-gray-700">
                       Status
                     </th>
@@ -220,7 +217,7 @@ export default function WorkerRevenuePage() {
                       <td className="px-4 py-3 text-gray-800 text-sm">
                         {(() => {
                           const { badge, dot, label } = getStatusClasses(
-                            job.payment_status,
+                            job.payment_status
                           );
                           return (
                             <span

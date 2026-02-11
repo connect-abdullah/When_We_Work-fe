@@ -34,7 +34,7 @@ const FormSelect: React.FC<FormSelectProps> = ({
         className={cn(
           "w-full px-4 py-3 text-sm border text-gray-900 placeholder:text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#5A6ACF]/20 focus:border-[#5A6ACF] transition-all bg-white",
           error && "border-red-500 focus:border-red-500 focus:ring-red-500/20",
-          className,
+          className
         )}
         {...props}
       >

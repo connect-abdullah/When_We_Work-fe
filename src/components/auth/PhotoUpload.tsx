@@ -61,7 +61,9 @@ export default function PhotoUpload({
           className={cn(
             "flex h-24 w-24 shrink-0 items-center justify-center rounded-lg border-2 border-dashed bg-gray-50 transition-colors",
             error ? "border-red-500" : "border-gray-300",
-            disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer hover:bg-gray-100"
+            disabled
+              ? "cursor-not-allowed opacity-50"
+              : "cursor-pointer hover:bg-gray-100"
           )}
         >
           <input
