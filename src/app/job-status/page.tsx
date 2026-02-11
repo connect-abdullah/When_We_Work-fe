@@ -4,8 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Card, PageHeader } from "@/components/ui";
 import { JobCard, JobDetailModal } from "@/components/admin/jobs";
 import { getJobStatusPanel } from "@/lib/api/job-applications";
-import { JobApplicationStatus } from "@/lib/api/job-applications/schema";
-import type { JobStatusPanelItem } from "@/lib/api/job-applications/schema";
+import { JobApplicationStatus, JobStatusPanelItem } from "@/lib/api/job-applications/schema";
 import { Briefcase } from "lucide-react";
 import { cn } from "@/lib/utils";
 

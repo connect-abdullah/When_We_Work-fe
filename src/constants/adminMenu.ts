@@ -2,6 +2,7 @@ import {
   Bell,
   BookOpen,
   Calendar,
+  DollarSign,
   LayoutDashboard,
   LogOut,
   // Settings,
@@ -17,6 +18,7 @@ export const ADMIN_TOP_MENU_ITEMS: MenuItem[] = [
   { label: "Approval Panel", link: "/admin/approval-panel", icon: BookOpen },
   { label: "Workers", link: "/admin/workers", icon: UserCheck },
   { label: "Jobs", link: "/admin/jobs", icon: Users },
+  { label: "Payments", link: "/admin/payments", icon: DollarSign },
   { label: "Reminder", link: "/admin/reminder", icon: Bell },
 ];
 

@@ -119,7 +119,9 @@ export default function JobCalendar({
   };
 
   const handleApply = async (jobId: number) => {
-    if (!showApplyButton) return;
+    if (!showApplyButton) {
+        return;
+      }
 
     setIsApplying(jobId);
     const payload: JobApplicationCreate = {

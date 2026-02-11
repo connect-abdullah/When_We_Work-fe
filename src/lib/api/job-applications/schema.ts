@@ -85,3 +85,51 @@ export interface JobStatusPanelResponse {
   data?: JobStatusPanelItem[];
   errors: unknown;
 }
+
+/** Payment status types used across revenue endpoints. */
+export type PaymentStatus = "pending" | "paid" | "rejected";
+
+/** GET /job_applications/worker/revenue – revenue summary for logged-in worker. */
+export interface WorkerRevenueJobItem {
+  job_id: number;
+  job_name: string;
+  salary: number;
+  from_date_time: string;
+  to_date_time: string;
+  payment_status: PaymentStatus;
+}
+
+export interface WorkerRevenueResponse {
+  success: boolean;
+  message: string;
+  data?: WorkerRevenueJobItem[];
+  errors: unknown;
+}
+
+/** GET /job_applications/admin/revenue – pending payments overview for admin. */
+
+export interface AdminRevenueJobItem {
+  job_id: number;
+  job_name: string;
+  salary: number;
+  from_date_time: string;
+  to_date_time: string;
+  payment_status: PaymentStatus;
+  worker_id?: number;
+  worker_name?: string;
+  worker_email?: string;
+}
+
+export interface AdminRevenueResponse {
+  success: boolean;
+  message: string;
+  data?: AdminRevenueJobItem[];
+  errors: unknown;
+}
+
+/** PUT /job_applications/admin/revenue – update payment status. */
+export interface AdminRevenueUpdatePayload {
+  job_id: number;
+  worker_id: number;
+  payment_status: PaymentStatus;
+}
