@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import Sidebar from "@/components/layout/Sidebar";
-import Navbar from "@/components/admin/layout/Navbar";
 import { ADMIN_SIDEBAR_CONFIG } from "@/constants/adminMenu";
 
 export default function AdminLayout({
@@ -21,8 +20,6 @@ export default function AdminLayout({
       />
 
       <div className="flex flex-col w-full h-screen">
-        <Navbar onMenuToggle={() => setSidebarOpen(!sidebarOpen)} />
-
         <div className="flex flex-col w-full h-full overflow-y-auto">
           {children}
         </div>

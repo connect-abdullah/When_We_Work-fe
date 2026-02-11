@@ -4,7 +4,8 @@ import {
   Calendar,
   LayoutDashboard,
   LogOut,
-  Settings,
+  // Settings,
+  User,
   UserCheck,
   Users,
 } from "lucide-react";
@@ -20,7 +21,8 @@ export const ADMIN_TOP_MENU_ITEMS: MenuItem[] = [
 ];
 
 export const ADMIN_BOTTOM_MENU_ITEMS: MenuItem[] = [
-  { label: "Settings", link: "/admin/settings", icon: Settings },
+  { label: "Profile", link: "/admin/profile", icon: User },
+  // { label: "Settings", link: "/admin/settings", icon: Settings },
   { label: "Logout", link: "/auth/login", icon: LogOut },
 ];
 
