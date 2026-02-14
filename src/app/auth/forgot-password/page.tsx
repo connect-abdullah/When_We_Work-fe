@@ -6,6 +6,7 @@ import { Button, FormInput } from "@/components/ui";
 import { AuthLayout } from "@/components/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { forgotPassword } from "@/lib/api/users";
 
 interface FormData {
   email: string;
@@ -66,14 +67,12 @@ const ForgotPasswordPage: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // TODO: Implement actual forgot password logic here
-      // console.log("Forgot password email:", formData.email);
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await forgotPassword(formData);
+      if(response.success){
+        setIsEmailSent(true);
+      }
 
       // Show success state
-      setIsEmailSent(true);
     } catch (error) {
       console.error("Forgot password error:", error);
     } finally {
@@ -127,12 +126,12 @@ const ForgotPasswordPage: React.FC = () => {
                 Back to Sign In
               </Button>
             </Link>
-            <button
+            {/* <button
               onClick={() => router.push("/auth/otp?flag=true")}
               className="text-xs text-[#5A6ACF] hover:text-[#4A5ABF] font-medium transition-colors"
             >
               Continue to verification
-            </button>
+            </button> */}
           </div>
         </div>
       </AuthLayout>

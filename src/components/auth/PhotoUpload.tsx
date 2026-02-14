@@ -78,6 +78,8 @@ export default function PhotoUpload({
             <Image
               src={previewUrl}
               alt="Preview"
+              width={48}
+              height={48}
               className="h-full w-full rounded-lg object-cover"
             />
           ) : (
