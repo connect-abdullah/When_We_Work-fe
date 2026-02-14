@@ -255,7 +255,7 @@ export default function AdminProfilePage() {
                   onChange={handlePhotoChange}
                   label="Profile Photo"
                   error={errors.photo}
-                  disabled={false}
+                  disabled
                 />
               </div>
 
