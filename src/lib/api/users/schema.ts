@@ -108,7 +108,7 @@ export interface UserCreateResponse {
 
 /** Forgot Password Payload */
 export interface ForgotPassword {
-  email : string
+  email: string;
 }
 
 export interface ForgotPasswordResponse {

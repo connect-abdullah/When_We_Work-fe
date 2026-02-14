@@ -8,6 +8,7 @@ import {
   JobApplicationStatus,
   JobStatusPanelItem,
 } from "@/lib/api/job-applications/schema";
+import { JobCategory, JobStatus } from "@/lib/api/jobs/schema";
 import { Briefcase } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -91,9 +92,9 @@ export default function JobStatusPage() {
                   id: job.id,
                   title: job.title,
                   description: job.description,
-                  status: job.status as any,
+                  status: job.status as JobStatus,
                   minimum_education: job.minimum_education,
-                  job_category: job.job_category as any,
+                  job_category: job.job_category as JobCategory,
                   characteristics: job.characteristics ?? undefined,
                   workers_required: job.workers_required,
                   salary: job.salary,
@@ -174,9 +175,9 @@ export default function JobStatusPage() {
             id: detailJob.job_details.id,
             title: detailJob.job_details.title,
             description: detailJob.job_details.description,
-            status: detailJob.job_details.status as any,
+            status: detailJob.job_details.status as JobStatus,
             minimum_education: detailJob.job_details.minimum_education,
-            job_category: detailJob.job_details.job_category as any,
+            job_category: detailJob.job_details.job_category as JobCategory,
             characteristics: detailJob.job_details.characteristics ?? undefined,
             workers_required: detailJob.job_details.workers_required,
             salary: detailJob.job_details.salary,

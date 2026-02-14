@@ -39,7 +39,9 @@ export default function ProfilePage() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreviewUrl, setPhotoPreviewUrl] = useState<string | null>(null);
-  const [originalPhotoUrl, setOriginalPhotoUrl] = useState<string | null>(null);
+  const [_originalPhotoUrl, setOriginalPhotoUrl] = useState<string | null>(
+    null
+  );
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [originalFormData, setOriginalFormData] = useState<Partial<UserUpdate>>(
     {}

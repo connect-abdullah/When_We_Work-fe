@@ -1,5 +1,7 @@
 import { del, get, post, put } from "@/lib/api/http";
 import type {
+  ForgotPassword,
+  ForgotPasswordResponse,
   UserCreate,
   UserCreateResponse,
   UserGetSchema,
@@ -8,8 +10,6 @@ import type {
   UserSingleResponseApi,
   UsersListResponseApi,
   UserUpdate,
-  ForgotPassword,
-  ForgotPasswordResponse,
 } from "@/lib/api/users/schema";
 
 const baseUrl = "/users";
@@ -20,14 +20,14 @@ export const getUsers = async (): Promise<UserGetSchema[]> => {
 };
 
 export const createUser = async (
-  payload: UserCreate,
+  payload: UserCreate
 ): Promise<UserCreateResponse> => {
   const response = await post<UserCreateResponse>(baseUrl, payload);
   return response;
 };
 
 export const getUser = async (
-  userId: number,
+  userId: number
 ): Promise<UserGetSchema | null> => {
   const response = await get<UserSingleResponseApi>(`${baseUrl}/${userId}`);
   return response?.data ?? null;
@@ -35,42 +35,45 @@ export const getUser = async (
 
 export const updateUserByAdmin = async (
   userId: number,
-  payload: UserUpdate,
+  payload: UserUpdate
 ): Promise<UserSingleResponseApi> => {
   const response = await put<UserSingleResponseApi>(
     `${baseUrl}/admin/${userId}`,
-    payload,
+    payload
   );
   return response;
 };
 
 export const updateUser = async (
-  payload: UserUpdate,
+  payload: UserUpdate
 ): Promise<UserSingleResponseApi> => {
   const response = await put<UserSingleResponseApi>(
     `${baseUrl}/worker/me`,
-    payload,
+    payload
   );
   return response;
 };
 
 export const deleteUser = async (
-  userId: number,
+  userId: number
 ): Promise<UserSingleResponseApi> => {
   const response = await del<UserSingleResponseApi>(`${baseUrl}/${userId}`);
   return response;
 };
 
 export const loginUser = async (
-  payload: UserLoginPayload,
+  payload: UserLoginPayload
 ): Promise<UserLoginResponse> => {
   const response = await post<UserLoginResponse>(`${baseUrl}/login`, payload);
   return response;
 };
 
 export const forgotPassword = async (
-  payload : ForgotPassword,
+  payload: ForgotPassword
 ): Promise<ForgotPasswordResponse> => {
-  const response = await post<ForgotPasswordResponse>(`${baseUrl}/forgot-password`, payload);
+  const response = await post<ForgotPasswordResponse>(
+    `${baseUrl}/forgot-password`,
+    payload
+  );
   return response;
 };

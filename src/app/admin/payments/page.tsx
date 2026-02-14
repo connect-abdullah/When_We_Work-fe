@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Card, PageHeader, Button } from "@/components/ui";
+import { Button, Card, PageHeader } from "@/components/ui";
 import {
   getAdminRevenue,
   updateAdminRevenueStatus,
@@ -10,7 +10,7 @@ import type {
   AdminRevenueJobItem,
   PaymentStatus,
 } from "@/lib/api/job-applications/schema";
-import { Calendar, DollarSign, ChevronDown } from "lucide-react";
+import { Calendar, ChevronDown, DollarSign } from "lucide-react";
 
 const formatDateTime = (iso: string) => {
   try {
@@ -134,7 +134,7 @@ export default function AdminPaymentsPage() {
         });
         setError(response?.message || "Failed to update payment status");
       }
-    } catch (err) {
+    } catch (_err) {
       // Revert on error
       setRows((prev) => {
         const next = [...prev];

@@ -8,8 +8,8 @@ import {
   updateApprovalPanelStatus,
 } from "@/lib/api/job-applications";
 import {
-  JobApplicationStatus,
   ApprovalPanelItem,
+  JobApplicationStatus,
 } from "@/lib/api/job-applications/schema";
 import type { ApprovalPanelJobGroup } from "@/components/admin/approval-panel/types";
 

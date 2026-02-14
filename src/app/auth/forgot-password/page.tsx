@@ -17,7 +17,7 @@ interface FormErrors {
 }
 
 const ForgotPasswordPage: React.FC = () => {
-  const router = useRouter();
+  const _router = useRouter();
   const [formData, setFormData] = useState<FormData>({
     email: "",
   });
@@ -68,7 +68,7 @@ const ForgotPasswordPage: React.FC = () => {
 
     try {
       const response = await forgotPassword(formData);
-      if(response.success){
+      if (response.success) {
         setIsEmailSent(true);
       }
 
@@ -127,7 +127,7 @@ const ForgotPasswordPage: React.FC = () => {
               </Button>
             </Link>
             {/* <button
-              onClick={() => router.push("/auth/otp?flag=true")}
+              onClick={() => _router.push("/auth/otp?flag=true")}
               className="text-xs text-[#5A6ACF] hover:text-[#4A5ABF] font-medium transition-colors"
             >
               Continue to verification
