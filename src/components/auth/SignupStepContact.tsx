@@ -57,6 +57,7 @@ export default function SignupStepContact({
           onChange={onPhotoChange}
           label="Photo (optional)"
           error={errors.photo}
+          disabled
         />
       </div>
       <div className="flex gap-3 pt-2">

@@ -13,7 +13,10 @@ import {
   StepIndicator,
 } from "@/components/auth";
 import { createUser } from "@/lib/api/users";
-import { createBusiness } from "@/lib/api/business";
+import {
+  requestBusinessRegistration,
+  verifyAndRegister,
+} from "@/lib/api/business";
 import type { BusinessCreate } from "@/lib/api/business/schema";
 import { Gender, UserRoleEnum } from "@/lib/api/users/schema";
 import type {
@@ -21,8 +24,6 @@ import type {
   SignupStep1Data,
   SignupStep2Data,
 } from "@/types";
-
-const VERIFICATION_BYPASS_CODE = "111111";
 
 const defaultStep1: SignupStep1Data = {
   first_name: "",
@@ -183,16 +184,8 @@ export default function SignupPage() {
     }
   };
 
-  const handleBusinessSubmit = () => {
+  const handleBusinessSubmit = async () => {
     if (!validateStep3()) {
-      return;
-    }
-    setCurrentStep(2);
-  };
-
-  const handleVerify = async (code: string) => {
-    if (code !== VERIFICATION_BYPASS_CODE) {
-      setErrors({ submit: "Invalid code. Use 111111 to continue." });
       return;
     }
     setIsLoading(true);
@@ -207,16 +200,47 @@ export default function SignupPage() {
         state: business.state,
         zip_code: business.zip_code,
         country: business.country,
-        description: business.description ?? null,
+        description: business.description ?? "",
       };
-      const created = await createBusiness(businessPayload);
-      if (created?.success === true) {
-        setCreatedBusinessId(created?.data?.id);
+      const res = await requestBusinessRegistration(businessPayload);
+      if (res?.success === true) {
+        setCurrentStep(2);
+      } else {
+        setErrors({
+          submit: res?.message ?? "Failed to send OTP. Please try again.",
+        });
       }
-      setCurrentStep(3);
     } catch (err) {
       console.error(err);
-      setErrors({ submit: "Could not create business. Please try again." });
+      setErrors({
+        submit: "Could not send verification code. Please try again.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleVerify = async (code: string) => {
+    setIsLoading(true);
+    setErrors({});
+    try {
+      const res = await verifyAndRegister({
+        email: business.email,
+        otp: code,
+      });
+      if (res?.success === true && res?.data?.id != null) {
+        setCreatedBusinessId(res.data.id);
+        setCurrentStep(3);
+      } else {
+        setErrors({
+          submit: res?.message ?? "Invalid or expired code. Please try again.",
+        });
+      }
+    } catch (err) {
+      console.error(err);
+      setErrors({
+        submit: "Verification failed. Please check the code and try again.",
+      });
     } finally {
       setIsLoading(false);
     }

@@ -10,6 +10,12 @@ export interface BusinessCreate {
   description: string;
 }
 
+/** Payload for verifying OTP and completing business registration. */
+export interface VerifyBusinessRegister {
+  email: string;
+  otp: string;
+}
+
 export interface BusinessGetSchema extends BusinessCreate {
   id: number;
 }
