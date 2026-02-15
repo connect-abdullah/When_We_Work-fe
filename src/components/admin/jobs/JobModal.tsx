@@ -36,7 +36,7 @@ const JobModal: React.FC<JobModalProps> = ({
     job_category: undefined,
     workers_required: 0,
     salary: 0,
-    salary_type: SalaryType.hourly,
+    salary_type: SalaryType.fixed,
     from_date_time: "",
     to_date_time: "",
   });
@@ -56,7 +56,7 @@ const JobModal: React.FC<JobModalProps> = ({
         job_category: job.job_category,
         workers_required: job.workers_required ?? 0,
         salary: job.salary ?? 0,
-        salary_type: job.salary_type ?? SalaryType.hourly,
+        salary_type: job.salary_type ?? SalaryType.fixed,
         from_date_time: job.from_date_time
           ? new Date(job.from_date_time).toISOString().slice(0, 16)
           : "",
@@ -75,7 +75,7 @@ const JobModal: React.FC<JobModalProps> = ({
         job_category: undefined,
         workers_required: 0,
         salary: 0,
-        salary_type: SalaryType.hourly,
+        salary_type: SalaryType.fixed,
       });
       setCharacteristicsInput("");
     }
@@ -223,46 +223,20 @@ const JobModal: React.FC<JobModalProps> = ({
             required
           />
 
-          <div className="grid grid-cols-2 gap-3">
-            <FormInput
-              label="Salary"
-              name="salary"
-              type="number"
-              value={formData.salary?.toString() ?? ""}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  salary: parseInt(e.target.value, 10) || 0,
-                })
-              }
-              placeholder="0"
-              required
-            />
-
-            <div>
-              <label className="block text-[9px] font-medium text-gray-700 mb-1">
-                Salary Type
-              </label>
-              <div className="grid grid-cols-2 gap-1.5">
-                {[SalaryType.hourly, SalaryType.fixed].map((type) => (
-                  <button
-                    key={type}
-                    type="button"
-                    onClick={() =>
-                      setFormData({ ...formData, salary_type: type })
-                    }
-                    className={`px-2 py-1.5 text-[9px] font-medium rounded-lg border-2 transition-all ${
-                      formData.salary_type === type
-                        ? "border-[#5A6ACF] bg-[#5A6ACF]/10 text-[#5A6ACF]"
-                        : "border-gray-200 bg-white text-gray-700 hover:border-gray-300"
-                    }`}
-                  >
-                    {type === SalaryType.hourly ? "Hourly" : "Fixed"}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
+          <FormInput
+            label="Salary (fixed)"
+            name="salary"
+            type="number"
+            value={formData.salary?.toString() ?? ""}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                salary: parseInt(e.target.value, 10) || 0,
+              })
+            }
+            placeholder="0"
+            required
+          />
 
           <div className="grid grid-cols-2 gap-3">
             <FormInput
